@@ -6,6 +6,13 @@ SetCapslockState AlwaysOff
 ; Timer for checking whether the Script was modified
 SetTimer,UPDATEDSCRIPT,1000
 
+; Modi
+ReverseMode := 0
+ForwardMode := 1
+ReviewMode  := 2
+
+; Always start in Reverse Mode
+SetMode(ReverseMode)
 LoadTasks()
 
 ; End of auto-execute section
@@ -16,16 +23,14 @@ CapsLock & a::
 	AddTask()
 Return
 
+; Show next tasks with CapsLock+s
 CapsLock & s::
 	ShowNextTasks()
 Return
 
+; Show current task with CapsLock+c
 CapsLock & c::
 	ShowCurrentTask()
-Return
-
-CapsLock & x::
-	SaveTasks()
 Return
 
 ; If the Script was modified, reload it
@@ -106,4 +111,10 @@ AddTask()
 		Tasks%Taskcount%_2 := NewTask
 		SaveTasks()
 	}
+}
+
+SetMode(Mode)
+{
+	global CurrentMode, ReverseMode, ForwardMode, ReviewMode
+	CurrentMode := Mode
 }
