@@ -11,7 +11,7 @@ Return
 
 ; Add a task with CapsLock+a
 CapsLock & a::
-	InputBox, OutputVar, Add Task - AutofocusAHK,,,375,135
+	InputBox, OutputVar, Add Task - AutofocusAHK,,,375,90
 	if ErrorLevel != 1
 		FileAppend, A%A_Now% %OutputVar%`n, %A_ScriptDir%\Tasks.txt
 Return
