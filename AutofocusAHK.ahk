@@ -57,6 +57,7 @@ LoadTasks()
 {
 	global
 	TaskCount := 0
+	UnactionedCount := 0
 	Loop, read, %A_ScriptDir%\Tasks.txt
 	{
 		TaskCount := TaskCount + 1
@@ -70,7 +71,8 @@ LoadTasks()
 		}
 		Else
 		{
-			Tasks%TaskCount%_3 := 0		
+			Tasks%TaskCount%_3 := 0
+			UnactionedCount := UnactionedCount +1
 		}
 	} 
 	CurrentTask := TaskCount + 1
@@ -94,6 +96,12 @@ SaveTasks()
 ShowNextTasks()
 {
 	global
+	If (UnactionedCount <= 0)
+	{
+		MsgBox No unactioned tasks!
+		Return
+	}
+
 	Message := ""
 	Count := 30
 	If (TaskCount < 30)
@@ -114,6 +122,12 @@ ShowNextTasks()
 ShowCurrentTask()
 {
 	global
+	If (UnactionedCount <= 0)
+	{
+		MsgBox No unactioned tasks!
+		Return
+	}
+	
 	MsgBox % Tasks%CurrentTask%_1
 }
 
@@ -125,6 +139,7 @@ AddTask()
 	If (ErrorLevel != 1)
 	{
 		TaskCount := TaskCount + 1
+		UnactionedCount := UnactionedCount + 1
 		Tasks%Taskcount%_1 := NewTask
 		Tasks%Taskcount%_2 := "A" . A_Now
 		Tasks%Taskcount%_3 := 0
@@ -143,6 +158,11 @@ SetMode(Mode)
 Work()
 {
 	global
+	If (UnactionedCount <= 0)
+	{
+		MsgBox No unactioned tasks!
+		Return
+	}
 	
 	If (Active == 1)
 	{
@@ -182,24 +202,27 @@ Work()
 SelectNextTask()
 {
 	global
-	If (CurrentMode == ReverseMode)
+	If (UnactionedCount > 0)
 	{
-		Loop
+		If (CurrentMode == ReverseMode)
 		{
-			CurrentTask := CurrentTask - 1
-			If (CurrentTask == 0)
+			Loop
 			{
-				CurrentTask := TaskCount
-			}
-			If (Tasks%CurrentTask%_3 == 0) 
-			{
-				Break
+				CurrentTask := CurrentTask - 1
+				If (CurrentTask == 0)
+				{
+					CurrentTask := TaskCount
 				}
+				If (Tasks%CurrentTask%_3 == 0) 
+				{
+					Break
+					}
+			}
 		}
-	}
-	Else If (CurrentMode == ForwardMode)
-	{
-	
+		Else If (CurrentMode == ForwardMode)
+		{
+		
+		}
 	}
 }
 
@@ -207,6 +230,7 @@ ReAddTask()
 {
 	global
 	TaskCount := TaskCount + 1
+	UnactionedCount := UnactionedCount + 1
 	Tasks%Taskcount%_1 := Tasks%CurrentTask%_1
 	Tasks%Taskcount%_2 := "A" . A_Now
 	Tasks%Taskcount%_3 := 0
@@ -216,8 +240,9 @@ ReAddTask()
 MarkAsDone()
 {
 	global
-	Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . "D" . A_Now
+	Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . " D" . A_Now
 	Tasks%CurrentTask%_3 := 1
+	UnactionedCount := UnactionedCount - 1
 	SaveTasks()
 	CurrentTask := TaskCount + 1
 	SelectNextTask()
