@@ -18,6 +18,9 @@ CapsLock & a::
 		FileAppend, A%A_Now%%A_Tab%%NewTask%`n, %A_ScriptDir%\Tasks.txt
 Return
 
+CapsLock & s::
+	ShowNextTasks()
+Return
 
 
 ; If the Script was modified, reload it
@@ -36,11 +39,35 @@ Return
 ; Load tasks from file Tasks.txt
 LoadTasks()
 {
-	global Mode, CurrentPage, CurrentTask, Tasks, TaskCount := 0
+	global
+	TaskCount := 0
 	Loop, read, %A_ScriptDir%\Tasks.txt
 	{
 		TaskCount := TaskCount + 1
 		Tasks%TaskCount% := A_LoopReadLine
 	} 
 	CurrentTask := TaskCount
+}
+
+; Show Next Tasks
+ShowNextTasks()
+{
+	global
+	Message := ""
+	Count := 30
+	If (TaskCount < 30)
+	{
+		Count := TaskCount
+	}
+	Loop %Count%
+	{
+		FieldCount := 0
+		Loop, parse, Tasks%A_Index%, %A_Tab%
+		{
+			FieldCount := FieldCount + 1
+			Field%FieldCount% := A_LoopField
+		}
+		Message := Message . Field%FieldCount% . "`n"
+	}
+	MsgBox %Message%
 }
