@@ -14,3 +14,13 @@ installation
 3. Right-click on "AutofocusAHK.ahk" and select "Compile Script" from the
    context menu.
 4. Start "AutofocusAHK.exe"
+
+usage
+-----
+This application uses CapsLock as a hotkey. If you need CapsLock for some 
+reason, you must change the hotkeys in the source code.
+
+CapsLock + a	Add a task
+CapsLock + s	Show the next 30 tasks
+CapsLock + d	Work [unimplementend]
+CapsLock + e	Export list [unimplemented]
