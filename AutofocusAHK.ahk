@@ -13,9 +13,7 @@ Return
 
 ; Add a task with CapsLock+a
 CapsLock & a::
-	InputBox, NewTask, Add Task - AutofocusAHK,,,375,90
-	if ErrorLevel != 1
-		FileAppend, A%A_Now%%A_Tab%%NewTask%`n, %A_ScriptDir%\Tasks.txt
+	AddTask()
 Return
 
 CapsLock & s::
@@ -94,4 +92,18 @@ ShowCurrentTask()
 {
 	global
 	MsgBox % Tasks%CurrentTask%_2
+}
+
+;Add a New Task
+AddTask()
+{
+	global
+	InputBox, NewTask, Add Task - AutofocusAHK,,,375,90
+	If (ErrorLevel != 1)
+	{
+		TaskCount := TaskCount + 1
+		Tasks%Taskcount%_1 := "A" . A_Now
+		Tasks%Taskcount%_2 := NewTask
+		SaveTasks()
+	}
 }
