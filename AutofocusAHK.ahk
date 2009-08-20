@@ -73,7 +73,8 @@ LoadTasks()
 			Tasks%TaskCount%_3 := 0		
 		}
 	} 
-	CurrentTask := TaskCount
+	CurrentTask := TaskCount + 1
+	SelectNextTask()
 }
 
 ; Save tasks to file Tasks.txt
@@ -180,10 +181,24 @@ Work()
 SelectNextTask()
 {
 	global
-	CurrentTask := CurrentTask - 1
-	If (CurrentTask == 0)
+	If (CurrentMode == ReverseMode)
 	{
-		CurrentTask := TaskCount
+		Loop
+		{
+			CurrentTask := CurrentTask - 1
+			If (CurrentTask == 0)
+			{
+				CurrentTask := TaskCount
+			}
+			If (Tasks%CurrentTask%_3 == 0) 
+			{
+				Break
+				}
+		}
+	}
+	Else If (CurrentMode == ForwardMode)
+	{
+	
 	}
 }
 
@@ -203,4 +218,6 @@ MarkAsDone()
 	Tasks%CurrentTask%_1 := "D" . A_Now . Tasks%CurrentTask%_1
 	Tasks%CurrentTask%_3 := 1
 	SaveTasks()
+	CurrentTask := TaskCount + 1
+	SelectNextTask()
 }
