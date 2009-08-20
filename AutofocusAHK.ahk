@@ -22,6 +22,9 @@ CapsLock & s::
 	ShowNextTasks()
 Return
 
+CapsLock & c::
+	ShowCurrentTask()
+Return
 
 ; If the Script was modified, reload it
 UPDATEDSCRIPT:
@@ -70,4 +73,11 @@ ShowNextTasks()
 		Message := Message . Field%FieldCount% . "`n"
 	}
 	MsgBox %Message%
+}
+
+;Show Current Task
+ShowCurrentTask()
+{
+	global
+	MsgBox % Tasks%CurrentTask%
 }
