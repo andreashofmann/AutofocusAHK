@@ -1,0 +1,16 @@
+AutofocusAHK 
+------------
+A simple tool based on Mark Forster's Autofocus Time Management System. Written
+in Autohotkey.
+
+history
+-------
+Currently this is a non-working release, only intended for testers.
+
+installation
+------------
+1. Download and install Autohotkey from http://www.autohotkey.com
+2. Download AutofocusAHK
+3. Right-click on "AutofocusAHK.ahk" and select "Compile Script" from the
+   context menu.
+4. Start "AutofocusAHK.exe"
