@@ -64,7 +64,7 @@ LoadTasks()
 		{
 			Tasks%TaskCount%_%A_Index% := A_LoopField
 		}
-		If (InStr(Tasks%TaskCount%_1, "D"))
+		If (InStr(Tasks%TaskCount%_2, "D"))
 		{
 			Tasks%TaskCount%_3 := 1
 		}
@@ -104,7 +104,7 @@ ShowNextTasks()
 	{
 		If (Tasks%A_Index%_3 == 0)
 		{
-			Message := Message . Tasks%A_Index%_2 . "`n"
+			Message := Message . Tasks%A_Index%_1 . "`n"
 		}
 	}
 	MsgBox %Message%
@@ -114,7 +114,7 @@ ShowNextTasks()
 ShowCurrentTask()
 {
 	global
-	MsgBox % Tasks%CurrentTask%_2
+	MsgBox % Tasks%CurrentTask%_1
 }
 
 ;Add a New Task
@@ -125,8 +125,9 @@ AddTask()
 	If (ErrorLevel != 1)
 	{
 		TaskCount := TaskCount + 1
-		Tasks%Taskcount%_1 := "A" . A_Now
-		Tasks%Taskcount%_2 := NewTask
+		Tasks%Taskcount%_1 := NewTask
+		Tasks%Taskcount%_2 := "A" . A_Now
+		Tasks%Taskcount%_3 := 0
 		SaveTasks()
 	}
 }
@@ -145,7 +146,7 @@ Work()
 	
 	If (Active == 1)
 	{
-		MsgBox, 3, AutofocusAHK, % "You were working on`n`n" . Tasks%CurrentTask%_2 . "`n`nDo you want to re-add this task?"
+		MsgBox, 3, AutofocusAHK, % "You were working on`n`n" . Tasks%CurrentTask%_1 . "`n`nDo you want to re-add this task?"
 		IfMsgBox Yes
 		{
 			Active := 0
@@ -160,7 +161,7 @@ Work()
 	
 	Loop
 	{
-		MsgBox, 3, AutofocusAHK, % Tasks%CurrentTask%_2 . "`n`nDoes this task feel ready to be done?"
+		MsgBox, 3, AutofocusAHK, % Tasks%CurrentTask%_1 . "`n`nDoes this task feel ready to be done?"
 		IfMsgBox Yes
 		{
 			Active := 1
@@ -206,8 +207,8 @@ ReAddTask()
 {
 	global
 	TaskCount := TaskCount + 1
-	Tasks%Taskcount%_1 := "A" . A_Now
-	Tasks%Taskcount%_2 := Tasks%CurrentTask%_2
+	Tasks%Taskcount%_1 := Tasks%CurrentTask%_1
+	Tasks%Taskcount%_2 := "A" . A_Now
 	Tasks%Taskcount%_3 := 0
 	MarkAsDone()
 }
@@ -215,7 +216,7 @@ ReAddTask()
 MarkAsDone()
 {
 	global
-	Tasks%CurrentTask%_1 := "D" . A_Now . Tasks%CurrentTask%_1
+	Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . "D" . A_Now
 	Tasks%CurrentTask%_3 := 1
 	SaveTasks()
 	CurrentTask := TaskCount + 1
