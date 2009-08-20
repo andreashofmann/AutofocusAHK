@@ -6,15 +6,19 @@ SetCapslockState AlwaysOff
 ; Timer for checking whether the Script was modified
 SetTimer,UPDATEDSCRIPT,1000
 
+LoadTasks()
+
 ; End of auto-execute section
 Return
 
 ; Add a task with CapsLock+a
 CapsLock & a::
-	InputBox, OutputVar, Add Task - AutofocusAHK,,,375,90
+	InputBox, NewTask, Add Task - AutofocusAHK,,,375,90
 	if ErrorLevel != 1
-		FileAppend, A%A_Now% %OutputVar%`n, %A_ScriptDir%\Tasks.txt
+		FileAppend, A%A_Now%%A_Tab%%NewTask%`n, %A_ScriptDir%\Tasks.txt
 Return
+
+
 
 ; If the Script was modified, reload it
 UPDATEDSCRIPT:
@@ -28,3 +32,15 @@ UPDATEDSCRIPT:
 		Reload
 	}
 Return 
+
+; Load tasks from file Tasks.txt
+LoadTasks()
+{
+	global Mode, CurrentPage, CurrentTask, Tasks, TaskCount := 0
+	Loop, read, %A_ScriptDir%\Tasks.txt
+	{
+		TaskCount := TaskCount + 1
+		Tasks%TaskCount% := A_LoopReadLine
+	} 
+	CurrentTask := TaskCount
+}
