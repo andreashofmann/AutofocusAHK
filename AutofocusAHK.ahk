@@ -47,9 +47,13 @@ LoadTasks()
 	Loop, read, %A_ScriptDir%\Tasks.txt
 	{
 		TaskCount := TaskCount + 1
-		Tasks%TaskCount% := A_LoopReadLine
+		Loop, parse, A_LoopReadLine, %A_Tab%
+		{
+			Tasks%TaskCount%_%A_Index% := A_LoopField
+		}
 	} 
 	CurrentTask := TaskCount
+
 }
 
 ; Show Next Tasks
@@ -64,13 +68,7 @@ ShowNextTasks()
 	}
 	Loop %Count%
 	{
-		FieldCount := 0
-		Loop, parse, Tasks%A_Index%, %A_Tab%
-		{
-			FieldCount := FieldCount + 1
-			Field%FieldCount% := A_LoopField
-		}
-		Message := Message . Field%FieldCount% . "`n"
+		Message := Message . Tasks%A_Index%_2 . "`n"
 	}
 	MsgBox %Message%
 }
