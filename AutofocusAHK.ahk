@@ -26,6 +26,10 @@ CapsLock & c::
 	ShowCurrentTask()
 Return
 
+CapsLock & x::
+	SaveTasks()
+Return
+
 ; If the Script was modified, reload it
 UPDATEDSCRIPT:
 	FileGetAttrib,attribs,%A_ScriptFullPath%
@@ -53,7 +57,19 @@ LoadTasks()
 		}
 	} 
 	CurrentTask := TaskCount
+}
 
+; Save tasks to file Tasks.txt
+SaveTasks()
+{
+	global TaskCount
+	Content := ""
+	Loop %TaskCount%
+	{
+		Content := Content . Tasks%A_Index%_1 . A_Tab . Tasks%A_Index%_2 . "`n"
+	}
+	FileDelete, %A_ScriptDir%\Tasks.txt
+	FileAppend, %Content%, %A_ScriptDir%\Tasks.txt
 }
 
 ; Show Next Tasks
@@ -77,5 +93,5 @@ ShowNextTasks()
 ShowCurrentTask()
 {
 	global
-	MsgBox % Tasks%CurrentTask%
+	MsgBox % Tasks%CurrentTask%_2
 }
