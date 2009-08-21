@@ -11,6 +11,8 @@ ReverseMode := 0
 ForwardMode := 1
 ReviewMode  := 2
 
+Ver := "0.1"
+
 menu, tray, NoStandard
 menu, tray, add, About/Help
 menu, tray, add 
@@ -121,7 +123,7 @@ ShowNextTasks()
 			Message := Message . Tasks%A_Index%_1 . "`n"
 		}
 	}
-	MsgBox %Message%
+	MsgBox,,AutofocusAHK %Ver%, %Message%
 }
 
 ;Show Current Task
@@ -141,7 +143,7 @@ ShowCurrentTask()
 AddTask()
 {
 	global
-	InputBox, NewTask, Add Task - AutofocusAHK,,,375,90
+	InputBox, NewTask, Add Task - AutofocusAHK %Ver%,,,375,90
 	If (ErrorLevel != 1)
 	{
 		TaskCount := TaskCount + 1
@@ -172,7 +174,7 @@ Work()
 	
 	If (Active == 1)
 	{
-		MsgBox, 3, AutofocusAHK, % "You were working on`n`n" . Tasks%CurrentTask%_1 . "`n`nDo you want to re-add this task?"
+		MsgBox, 3, AutofocusAHK %Ver%, % "You were working on`n`n" . Tasks%CurrentTask%_1 . "`n`nDo you want to re-add this task?"
 		IfMsgBox Yes
 		{
 			Active := 0
@@ -187,7 +189,7 @@ Work()
 	
 	Loop
 	{
-		MsgBox, 3, AutofocusAHK, % Tasks%CurrentTask%_1 . "`n`nDoes this task feel ready to be done?"
+		MsgBox, 3, AutofocusAHK %Ver%, % Tasks%CurrentTask%_1 . "`n`nDoes this task feel ready to be done?"
 		IfMsgBox Yes
 		{
 			Active := 1
@@ -255,7 +257,7 @@ MarkAsDone()
 }
 
 About/Help:
-MsgBox, ,About/Help - AutofocusAHK 0.1, CapsLock + a%A_Tab%Add task`nCapsLock + c%A_Tab%Show current task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`n`nAutofocus Time Management System`nCopyright (C) 2009 Mark Forster`nhttp://markforster.net`n`nAutofocusAHK`nCopyright (C) 2009 Andreas Hofmann`nhttp://andreashofmann.net
+MsgBox, ,About/Help - AutofocusAHK %Ver%, CapsLock + a%A_Tab%Add task`nCapsLock + c%A_Tab%Show current task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`n`nAutofocus Time Management System`nCopyright (C) 2009 Mark Forster`nhttp://markforster.net`n`nAutofocusAHK`nCopyright (C) 2009 Andreas Hofmann`nhttp://andreashofmann.net
 Return
 
 Exit:
