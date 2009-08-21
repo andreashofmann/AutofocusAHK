@@ -5,7 +5,8 @@ in Autohotkey.
 
 history
 -------
-Currently this is a non-working release, only intended for testers.
+2009-08-21 - Released version 0.1 - basic reverse mode, no forward or review mode
+2009-08-20 - Started development
 
 installation
 ------------
@@ -21,6 +22,7 @@ This application uses CapsLock as a hotkey. If you need CapsLock for some
 reason, you must change the hotkeys in the source code.
 
 CapsLock + a	Add a task
+CapsLock + c	Show the current task
 CapsLock + s	Show the next 30 tasks
-CapsLock + d	Work [unimplementend]
+CapsLock + d	Start/Stop Working
 CapsLock + e	Export list [unimplemented]
