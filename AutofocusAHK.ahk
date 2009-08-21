@@ -21,6 +21,7 @@ menu, tray, default, About/Help
 
 Active := 0
 ; Always start in Reverse Mode
+LoadConfig()
 SetMode(ReverseMode)
 LoadTasks()
 
@@ -256,10 +257,32 @@ MarkAsDone()
 	SelectNextTask()
 }
 
+LoadConfig()
+{
+	global
+	FormatTime, Now, , yyyyMMdd
+	IfNotExist, %A_ScriptDir%\AutofocusAHK.ini
+	{
+		LastRoutine := Now
+		StartRoutineAt := 6
+		IniWrite, %LastRoutine%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, LastRoutine
+		IniWrite, %StartRoutineAt%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, StartRoutineAt
+	}
+	Else
+	{
+		IniRead, LastRoutine, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, LastRoutine, Now
+		IniRead, StartRoutineAt, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, StartRoutineAt, 6
+	}
+}
+
 About/Help:
 MsgBox, ,About/Help - AutofocusAHK %Ver%, CapsLock + a%A_Tab%Add task`nCapsLock + c%A_Tab%Show current task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`n`nAutofocus Time Management System`nCopyright (C) 2009 Mark Forster`nhttp://markforster.net`n`nAutofocusAHK`nCopyright (C) 2009 Andreas Hofmann`nhttp://andreashofmann.net
 Return
 
 Exit:
 ExitApp, 0
+Return
+
+MourningRoutine:
+
 Return
