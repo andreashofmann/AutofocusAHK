@@ -11,6 +11,12 @@ ReverseMode := 0
 ForwardMode := 1
 ReviewMode  := 2
 
+menu, tray, NoStandard
+menu, tray, add, About/Help
+menu, tray, add 
+menu, tray, add, Exit
+menu, tray, default, About/Help
+
 Active := 0
 ; Always start in Reverse Mode
 SetMode(ReverseMode)
@@ -247,3 +253,11 @@ MarkAsDone()
 	CurrentTask := TaskCount + 1
 	SelectNextTask()
 }
+
+About/Help:
+MsgBox, ,About/Help - AutofocusAHK 0.1, CapsLock + a%A_Tab%Add task`nCapsLock + c%A_Tab%Show current task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`n`nAutofocus Time Management System`nCopyright (C) 2009 Mark Forster`nhttp://markforster.net`n`nAutofocusAHK`nCopyright (C) 2009 Andreas Hofmann`nhttp://andreashofmann.net
+Return
+
+Exit:
+ExitApp, 0
+Return
