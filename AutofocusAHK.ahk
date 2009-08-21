@@ -5,6 +5,7 @@ SetCapslockState AlwaysOff
 
 ; Timer for checking whether the Script was modified
 SetTimer,UPDATEDSCRIPT,1000
+SetTimer,MorningRoutine,300000
 
 ; Modi
 ReverseMode := 0
@@ -24,6 +25,7 @@ Active := 0
 LoadConfig()
 SetMode(ReverseMode)
 LoadTasks()
+DoMorningRoutine()
 
 ; End of auto-execute section
 Return
@@ -74,7 +76,7 @@ LoadTasks()
 		{
 			Tasks%TaskCount%_%A_Index% := A_LoopField
 		}
-		If (InStr(Tasks%TaskCount%_2, "D"))
+		If (InStr(Tasks%TaskCount%_2, "D") or InStr(Tasks%TaskCount%_2, "R"))
 		{
 			Tasks%TaskCount%_3 := 1
 		}
@@ -261,6 +263,7 @@ LoadConfig()
 {
 	global
 	FormatTime, Now, , yyyyMMdd
+	FormatTime, Hour, , H
 	IfNotExist, %A_ScriptDir%\AutofocusAHK.ini
 	{
 		LastRoutine := Now
@@ -275,6 +278,71 @@ LoadConfig()
 	}
 }
 
+DoMorningRoutine()
+{
+	global
+	if (((Now - LastRoutine) == 1 and (Hour - StartRoutineAt) >= 0) or (Now - LastRoutine) > 1)
+	{
+	MsgBox 1
+		DismissTasks()
+		PutTasksOnNotice()
+		SaveTasks()
+		IniWrite, %Now%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, LastRoutine
+	}
+}
+
+DismissTasks()
+{
+	global
+	Message := ""
+	Loop %TaskCount%
+	{
+		If (Tasks%A_Index%_3 == 0 and InStr(Tasks%A_Index%_2, "N"))
+		{
+			Tasks%A_Index%_2 := Tasks%A_Index%_2 . " R" . A_Now
+			Tasks%A_Index%_3 := 1
+			UnactionedCount := UnactionedCount - 1
+			Message := Message . "- " . Tasks%A_Index%_1 . "`n"
+		}
+	}
+	If (Message != "")
+	{
+		MsgBox The following tasks are now on review:`n`n%Message%
+	}
+}
+
+PutTasksOnNotice()
+{
+	global
+	BlockStarted := 0
+	Loop %TaskCount%
+	{
+		If (BlockStarted)
+		{
+		MsgBox A_Index
+			If (Tasks%A_Index%_3 == 1)
+			{
+				Break
+			}
+			Tasks%A_Index%_2 := Tasks%A_Index%_2 . " N"
+			Message := Message . "- " . Tasks%A_Index%_1 . "`n"
+		}
+		Else
+		{
+			If (A_Index== 0)
+			{
+				BlockStarted := 1
+				Tasks%A_Index%_2 := Tasks%A_Index%_2 . " N"
+				Message := Message . "- " . Tasks%A_Index%_1 . "`n"
+			}
+		}
+	}
+	If (Message != "")
+	{
+		MsgBox The following tasks are now on notice for review:`n`n%Message%
+	}
+}
+
 About/Help:
 MsgBox, ,About/Help - AutofocusAHK %Ver%, CapsLock + a%A_Tab%Add task`nCapsLock + c%A_Tab%Show current task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`n`nAutofocus Time Management System`nCopyright (C) 2009 Mark Forster`nhttp://markforster.net`n`nAutofocusAHK`nCopyright (C) 2009 Andreas Hofmann`nhttp://andreashofmann.net
 Return
@@ -283,6 +351,8 @@ Exit:
 ExitApp, 0
 Return
 
-MourningRoutine:
-
+MorningRoutine:
+	FormatTime, Now, , yyyyMMdd
+	FormatTime, Hour, , H
+	DoMorningRoutine()
 Return
