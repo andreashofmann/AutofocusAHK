@@ -342,21 +342,22 @@ PutTasksOnNotice()
 	Message := ""
 	Loop %TaskCount%
 	{
-		MsgBox % Tasks%A_Index%_3 . " " . Tasks%A_Index%_1
 		If (BlockStarted)
 		{
 			If (Tasks%A_Index%_3 == 1)
 			{
 				Break
 			}
-			Tasks%A_Index%_2 := Tasks%A_Index%_2 . " N"
-			Message := Message . "- " . Tasks%A_Index%_1 . "`n"
+			if (Tasks%A_Index%_1 != "Change to review mode")
+			{
+				Tasks%A_Index%_2 := Tasks%A_Index%_2 . " N"
+				Message := Message . "- " . Tasks%A_Index%_1 . "`n"
+			}
 		}
 		Else
 		{
-			If (Tasks%A_Index%_3 == 0)
+			If (Tasks%A_Index%_3 == 0 && Tasks%A_Index%_1 != "Change to review mode")
 			{
-				MsgBox On Notice!
 				BlockStarted := 1
 				Tasks%A_Index%_2 := Tasks%A_Index%_2 . " N"
 				Message := Message . "- " . Tasks%A_Index%_1 . "`n"
