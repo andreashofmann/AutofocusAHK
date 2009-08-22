@@ -14,7 +14,7 @@ ReviewMode  := 2
 
 HasTasksOnReview := 0
 HasReviewModeTask := 0
-Ver := "0.3"
+Ver := "0.4"
 
 menu, tray, NoStandard
 menu, tray, add, About/Help
@@ -51,6 +51,10 @@ Return
 ; Start working with CapsLock+d
 CapsLock & d::
 	Work()
+Return
+
+CapsLock & 1::
+	ToggleStartup()
 Return
 
 ; If the Script was modified, reload it
@@ -282,6 +286,12 @@ LoadConfig()
 	global
 	FormatTime, Now, , yyyyMMdd
 	FormatTime, Hour, , H
+	IniRead, StartWithWindows, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
+	If (StartWithWindows == "ERROR")
+	{
+		StartWithWindows := 0
+		ToggleStartup()
+	}
 	IniRead, DoBackups, %A_ScriptDir%\AutofocusAHK.ini, General, DoBackups
 	If (DoBackups == "ERROR")
 	{
@@ -474,8 +484,35 @@ BackupTasks()
 	}
 }
 
+ToggleStartup()
+{
+	If (StartWithWindows)
+	{
+		Message := "Autostart is currently enabled."
+	}
+	Else 
+	{
+		Message := "Autostart is currently disabled."
+	}
+	Message := Message . "`n`nDo you want AutofocusAHK to start with Windows in the future?"
+
+	MsgBox, 4, AutofocusAHK %Ver%, %Message%
+	IfMsgBox Yes
+	{
+		FileCreateShortcut, "%A_ScriptFullPath%", %A_Startup%\AutofocusAHK.lnk, %A_ScriptDir% 
+		StartWithWindows := 1
+		IniWrite, 1, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
+	}
+	IfMsgBox No
+	{
+		FileDelete, %A_Startup%\AutofocusAHK.lnk
+		StartWithWindows := 0
+		IniWrite, 0, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
+	}
+}
+
 About/Help:
-MsgBox, ,About/Help - AutofocusAHK %Ver%, CapsLock + a%A_Tab%Add task`nCapsLock + c%A_Tab%Show current task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`n`nAutofocus Time Management System`nCopyright (C) 2009 Mark Forster`nhttp://markforster.net`n`nAutofocusAHK`nCopyright (C) 2009 Andreas Hofmann`nhttp://andreashofmann.net
+MsgBox, ,About/Help - AutofocusAHK %Ver%, CapsLock + a%A_Tab%Add task`nCapsLock + c%A_Tab%Show current task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`nCapsLock + 1%A_Tab%Toggle autostart`n`nAutofocus Time Management System`nCopyright (C) 2009 Mark Forster`nhttp://markforster.net`n`nAutofocusAHK`nCopyright (C) 2009 Andreas Hofmann`nhttp://andreashofmann.net
 Return
 
 Exit:
