@@ -14,7 +14,7 @@ ReviewMode  := 2
 
 HasTasksOnReview := 0
 HasReviewModeTask := 0
-Ver := "0.1"
+Ver := "0.2"
 
 menu, tray, NoStandard
 menu, tray, add, About/Help
@@ -26,6 +26,7 @@ Active := 0
 ; Always start in Reverse Mode
 LoadConfig()
 SetMode(ReverseMode)
+PreviousMode := ReverseMode
 LoadTasks()
 DoMorningRoutine()
 
@@ -50,10 +51,6 @@ Return
 ; Start working with CapsLock+d
 CapsLock & d::
 	Work()
-Return
-
-CapsLock & q::
-	MsgBox %HasTasksOnReview% %HasReviewModeTask%
 Return
 
 ; If the Script was modified, reload it
@@ -210,6 +207,13 @@ Work()
 		IfMsgBox Yes
 		{
 			Active := 1
+			If (Tasks%CurrentTask%_1 == "Change to review mode")
+			{
+				Active := 0
+				PreviousMode := CurrentMode
+				CurrentMode := ReviewMode
+				DoReview()
+			}
 			Break
 		}
 		IfMsgBox No
@@ -371,6 +375,49 @@ PutTasksOnNotice()
 	If (Message != "")
 	{
 		MsgBox The following tasks are now on notice for review:`n`n%Message%
+	}
+}
+
+DoReview()
+{
+	global
+	ReviewComplete := 1
+	Loop, %TaskCount%
+	{
+		If (Tasks%A_Index%_3 == 1 and !InStr(Tasks%A_Index%_2, "D") and InStr(Tasks%A_Index%_2, "R"))
+		{
+			MsgBox, 3, Review Mode - AutofocusAHK %Ver%, % Tasks%A_Index%_1 . "`n`nDo you want to re-add this task?"
+			IfMsgBox Yes
+			{
+				Tasks%A_Index%_2 := Tasks%A_Index%_2 . " D" . A_Now
+				Tasks%A_Index%_3 := 1
+
+				TaskCount := TaskCount + 1
+				UnactionedCount := UnactionedCount + 1
+				Tasks%Taskcount%_1 := Tasks%A_Index%_1
+				Tasks%Taskcount%_2 := "A" . A_Now
+				Tasks%Taskcount%_3 := 0
+
+			}
+			IfMsgBox No
+			{
+				ReviewComplete := 0
+			}
+			IfMsgBox Cancel
+			{
+				ReviewComplete := 0
+				Break
+			}
+		}
+	}
+	CurrentMode := PreviousMode
+	If (!ReviewComplete)
+	{
+		ReAddTask()
+	}
+	Else
+	{
+		MarkAsDone()
 	}
 }
 
