@@ -57,6 +57,10 @@ CapsLock & 1::
 	ToggleStartup()
 Return
 
+CapsLock & n::
+	ShowOnNotice()
+Return
+
 ; If the Script was modified, reload it
 UPDATEDSCRIPT:
 	FileGetAttrib,attribs,%A_ScriptFullPath%
@@ -508,6 +512,27 @@ ToggleStartup()
 		FileDelete, %A_Startup%\AutofocusAHK.lnk
 		StartWithWindows := 0
 		IniWrite, 0, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
+	}
+}
+
+ShowOnNotice()
+{
+	global
+	Message := ""
+	Loop %TaskCount%
+	{
+		If (Tasks%A_Index%_3 == 0 and InStr(Tasks%A_Index%_2, "N"))
+		{
+			Message := Message . "- " . Tasks%A_Index%_1 . "`n"
+		}
+	}
+	If (Message != "")
+	{
+		MsgBox The following tasks are on notice:`n`n%Message%
+	}
+	Else
+	{
+		MsgBox There are currently no tasks on notice.
 	}
 }
 
