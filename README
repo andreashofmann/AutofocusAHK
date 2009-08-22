@@ -5,6 +5,7 @@ in Autohotkey.
 
 history
 -------
+2009-08-22 - Released version 0.4 - autostart
 2009-08-22 - Released version 0.3 - automatic daily backup, keep certain number of backups
 2009-08-22 - Released version 0.2 - morning routine, basic review mode
 2009-08-21 - Released version 0.1 - basic reverse mode, no forward or review mode
@@ -29,6 +30,7 @@ CapsLock + s	Show the next 30 tasks [broken]
 CapsLock + d	Start/Stop Working
 CapsLock + e	Export list [unimplemented]
 CapsLock + n	Show tasks on notice for review [unimplemented]
+CapsLock + 1	Toggles autostart
 
 configuration
 -------------
