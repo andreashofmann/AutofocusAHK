@@ -283,7 +283,6 @@ DoMorningRoutine()
 	global
 	if (((Now - LastRoutine) == 1 and (Hour - StartRoutineAt) >= 0) or (Now - LastRoutine) > 1)
 	{
-	MsgBox 1
 		DismissTasks()
 		PutTasksOnNotice()
 		SaveTasks()
@@ -320,7 +319,6 @@ PutTasksOnNotice()
 	{
 		If (BlockStarted)
 		{
-		MsgBox A_Index
 			If (Tasks%A_Index%_3 == 1)
 			{
 				Break
@@ -330,7 +328,7 @@ PutTasksOnNotice()
 		}
 		Else
 		{
-			If (A_Index== 0)
+			If (Tasks%A_Index%_3 == 0)
 			{
 				BlockStarted := 1
 				Tasks%A_Index%_2 := Tasks%A_Index%_2 . " N"
