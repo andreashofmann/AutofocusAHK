@@ -5,6 +5,7 @@ in Autohotkey.
 
 history
 -------
+2009-08-22 - Released version 0.3 - automatic daily backup, keep certain number of backups
 2009-08-22 - Released version 0.2 - morning routine, basic review mode
 2009-08-21 - Released version 0.1 - basic reverse mode, no forward or review mode
 2009-08-20 - Started development
@@ -24,6 +25,25 @@ reason, you must change the hotkeys in the source code.
 
 CapsLock + a	Add a task
 CapsLock + c	Show the current task
-CapsLock + s	Show the next 30 tasks
+CapsLock + s	Show the next 30 tasks [broken]
 CapsLock + d	Start/Stop Working
 CapsLock + e	Export list [unimplemented]
+CapsLock + n	Show tasks on notice for review [unimplemented]
+
+configuration
+-------------
+Edit AutofocusAHK.ini (created on first start) to change how the application behaves.
+
+Sample ini file:
+
+[General]
+DoBackups=1
+BackupsToKeep=10
+[ReviewMode]
+LastRoutine=20090822
+StartRoutineAt=6
+
+DoBackups        1: Do daily automatic backups (saved in sub folder "Backups"), 0: don't do backups
+BackupsToKeep    Number of backups that should be kept. Default value is 10.
+LastRoutine      Date when the last morning routine was executed. Updated autmatically.
+StartRoutineAt   Time (hour) when the morning routine takes place. Value from 0 to 23.

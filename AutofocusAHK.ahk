@@ -14,7 +14,7 @@ ReviewMode  := 2
 
 HasTasksOnReview := 0
 HasReviewModeTask := 0
-Ver := "0.2"
+Ver := "0.3"
 
 menu, tray, NoStandard
 menu, tray, add, About/Help
@@ -282,17 +282,29 @@ LoadConfig()
 	global
 	FormatTime, Now, , yyyyMMdd
 	FormatTime, Hour, , H
-	IfNotExist, %A_ScriptDir%\AutofocusAHK.ini
+	IniRead, DoBackups, %A_ScriptDir%\AutofocusAHK.ini, General, DoBackups
+	If (DoBackups == "ERROR")
+	{
+		DoBackups := 1
+		IniWrite, %DoBackups%, %A_ScriptDir%\AutofocusAHK.ini, General, DoBackups
+	}
+	IniRead, BackupsToKeep, %A_ScriptDir%\AutofocusAHK.ini, General, BackupsToKeep
+	If (BackupsToKeep == "ERROR")
+	{
+		BackupsToKeep := 10
+		IniWrite, %BackupsToKeep%, %A_ScriptDir%\AutofocusAHK.ini, General, BackupsToKeep
+	}
+	IniRead, LastRoutine, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, LastRoutine
+	If (LastRoutine == "ERROR")
 	{
 		LastRoutine := Now
-		StartRoutineAt := 6
 		IniWrite, %LastRoutine%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, LastRoutine
-		IniWrite, %StartRoutineAt%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, StartRoutineAt
 	}
-	Else
+	IniRead, StartRoutineAt, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, StartRoutineAt
+	If (StartRoutineAt == "ERROR")
 	{
-		IniRead, LastRoutine, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, LastRoutine, Now
-		IniRead, StartRoutineAt, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, StartRoutineAt, 6
+		StartRoutineAt := 6
+		IniWrite, %StartRoutineAt%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, StartRoutineAt
 	}
 }
 
@@ -304,6 +316,7 @@ DoMorningRoutine()
 		DismissTasks()
 		PutTasksOnNotice()
 		SaveTasks()
+		BackupTasks()
 		LastRoutine := Now
 		IniWrite, %Now%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, LastRoutine
 		If (Tasks%CurrentTask%_3 == 1) 
@@ -418,6 +431,46 @@ DoReview()
 	Else
 	{
 		MarkAsDone()
+	}
+}
+
+BackupTasks()
+{
+	global DoBackups, BackupsToKeep
+	If (DoBackups)
+	{
+		If (!FileExist(A_ScriptDir . "\Backups"))
+		{
+			FileCreateDir, %A_ScriptDir%\Backups
+		}
+		FormatTime, BackupTime, , yyyy-MM-dd
+		FileCopy, %A_ScriptDir%\Tasks.txt, %A_ScriptDir%\Backups\Tasks-%BackupTime%.txt
+		
+		Count := 0
+		Loop, %A_ScriptDir%\Backups\*.*
+		{
+			Count := Count + 1
+			FileList = %FileList%%A_LoopFileName%`n
+			Sort, FileList
+		}
+		If (Count > BackupsToKeep)
+		{
+			FilesToDelete := Count - BackupsToKeep
+			Count := 0
+			Loop, parse, FileList, `n
+			{
+				if (A_LoopField == "")
+				{
+					Continue
+				}
+				Count := Count + 1
+				If (Count > FilesToDelete)
+				{
+					Break
+				}
+				FileDelete, %A_ScriptDir%\Backups\%A_LoopField%
+			}
+		}
 	}
 }
 
