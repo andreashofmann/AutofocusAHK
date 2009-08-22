@@ -339,6 +339,7 @@ PutTasksOnNotice()
 {
 	global
 	BlockStarted := 0
+	Message := ""
 	Loop %TaskCount%
 	{
 		MsgBox % Tasks%A_Index%_3 . " " . Tasks%A_Index%_1
