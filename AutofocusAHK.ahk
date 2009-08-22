@@ -12,6 +12,8 @@ ReverseMode := 0
 ForwardMode := 1
 ReviewMode  := 2
 
+HasTasksOnReview := 0
+HasReviewModeTask := 0
 Ver := "0.1"
 
 menu, tray, NoStandard
@@ -50,6 +52,10 @@ CapsLock & d::
 	Work()
 Return
 
+CapsLock & q::
+	MsgBox %HasTasksOnReview% %HasReviewModeTask%
+Return
+
 ; If the Script was modified, reload it
 UPDATEDSCRIPT:
 	FileGetAttrib,attribs,%A_ScriptFullPath%
@@ -84,6 +90,14 @@ LoadTasks()
 		{
 			Tasks%TaskCount%_3 := 0
 			UnactionedCount := UnactionedCount +1
+			If (Tasks%TaskCount%_1 == "Change to review mode")
+			{
+				HasReviewModeTask := 1
+			}
+		}
+		If (!InStr(Tasks%TaskCount%_2, "D") and InStr(Tasks%TaskCount%_2, "R"))
+		{
+			HasTasksOnReview := 1
 		}
 	} 
 	CurrentTask := TaskCount + 1
@@ -308,6 +322,16 @@ DismissTasks()
 	If (Message != "")
 	{
 		MsgBox The following tasks are now on review:`n`n%Message%
+		HasTasksOnReview := 1
+		If (HasReviewModeTask == 0)
+		{
+			TaskCount := TaskCount + 1
+			UnactionedCount := UnactionedCount + 1
+			Tasks%Taskcount%_1 := "Change to review mode"
+			Tasks%Taskcount%_2 := "A" . A_Now
+			Tasks%Taskcount%_3 := 0
+			HasReviewModeTask := 1
+		}
 	}
 }
 
@@ -317,6 +341,7 @@ PutTasksOnNotice()
 	BlockStarted := 0
 	Loop %TaskCount%
 	{
+		MsgBox % Tasks%A_Index%_3 . " " . Tasks%A_Index%_1
 		If (BlockStarted)
 		{
 			If (Tasks%A_Index%_3 == 1)
@@ -330,6 +355,7 @@ PutTasksOnNotice()
 		{
 			If (Tasks%A_Index%_3 == 0)
 			{
+				MsgBox On Notice!
 				BlockStarted := 1
 				Tasks%A_Index%_2 := Tasks%A_Index%_2 . " N"
 				Message := Message . "- " . Tasks%A_Index%_1 . "`n"
