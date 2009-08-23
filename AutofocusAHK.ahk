@@ -14,7 +14,10 @@ ReviewMode  := 2
 
 HasTasksOnReview := 0
 HasReviewModeTask := 0
-Ver := "0.4"
+Ver := "0.5"
+
+Test := "CapsLock & p"
+Hotkey, %Test%, MyLabelForNotepad
 
 menu, tray, NoStandard
 menu, tray, add, About/Help
@@ -34,30 +37,30 @@ DoMorningRoutine()
 Return
 
 ; Add a task with CapsLock+a
-CapsLock & a::
+TriggerAddTask:
 	AddTask()
 Return
 
 ; Show next tasks with CapsLock+s
-CapsLock & s::
+TriggerShowNextTasks:
 	ShowNextTasks()
 Return
 
 ; Show current task with CapsLock+c
-CapsLock & c::
+TriggerShowCurrentTask:
 	ShowCurrentTask()
 Return
 
 ; Start working with CapsLock+d
-CapsLock & d::
+TriggerWork:
 	Work()
 Return
 
-CapsLock & 1::
+TriggerToggleAutostart:
 	ToggleStartup()
 Return
 
-CapsLock & n::
+TriggerShowOnNotice:
 	ShowOnNotice()
 Return
 
@@ -320,6 +323,49 @@ LoadConfig()
 		StartRoutineAt := 6
 		IniWrite, %StartRoutineAt%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, StartRoutineAt
 	}
+	IniRead, HKAddTask, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKAddTask
+	If (HKAddTask == "ERROR")
+	{
+		HKAddTask := "CapsLock & a"
+		IniWrite, %HKAddTask%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKAddTask
+	}
+	Hotkey, %HKAddTask%, TriggerAddTask
+	IniRead, HKWork, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKWork
+	If (HKWork == "ERROR")
+	{
+		HKWork := "CapsLock & d"
+		IniWrite, %HKWork%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKWork
+	}
+	Hotkey, %HKWork%, TriggerWork
+	IniRead, HKShowNextTasks, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowNextTasks
+	If (HKShowNextTasks == "ERROR")
+	{
+		HKShowNextTasks := "CapsLock & s"
+		IniWrite, %HKShowNextTasks%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowNextTasks
+	}
+	Hotkey, %HKShowNextTasks%, TriggerShowNextTasks
+	IniRead, HKShowCurrentTask, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowCurrentTask
+	If (HKShowCurrentTask == "ERROR")
+	{
+		HKShowCurrentTask := "CapsLock & c"
+		IniWrite, %HKShowCurrentTask%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowCurrentTask
+	}
+	Hotkey, %HKShowCurrentTask%, TriggerShowCurrentTask
+	IniRead, HKShowOnNotice, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowOnNotice
+	If (HKShowOnNotice == "ERROR")
+	{
+		HKShowOnNotice := "CapsLock & n"
+		IniWrite, %HKShowOnNotice%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowOnNotice
+	}
+	Hotkey, %HKShowOnNotice%, TriggerShowOnNotice
+	IniRead, HKToggleAutostart, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
+	If (HKToggleAutostart == "ERROR")
+	{
+		HKToggleAutostart := "CapsLock & s"
+		IniWrite, %HKToggleAutostart%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
+	}
+	Hotkey, %HKToggleAutostart%, TriggerToggleAutostart
+
 }
 
 DoMorningRoutine()
@@ -548,4 +594,8 @@ MorningRoutine:
 	FormatTime, Now, , yyyyMMdd
 	FormatTime, Hour, , H
 	DoMorningRoutine()
+Return
+
+MyLabelForNotepad:
+	MsgBox Jo!
 Return
