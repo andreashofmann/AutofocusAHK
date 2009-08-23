@@ -361,7 +361,7 @@ LoadConfig()
 	IniRead, HKToggleAutostart, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
 	If (HKToggleAutostart == "ERROR")
 	{
-		HKToggleAutostart := "CapsLock & s"
+		HKToggleAutostart := "CapsLock & 1"
 		IniWrite, %HKToggleAutostart%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
 	}
 	Hotkey, %HKToggleAutostart%, TriggerToggleAutostart
