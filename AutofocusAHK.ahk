@@ -12,9 +12,9 @@ ReverseMode := 0
 ForwardMode := 1
 ReviewMode  := 2
 
-HasTasksOnReview := 0
 HasReviewModeTask := 0
-Ver := "0.5"
+HasForwardModeTask := 0
+Ver := "0.6"
 
 Test := "CapsLock & p"
 Hotkey, %Test%, MyLabelForNotepad
@@ -93,6 +93,10 @@ LoadTasks()
 		If (InStr(Tasks%TaskCount%_2, "D") or InStr(Tasks%TaskCount%_2, "R"))
 		{
 			Tasks%TaskCount%_3 := 1
+			If (!InStr(Tasks%TaskCount%_2, "D") and InStr(Tasks%TaskCount%_2, "R"))
+			{
+				HasTasksOnReview := 1
+			}
 		}
 		Else
 		{
@@ -102,12 +106,22 @@ LoadTasks()
 			{
 				HasReviewModeTask := 1
 			}
+			If (Tasks%TaskCount%_1 == "Change to forward mode")
+			{
+				HasForwardModeTask := 1
+			}
 		}
-		If (!InStr(Tasks%TaskCount%_2, "D") and InStr(Tasks%TaskCount%_2, "R"))
-		{
-			HasTasksOnReview := 1
-		}
-	} 
+	}
+	If (TaskCount >= TasksPerPage * 3 and HasForwardModeTask == 0)
+	{
+			TaskCount := TaskCount + 1
+			UnactionedCount := UnactionedCount + 1
+			Tasks%Taskcount%_1 := "Change to forward mode"
+			Tasks%Taskcount%_2 := "A" . A_Now
+			Tasks%Taskcount%_3 := 0
+			HasForwardModeTask := 1
+			SaveTasks()
+	}
 	CurrentTask := TaskCount + 1
 	SelectNextTask()
 }
@@ -202,13 +216,16 @@ Work()
 		MsgBox, 3, AutofocusAHK %Ver%, % "You were working on`n`n" . Tasks%CurrentTask%_1 . "`n`nDo you want to re-add this task?"
 		IfMsgBox Yes
 		{
-			Active := 0
 			ReAddTask()
 		}
 		IfMsgBox No
 		{
-			Active := 0
 			MarkAsDone()
+		}
+		Active := 0
+		If (CurrentMode == ForwardMode)
+		{
+			ActionOnCurrentPass := 1
 		}
 	}
 	
@@ -225,11 +242,28 @@ Work()
 				CurrentMode := ReviewMode
 				DoReview()
 			}
+			Else If (Tasks%CurrentTask%_1 == "Change to forward mode")
+			{
+				MsgBox Change to forward mode!
+				Active := 0
+				CurrentMode := ForwardMode
+				CurrentPass := 1
+				ActionOnCurrentPass := 0
+				Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . " D" . A_Now
+				Tasks%CurrentTask%_3 := 1
+				UnactionedCount := UnactionedCount - 1
+				SaveTasks()
+				CurrentTask := 1
+				SelectNextActivePage()
+				SelectNextTask()
+				Continue
+			}
 			Break
 		}
 		IfMsgBox No
 		{
 			SelectNextTask()
+			Continue
 		}
 		IfMsgBox Cancel
 		{
@@ -256,12 +290,52 @@ SelectNextTask()
 				If (Tasks%CurrentTask%_3 == 0) 
 				{
 					Break
-					}
+				}
 			}
 		}
 		Else If (CurrentMode == ForwardMode)
 		{
-		
+			Start := CurrentTask
+			Loop
+			{
+				CurrentTask := CurrentTask + 1
+				If (CurrentTask > LastTaskOnPage)
+				{
+					If (ActionOnCurrentPass)
+					{
+						CurrentTask := FirstTaskOnPage
+						CurrentPass := CurrentPass + 1
+						ActionOnCurrentPass := 0
+					}
+					Else
+					{
+						If (CurrentPass == 1)
+						{
+							CurrentMode := ReverseMode
+							TaskCount := TaskCount + 1
+							UnactionedCount := UnactionedCount + 1
+							Tasks%Taskcount%_1 := "Change to forward mode"
+							Tasks%Taskcount%_2 := "A" . A_Now
+							Tasks%Taskcount%_3 := 0
+							HasForwardModeTask := 1
+							SaveTasks()
+							CurrentTask := TaskCount + 1
+							SelectNextTask()
+							Break
+						}
+						Else
+						{
+							CurrentPass := 1
+							ActionOnCurrentPass := 0
+							SelectNextActivePage()
+						}
+					}
+				}
+				If (Tasks%CurrentTask%_3 == 0) 
+				{
+					Break
+				}
+			}
 		}
 	}
 }
@@ -284,7 +358,10 @@ MarkAsDone()
 	Tasks%CurrentTask%_3 := 1
 	UnactionedCount := UnactionedCount - 1
 	SaveTasks()
-	CurrentTask := TaskCount + 1
+	If (CurrentTask == ReverseMode)
+	{
+		CurrentTask := TaskCount + 1
+	}
 	SelectNextTask()
 }
 
@@ -322,6 +399,12 @@ LoadConfig()
 	{
 		StartRoutineAt := 6
 		IniWrite, %StartRoutineAt%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, StartRoutineAt
+	}
+	IniRead, TasksPerPage, %A_ScriptDir%\AutofocusAHK.ini, ForwardMode, TasksPerPage
+	If (TasksPerPage == "ERROR")
+	{
+		TasksPerPage := 20
+		IniWrite, %TasksPerPage%, %A_ScriptDir%\AutofocusAHK.ini, ForwardMode, TasksPerPage
 	}
 	IniRead, HKAddTask, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKAddTask
 	If (HKAddTask == "ERROR")
@@ -580,6 +663,41 @@ ShowOnNotice()
 	{
 		MsgBox There are currently no tasks on notice.
 	}
+}
+
+SetForwardModeStats()
+{
+	global
+	CurrentPage := Ceil(CurrentTask/TasksPerPage)
+	If (TaskCount < TasksPerPage)
+	{
+		LastTaskOnPage := TaskCount
+		FirstTaskOnPage := 1
+	}
+	Else
+	{
+		LastTaskOnPage := CurrentPage * TasksPerPage
+		FirstTaskOnPage := LastTaskOnPage - TasksPerPage + 1
+		If (LastTaskOnPage > TaskCount)
+		{
+			LastTaskOnPage := TaskCount
+		}
+	}
+}
+
+SelectNextActivePage()
+{
+	global
+	Loop
+	{
+		If (Tasks%CurrentTask%_3 == 0)
+		{
+			Break
+		}
+		CurrentTask := CurrentTask +1
+	}
+	SetForwardModeStats()
+	CurrentTask := FirstTaskOnPage - 1
 }
 
 About/Help:

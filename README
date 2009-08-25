@@ -5,6 +5,7 @@ in Autohotkey.
 
 history
 -------
+2009-08-25 - Released version 0.6 - forward mode
 2009-08-22 - Released version 0.5 - hotkeys now configurable via ini file
 2009-08-22 - Released version 0.4 - autostart
 2009-08-22 - Released version 0.3 - automatic daily backup, keep certain number of backups
