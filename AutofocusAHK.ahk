@@ -181,16 +181,10 @@ ShowCurrentTask()
 AddTask()
 {
 	global
-	InputBox, NewTask, Add Task - AutofocusAHK %Ver%,,,375,90
-	If (ErrorLevel != 1)
-	{
-		TaskCount := TaskCount + 1
-		UnactionedCount := UnactionedCount + 1
-		Tasks%Taskcount%_1 := NewTask
-		Tasks%Taskcount%_2 := "A" . A_Now
-		Tasks%Taskcount%_3 := 0
-		SaveTasks()
-	}
+	Gui, Destroy
+	Gui, Add, Edit, w400 vNewTask  ; The ym option starts a new column of controls.
+	Gui, Add, Button,ym default gButtonAdd, Add
+	Gui, Show, , Add Task - AutofocusAHK %Ver%
 }
 
 ;Set the current mode
@@ -786,6 +780,20 @@ ButtonNoReAdd:
 	}
 	MarkAsDone()
 	ShowWorkWindow()
+Return
+
+ButtonAdd:
+	Gui, Submit
+	If (NewTask != "")
+	{
+		TaskCount := TaskCount + 1
+		UnactionedCount := UnactionedCount + 1
+		Tasks%Taskcount%_1 := NewTask
+		Tasks%Taskcount%_2 := "A" . A_Now
+		Tasks%Taskcount%_3 := 0
+		SaveTasks()
+	}
+	Gui, Hide
 Return
 
 About/Help:
