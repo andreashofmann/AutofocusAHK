@@ -16,9 +16,6 @@ HasReviewModeTask := 0
 HasForwardModeTask := 0
 Ver := "0.6"
 
-Test := "CapsLock & p"
-Hotkey, %Test%, MyLabelForNotepad
-
 menu, tray, NoStandard
 menu, tray, add, About/Help
 menu, tray, add 
@@ -63,6 +60,8 @@ Return
 TriggerShowOnNotice:
 	ShowOnNotice()
 Return
+
+
 
 ; If the Script was modified, reload it
 UPDATEDSCRIPT:
@@ -213,64 +212,14 @@ Work()
 	
 	If (Active == 1)
 	{
-		MsgBox, 3, AutofocusAHK %Ver%, % "You were working on`n`n" . Tasks%CurrentTask%_1 . "`n`nDo you want to re-add this task?"
-		IfMsgBox Yes
-		{
-			ReAddTask()
-		}
-		IfMsgBox No
-		{
-			MarkAsDone()
-		}
-		Active := 0
-		If (CurrentMode == ForwardMode)
-		{
-			ActionOnCurrentPass := 1
-		}
+		ShowDoneWindow()
 	}
-	
-	Loop
+	Else
 	{
-		MsgBox, 3, AutofocusAHK %Ver%, % Tasks%CurrentTask%_1 . "`n`nDoes this task feel ready to be done?"
-		IfMsgBox Yes
-		{
-			Active := 1
-			If (Tasks%CurrentTask%_1 == "Change to review mode")
-			{
-				Active := 0
-				PreviousMode := CurrentMode
-				CurrentMode := ReviewMode
-				DoReview()
-			}
-			Else If (Tasks%CurrentTask%_1 == "Change to forward mode")
-			{
-				MsgBox Change to forward mode!
-				Active := 0
-				CurrentMode := ForwardMode
-				CurrentPass := 1
-				ActionOnCurrentPass := 0
-				Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . " D" . A_Now
-				Tasks%CurrentTask%_3 := 1
-				UnactionedCount := UnactionedCount - 1
-				SaveTasks()
-				CurrentTask := 1
-				SelectNextActivePage()
-				SelectNextTask()
-				Continue
-			}
-			Break
-		}
-		IfMsgBox No
-		{
-			SelectNextTask()
-			Continue
-		}
-		IfMsgBox Cancel
-		{
-			Break
-		}
+		ShowWorkWindow()
 	}
 }
+
 
 ;Select Next Task
 SelectNextTask()
@@ -358,7 +307,7 @@ MarkAsDone()
 	Tasks%CurrentTask%_3 := 1
 	UnactionedCount := UnactionedCount - 1
 	SaveTasks()
-	If (CurrentTask == ReverseMode)
+	If (CurrentMode == ReverseMode)
 	{
 		CurrentTask := TaskCount + 1
 	}
@@ -700,6 +649,145 @@ SelectNextActivePage()
 	CurrentTask := FirstTaskOnPage - 1
 }
 
+ShowWorkWindow()
+{
+	global
+	Gui, Destroy
+	Gui, Font, Bold
+	Gui, Add, Text, Y20 w400 Center vTaskControl, % Tasks%CurrentTask%_1
+	Gui, Font, Norm
+	GuiControlGet, TaskPos, Pos, TaskControl
+	NewY := TaskPosY + TaskPosH + 20
+	NewYT := NewY + 5
+	GuiControl, Text, ModeControl, ForwardMode
+	;GuiControl, Move, TaskControl, w200 h100
+	Gui, Add, Text, vQuestionLabel Y%NewYT%,Does this task feel ready to be done? 
+	Gui, Add, Button, gButtonReady vYesButton Y%NewY%, &Yes
+	Gui, Add, Button, gButtonNotReady vNoButton Y%NewY% Default, &No
+	;Gui, Add, Button, vCancelButton Y%NewY%, &Cancel
+	;GuiControlGet, CancelPos, Pos, CancelButton
+	;DiffX := CancelPosX + CancelPosW - TaskPosX - TaskPosW
+	;CancelPosX := CancelPosX - DiffX
+	;GuiControl, Move, CancelButton, x%CancelPosX% y%CancelPosY% w%CancelPosW% h%CancelPosH%
+	GuiControlGet, NoPos, Pos, NoButton
+	DiffX := NoPosX + NoPosW - TaskPosX - TaskPosW
+	NoPosX := NoPosX - DiffX
+	GuiControl, Move, NoButton, x%NoPosX% y%NoPosY% w%NoPosW% h%NoPosH%
+	GuiControlGet, YesPos, Pos, YesButton
+	YesPosX := YesPosX - DiffX
+	GuiControl, Move, YesButton, x%YesPosX% y%YesPosY% w%YesPosW% h%YesPosH%
+	GuiControlGet, QuestionPos, Pos, QuestionLabel
+	QuestionPosX := QuestionPosX - DiffX
+	GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
+	If (CurrentMode == ForwardMode)
+	{
+		Title := "Forward Mode"
+	}
+	Else
+	{
+		Title := "Reverse Mode"
+	}
+	Gui, Show, Center Autosize, %Title% - AutofocusAHK %Ver% 
+	Return
+}
+
+ShowDoneWindow()
+{
+	global
+	Gui, Destroy
+	Gui, Add, Text, vWorkingOn, You were working on
+	GuiControlGet, WorkingPos, Pos, WorkingOn
+	NewY := WorkingPosY + WorkingPosH + 20
+	Gui, Font, Bold
+	Gui, Add, Text, x%WorkingPosX% Y%NewY% w400 Center vTaskControl, % Tasks%CurrentTask%_1
+	Gui, Font, Norm
+	GuiControlGet, TaskPos, Pos, TaskControl
+	NewY := TaskPosY + TaskPosH + 20
+	NewYT := NewY + 5
+	GuiControl, Text, ModeControl, ForwardMode
+	;GuiControl, Move, TaskControl, w200 h100
+	Gui, Add, Text, vQuestionLabel Y%NewYT%,Do you want to re-add this task?
+	Gui, Add, Button, gButtonReAdd vYesButton Y%NewY%, &Yes
+	Gui, Add, Button, gButtonNoReAdd vNoButton Y%NewY% Default, &No
+	;Gui, Add, Button, vCancelButton Y%NewY%, &Cancel
+	;GuiControlGet, CancelPos, Pos, CancelButton
+	;DiffX := CancelPosX + CancelPosW - TaskPosX - TaskPosW
+	;CancelPosX := CancelPosX - DiffX
+	;GuiControl, Move, CancelButton, x%CancelPosX% y%CancelPosY% w%CancelPosW% h%CancelPosH%
+	GuiControlGet, NoPos, Pos, NoButton
+	DiffX := NoPosX + NoPosW - TaskPosX - TaskPosW
+	NoPosX := NoPosX - DiffX
+	GuiControl, Move, NoButton, x%NoPosX% y%NoPosY% w%NoPosW% h%NoPosH%
+	GuiControlGet, YesPos, Pos, YesButton
+	YesPosX := YesPosX - DiffX
+	GuiControl, Move, YesButton, x%YesPosX% y%YesPosY% w%YesPosW% h%YesPosH%
+	GuiControlGet, QuestionPos, Pos, QuestionLabel
+	QuestionPosX := QuestionPosX - DiffX
+	GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
+	Gui, Show, Center Autosize, Done - AutofocusAHK %Ver% 
+	Return
+}
+
+GuiClose:
+Gui, Hide
+Return
+
+GuiEscape:
+Gui, Hide
+Return
+
+ButtonNotReady:
+SelectNextTask()
+ShowWorkWindow()
+Return
+
+ButtonReady:
+Gui, Hide
+Active := 1
+If (Tasks%CurrentTask%_1 == "Change to review mode")
+{
+	Active := 0
+	PreviousMode := CurrentMode
+	CurrentMode := ReviewMode
+	DoReview()
+}
+Else If (Tasks%CurrentTask%_1 == "Change to forward mode")
+{
+	Active := 0
+	CurrentMode := ForwardMode
+	CurrentPass := 1
+	ActionOnCurrentPass := 0
+	Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . " D" . A_Now
+	Tasks%CurrentTask%_3 := 1
+	UnactionedCount := UnactionedCount - 1
+	SaveTasks()
+	CurrentTask := 1
+	SelectNextActivePage()
+	SelectNextTask()
+	ShowWorkWindow()
+}
+Return
+
+ButtonReAdd:
+	Active := 0
+	If (CurrentMode == ForwardMode)
+	{
+		ActionOnCurrentPass := 1
+	}
+	ReAddTask()
+	ShowWorkWindow()
+Return
+
+ButtonNoReAdd:
+	Active := 0
+	If (CurrentMode == ForwardMode)
+	{
+		ActionOnCurrentPass := 1
+	}
+	MarkAsDone()
+	ShowWorkWindow()
+Return
+
 About/Help:
 MsgBox, ,About/Help - AutofocusAHK %Ver%, CapsLock + a%A_Tab%Add task`nCapsLock + c%A_Tab%Show current task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`nCapsLock + 1%A_Tab%Toggle autostart`n`nAutofocus Time Management System`nCopyright (C) 2009 Mark Forster`nhttp://markforster.net`n`nAutofocusAHK`nCopyright (C) 2009 Andreas Hofmann`nhttp://andreashofmann.net
 Return
@@ -712,8 +800,4 @@ MorningRoutine:
 	FormatTime, Now, , yyyyMMdd
 	FormatTime, Hour, , H
 	DoMorningRoutine()
-Return
-
-MyLabelForNotepad:
-	MsgBox Jo!
 Return
