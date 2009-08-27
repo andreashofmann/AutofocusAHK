@@ -14,7 +14,7 @@ ReviewMode  := 2
 
 HasReviewModeTask := 0
 HasForwardModeTask := 0
-Ver := "0.6"
+Ver := "0.7"
 
 menu, tray, NoStandard
 menu, tray, add, About/Help
@@ -50,7 +50,14 @@ Return
 
 ; Start working with CapsLock+d
 TriggerWork:
-	Work()
+	If (WinActive("Reverse Mode - AutofocusAHK") or WinActive("Forward Mode - AutofocusAHK") or WinActive("Done - AutofocusAHK"))
+	{
+		WinClose
+	}
+	Else
+	{
+		Work()
+	}
 Return
 
 TriggerToggleAutostart:
@@ -297,7 +304,7 @@ ReAddTask()
 MarkAsDone()
 {
 	global
-	Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . " D" . A_Now
+	Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . " D" . A_Now . " T" . TimePassed
 	Tasks%CurrentTask%_3 := 1
 	UnactionedCount := UnactionedCount - 1
 	SaveTasks()
@@ -681,13 +688,15 @@ ShowWorkWindow()
 	{
 		Title := "Reverse Mode"
 	}
-	Gui, Show, Center Autosize, %Title% - AutofocusAHK %Ver% 
+	Gui, Show, Center Autosize, %Title% - AutofocusAHK %Ver%
 	Return
 }
 
 ShowDoneWindow()
 {
 	global
+	SetTimer,UpdateTime,Off
+	Gui, 2:Destroy
 	Gui, Destroy
 	Gui, Add, Text, vWorkingOn, You were working on
 	GuiControlGet, WorkingPos, Pos, WorkingOn
@@ -718,16 +727,35 @@ ShowDoneWindow()
 	GuiControlGet, QuestionPos, Pos, QuestionLabel
 	QuestionPosX := QuestionPosX - DiffX
 	GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
+	Gui, +LabelGuiDone
 	Gui, Show, Center Autosize, Done - AutofocusAHK %Ver% 
 	Return
 }
 
+CapsLock & y::
+Return
+ShowStatusWindow()
+{
+	global
+	Gui, 2:Destroy
+	Gui, 2:+AlwaysOnTop -SysMenu +Owner -Caption +ToolWindow  +Resize MinSize MaxSize
+	Gui, 2:Add, Text, y10, % Tasks%CurrentTask%_1
+	Gui, 2:Add, Text, y10 Right vTimeControl, 00:00:00
+	Gui, 2:Add, Button,ym default gButtonStop, Stop
+	Gui, 2:Add, Button,ym default gButtonHide, Hide for 30s
+	Gui, 2:Show, y0 xCenter NoActivate AutoSize, Status - AutohotkeyAHK
+}
+
 GuiClose:
+GuiEscape:
 Gui, Hide
 Return
 
-GuiEscape:
-Gui, Hide
+GuiDoneClose:
+GuiDoneEscape:
+	Gui, Destroy
+	ShowStatusWindow()
+	SetTimer,UpdateTime,1000
 Return
 
 ButtonNotReady:
@@ -737,7 +765,6 @@ Return
 
 ButtonReady:
 Gui, Hide
-Active := 1
 If (Tasks%CurrentTask%_1 == "Change to review mode")
 {
 	Active := 0
@@ -759,6 +786,13 @@ Else If (Tasks%CurrentTask%_1 == "Change to forward mode")
 	SelectNextActivePage()
 	SelectNextTask()
 	ShowWorkWindow()
+}
+Else
+{
+	Active := 1
+	TimePassed := 0
+	ShowStatusWindow()
+	SetTimer,UpdateTime,1000
 }
 Return
 
@@ -796,6 +830,15 @@ ButtonAdd:
 	Gui, Hide
 Return
 
+ButtonHide:
+	SetTimer,ReShowStatusWindow,30000
+	Gui, 2:Hide
+Return
+
+ButtonStop:
+	Work()
+Return
+
 About/Help:
 MsgBox, ,About/Help - AutofocusAHK %Ver%, CapsLock + a%A_Tab%Add task`nCapsLock + c%A_Tab%Show current task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`nCapsLock + 1%A_Tab%Toggle autostart`n`nAutofocus Time Management System`nCopyright (C) 2009 Mark Forster`nhttp://markforster.net`n`nAutofocusAHK`nCopyright (C) 2009 Andreas Hofmann`nhttp://andreashofmann.net
 Return
@@ -808,4 +851,81 @@ MorningRoutine:
 	FormatTime, Now, , yyyyMMdd
 	FormatTime, Hour, , H
 	DoMorningRoutine()
+Return
+
+ReShowStatusWindow:
+	SetTimer,ReShowStatusWindow,Off
+	Gui, 2:Show, y0 xCenter NoActivate AutoSize, Status - AutohotkeyAHK
+Return
+
+UpdateTime:
+	TimePassed := TimePassed + 1
+	TimeTemp := TimePassed
+	If (TimePassed < 60)
+	{
+		Hours := 0
+		Minutes := 0
+		Seconds := TimePassed
+	}
+	Else If (TimePassed < 3600)
+	{
+		Hours := 0
+		Minutes := 0
+		Loop
+		{
+			TimeTemp := TimeTemp - 60
+			Minutes := Minutes + 1
+			If (TimeTemp <60)
+			{
+				break
+			}
+		}
+		Seconds := TimeTemp
+	}
+	Else
+	{
+		Hours := 0
+		Loop
+		{
+			TimeTemp := TimeTemp - 3600
+			Hours := Hours + 1
+			If (TimeTemp < 3600)
+			{
+				break
+			}
+		}
+		Minutes := 0
+		Loop
+		{
+			If (TimeTemp <60)
+			{
+				break
+			}
+			TimeTemp := TimeTemp - 60
+			Minutes := Minutes + 1
+		}
+		Seconds := TimeTemp
+	}
+	TimeString := ""
+	
+	If (Hours > 0)
+	{
+		;If (Hours < 10)
+		;{
+		;	TimeString := TimeString . "0"
+		;}
+		TimeString := TimeString . Hours . ":"
+		If (Minutes < 10)
+		{
+			TimeString := TimeString . "0"		
+		}
+	}
+	TimeString := TimeString . Minutes . ":"
+	If (Seconds< 10)
+	{
+		TimeString := TimeString . "0"
+	}
+	TimeString := TimeString . Seconds
+
+	GuiControl, 2: , TimeControl, %TimeString%
 Return
