@@ -738,7 +738,7 @@ ShowStatusWindow()
 {
 	global
 	Gui, 2:Destroy
-	Gui, 2:+AlwaysOnTop -SysMenu +Owner -Caption +ToolWindow  +Resize MinSize MaxSize
+	Gui, 2:+AlwaysOnTop -SysMenu +Owner -Caption +0x400000 MinSize MaxSize
 	Gui, 2:Add, Text, y10, % Tasks%CurrentTask%_1
 	Gui, 2:Add, Text, y10 Right vTimeControl, 00:00:00
 	Gui, 2:Add, Button,ym default gButtonStop, Stop
