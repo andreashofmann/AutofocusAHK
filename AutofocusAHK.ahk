@@ -689,6 +689,7 @@ ShowWorkWindow()
 		Title := "Reverse Mode"
 	}
 	Gui, Show, Center Autosize, %Title% - AutofocusAHK %Ver%
+	GuiControl, Focus, NoButton
 	Return
 }
 
@@ -729,6 +730,7 @@ ShowDoneWindow()
 	GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
 	Gui, +LabelGuiDone
 	Gui, Show, Center Autosize, Done - AutofocusAHK %Ver% 
+	GuiControl, Focus, YesButton
 	Return
 }
 
@@ -741,9 +743,10 @@ ShowStatusWindow()
 	Gui, 2:+AlwaysOnTop -SysMenu +Owner -Caption +0x400000 MinSize MaxSize
 	Gui, 2:Add, Text, y10, % Tasks%CurrentTask%_1
 	Gui, 2:Add, Text, y10 Right vTimeControl, 00:00:00
-	Gui, 2:Add, Button,ym default gButtonStop, Stop
-	Gui, 2:Add, Button,ym default gButtonHide, Hide for 30s
+	Gui, 2:Add, Button,ym default gButtonStop vStopButton, Stop
+	Gui, 2:Add, Button,ym gButtonHide, Hide for 30s
 	Gui, 2:Show, y0 xCenter NoActivate AutoSize, Status - AutohotkeyAHK
+	GuiControl, Focus, StopButton
 }
 
 GuiClose:
