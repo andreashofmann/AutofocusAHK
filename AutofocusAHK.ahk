@@ -14,7 +14,7 @@ ReviewMode  := 2
 
 HasReviewModeTask := 0
 HasForwardModeTask := 0
-Ver := "0.7"
+Ver := "0.8"
 
 menu, tray, NoStandard
 menu, tray, add, About/Help
@@ -68,6 +68,9 @@ TriggerShowOnNotice:
 	ShowOnNotice()
 Return
 
+TriggerExport:
+	Export()
+Return
 
 
 ; If the Script was modified, reload it
@@ -398,6 +401,13 @@ LoadConfig()
 		IniWrite, %HKToggleAutostart%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
 	}
 	Hotkey, %HKToggleAutostart%, TriggerToggleAutostart
+	IniRead, HKExport, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKExport
+	If (HKExport == "ERROR")
+	{
+		HKExport := "CapsLock & e"
+		IniWrite, %HKExport%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKExport
+	}
+	Hotkey, %HKExport%, TriggerExport
 
 }
 
@@ -648,6 +658,103 @@ SelectNextActivePage()
 	}
 	SetForwardModeStats()
 	CurrentTask := FirstTaskOnPage - 1
+}
+
+Export()
+{
+	global
+	If (!FileExist(A_ScriptDir . "\Export"))
+	{
+		FileCreateDir, %A_ScriptDir%\Export
+	}
+	FormatTime, ExportTime, , yyyy-MM-dd
+	Export := ""
+	Export := "<!doctype html>" 
+		. "<html><head><title>Export " . ExportTime . " - AutofocusAHK</title>"
+		. "<style type=""text/css"">"
+		. "body {background-color: #FFF;font-family: Corbel, ""Lucida Grande"", ""Lucida Sans Unicode"", ""Lucida Sans"", ""DejaVu Sans"", ""Bitstream Vera Sans"", ""Liberation Sans"", Verdana, ""Verdana Ref"", sans-serif;} "
+		. "table {width:90%; margin:0 auto;border-collapse: collapse;border-spacing: 0;} "
+		. "th,td {border:1px solid #666;} "
+		. ".done {background:#CDFF7F;} "
+		. ".review {background:#F5FF7F;} "
+		. ".datefield {whitespace:nowrap;} "
+		. "th {text-align:center;background:#DDD; font-weight:bold;} "
+		. "th,td {padding:0.3em;} "
+		. "h1 {font-size:16px; color:#666; padding:0; margin:0.5em auto; width:90%;}"
+		. "h2 {font-size:24px; color:#666; padding:0; margin:0.5em auto; width:90%;}"
+		. "</style>"
+		. "</head><body>"
+		. "<h1>AutofocusAHK</h1>"
+		. "<h2>Export " . ExportTime . "</h2><table cellspacing=""0"">"
+		. "<tr><th colspan=""4"">Page 1</th></tr>"
+		. "<tr><th>Task</th><th>Added</th><th>On&nbsp;Review</th><th><nobr>Done/Re-Added</nobr></th></tr>"
+		ExportPage := 1
+	Loop, %TaskCount%
+	{
+		If (ExportPage < ceil(A_Index/TasksPerPage))
+		{
+			ExportPage := ExportPage + 1
+			Export .= "<tr><th colspan=""4"">Page " . ExportPage . "</th></tr>"
+			. "<tr><th>Task</th><th>Added</th><th>On Review</th><th><nobr>Done/Re-Added</nobr></th></tr>"
+		}
+		Export .= "<tr"
+		If (Tasks%A_Index%_3 == 1)
+		{
+			Export .= " class="""
+			If (InStr(Tasks%A_Index%_2, "R"))
+			{
+				Export .= "review"
+			}
+			Else If (InStr(Tasks%A_Index%_2, "D"))
+			{
+				Export .= " done"
+			}
+			Export .= """"
+		}
+		Export .= ">"
+				. "<td>" 
+					. Tasks%A_Index%_1
+				. "</td>"
+		ExportAdded := ""
+		ExportReview := ""
+		ExportDone := ""
+		Loop, Parse, Tasks%A_Index%_2, %A_Space%
+		{
+			If (InStr(A_LoopField, "D"))
+			{
+				ExportDone := SubStr(A_LoopField, 2)
+				FormatTime, ExportDone, %ExportDone%, yyyy-MM-dd'&nbsp;'H:mm
+			}
+			If (InStr(A_LoopField, "R"))
+			{
+				ExportReview := SubStr(A_LoopField, 2)
+				FormatTime, ExportReview, %ExportReview%, yyyy-MM-dd'&nbsp;'H:mm
+			}
+			If (InStr(A_LoopField, "A"))
+			{
+				ExportAdded := SubStr(A_LoopField, 2)
+				FormatTime, ExportAdded, %ExportAdded%, yyyy-MM-dd'&nbsp;'H:mm
+			}
+
+		}
+		Export .= "<td><nobr>" 
+					. ExportAdded
+				. "<nobr></td>"
+				. "<td><nobr>" 
+					. ExportReview
+				. "<nobr></td>"
+				. "<td><nobr>" 
+					. ExportDone
+				. "</nobr></td>"
+		
+		Export .= "</tr>"
+	}
+	
+	Export .= "</table></body></html>"
+	
+	FileDelete, %A_ScriptDir%\Export\Tasks-%ExportTime%.html
+	FileAppend, %Export%, %A_ScriptDir%\Export\Tasks-%ExportTime%.html 
+	Run, %A_ScriptDir%\Export\Tasks-%ExportTime%.html 
 }
 
 ShowWorkWindow()
