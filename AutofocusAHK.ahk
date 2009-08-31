@@ -35,7 +35,14 @@ Return
 
 ; Add a task with CapsLock+a
 TriggerAddTask:
-	AddTask()
+	If (WinActive("Add Task - AutofocusAHK"))
+	{
+		WinClose
+	}
+	Else
+	{
+		AddTask()
+	}
 Return
 
 ; Show next tasks with CapsLock+s
@@ -191,10 +198,11 @@ ShowCurrentTask()
 AddTask()
 {
 	global
-	Gui, Destroy
-	Gui, Add, Edit, w400 vNewTask  ; The ym option starts a new column of controls.
-	Gui, Add, Button,ym default gButtonAdd, Add
-	Gui, Show, , Add Task - AutofocusAHK %Ver%
+	Gui, 3:Destroy
+	Gui, 3:Add, Edit, w400 vNewTask  ; The ym option starts a new column of controls.
+	Gui, 3:Add, Button,ym default gButtonAdd, Add
+	Gui, 3:+LabelGuiAdd
+	Gui, 3:Show, , Add Task - AutofocusAHK %Ver%
 }
 
 ;Set the current mode
@@ -867,6 +875,12 @@ GuiDoneEscape:
 	ShowStatusWindow()
 	SetTimer,UpdateTime,1000
 Return
+
+GuiAddClose:
+GuiAddEscape:
+	Gui, 3:Destroy
+Return
+
 
 ButtonNotReady:
 SelectNextTask()
