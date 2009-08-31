@@ -57,7 +57,7 @@ Return
 
 ; Start working with CapsLock+d
 TriggerWork:
-	If (WinActive("Reverse Mode - AutofocusAHK") or WinActive("Forward Mode - AutofocusAHK") or WinActive("Done - AutofocusAHK"))
+	If (WinActive("Reverse Mode - AutofocusAHK") or WinActive("Forward Mode - AutofocusAHK") or WinActive("Done - AutofocusAHK") or WinActive("Forward Mode - AutofocusAHK") or WinActive("Review Mode - AutofocusAHK"))
 	{
 		WinClose
 	}
@@ -216,18 +216,22 @@ SetMode(Mode)
 Work()
 {
 	global
-	If (UnactionedCount <= 0)
-	{
-		MsgBox No unactioned tasks!
-		Return
-	}
 	
-	If (Active == 1)
+	If (CurrentMode == ReviewMode)
+	{
+		ShowReviewWindow()
+	}
+	Else If (Active == 1)
 	{
 		ShowDoneWindow()
 	}
 	Else
 	{
+		If (UnactionedCount <= 0)
+		{
+			MsgBox No unactioned tasks!
+			Return
+		}
 		ShowWorkWindow()
 	}
 }
@@ -480,7 +484,7 @@ PutTasksOnNotice()
 			{
 				Break
 			}
-			if (Tasks%A_Index%_1 != "Change to review mode")
+			if (Tasks%A_Index%_1 != "Change to review mode" and Tasks%A_Index%_1 != "Change to forward mode")
 			{
 				Tasks%A_Index%_2 := Tasks%A_Index%_2 . " N"
 				Message := Message . "- " . Tasks%A_Index%_1 . "`n"
@@ -488,7 +492,7 @@ PutTasksOnNotice()
 		}
 		Else
 		{
-			If (Tasks%A_Index%_3 == 0 && Tasks%A_Index%_1 != "Change to review mode")
+			If (Tasks%A_Index%_3 == 0 && Tasks%A_Index%_1 != "Change to review mode" and Tasks%A_Index%_1 != "Change to forward mode")
 			{
 				BlockStarted := 1
 				Tasks%A_Index%_2 := Tasks%A_Index%_2 . " N"
@@ -506,43 +510,8 @@ DoReview()
 {
 	global
 	ReviewComplete := 1
-	Loop, %TaskCount%
-	{
-		If (Tasks%A_Index%_3 == 1 and !InStr(Tasks%A_Index%_2, "D") and InStr(Tasks%A_Index%_2, "R"))
-		{
-			MsgBox, 3, Review Mode - AutofocusAHK %Ver%, % Tasks%A_Index%_1 . "`n`nDo you want to re-add this task?"
-			IfMsgBox Yes
-			{
-				Tasks%A_Index%_2 := Tasks%A_Index%_2 . " D" . A_Now
-				Tasks%A_Index%_3 := 1
-
-				TaskCount := TaskCount + 1
-				UnactionedCount := UnactionedCount + 1
-				Tasks%Taskcount%_1 := Tasks%A_Index%_1
-				Tasks%Taskcount%_2 := "A" . A_Now
-				Tasks%Taskcount%_3 := 0
-
-			}
-			IfMsgBox No
-			{
-				ReviewComplete := 0
-			}
-			IfMsgBox Cancel
-			{
-				ReviewComplete := 0
-				Break
-			}
-		}
-	}
-	CurrentMode := PreviousMode
-	If (!ReviewComplete)
-	{
-		ReAddTask()
-	}
-	Else
-	{
-		MarkAsDone()
-	}
+	ReviewTask := 0
+	SelectNextReviewTask()
 }
 
 BackupTasks()
@@ -656,16 +625,19 @@ SetForwardModeStats()
 SelectNextActivePage()
 {
 	global
-	Loop
+	If (UnactionedCount > 0)
 	{
-		If (Tasks%CurrentTask%_3 == 0)
+		Loop
 		{
-			Break
+			If (Tasks%CurrentTask%_3 == 0)
+			{
+				Break
+			}
+			CurrentTask := CurrentTask +1
 		}
-		CurrentTask := CurrentTask +1
+		SetForwardModeStats()
+		CurrentTask := FirstTaskOnPage - 1
 	}
-	SetForwardModeStats()
-	CurrentTask := FirstTaskOnPage - 1
 }
 
 Export()
@@ -850,7 +822,49 @@ ShowDoneWindow()
 }
 
 CapsLock & y::
+ShowReviewWindow()
 Return
+ShowReviewWindow()
+{
+	global
+	Gui, Destroy
+	Gui, Font, Bold
+	Gui, Add, Text, Y20 w400 Center vTaskControl, % Tasks%ReviewTask%_1
+	Gui, Font, Norm
+	GuiControlGet, TaskPos, Pos, TaskControl
+	NewY := TaskPosY + TaskPosH + 20
+	NewYT := NewY + 5
+	GuiControl, Text, ModeControl, ForwardMode
+	;GuiControl, Move, TaskControl, w200 h100
+	Gui, Add, Text, vQuestionLabel Y%NewYT%,Do you want to re-add this task?
+	Gui, Add, Button, gButtonReviewYes vRvYesButton Y%NewY%, &Yes
+	Gui, Add, Button, gButtonReviewNo vRvNoButton Y%NewY% Default, &Not now
+	Gui, Add, Button, gButtonReviewNever vRvNeverButton Y%NewY%, Ne&ver
+	;Gui, Add, Button, vCancelButton Y%NewY%, &Cancel
+	;GuiControlGet, CancelPos, Pos, CancelButton
+	;DiffX := CancelPosX + CancelPosW - TaskPosX - TaskPosW
+	;CancelPosX := CancelPosX - DiffX
+	;GuiControl, Move, CancelButton, x%CancelPosX% y%CancelPosY% w%CancelPosW% h%CancelPosH%
+	GuiControlGet, NeverPos, Pos, RvNeverButton
+	DiffX := NeverPosX + NeverPosW - TaskPosX - TaskPosW
+	NeverPosX := NeverPosX - DiffX
+	GuiControl, Move, RvNeverButton, x%NeverPosX% y%NeverPosY% w%NeverPosW% h%NeverPosH%
+	GuiControlGet, YesPos, Pos, RvYesButton
+	YesPosX := YesPosX - DiffX
+	GuiControl, Move, RvYesButton, x%YesPosX% y%YesPosY% w%YesPosW% h%YesPosH%
+	GuiControlGet, NoPos, Pos, RvNoButton
+	NoPosX := NoPosX - DiffX
+	GuiControl, Move, RvNoButton, x%NoPosX% y%NoPosY% w%NoPosW% h%NoPosH%
+	GuiControlGet, QuestionPos, Pos, QuestionLabel
+	QuestionPosX := QuestionPosX - DiffX
+	GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
+	;Gui, +LabelGuiReview
+	Gui, Show, Center Autosize, Review Mode - AutofocusAHK %Ver%
+	GuiControl, Focus, RvNoButton
+	Return
+}
+
+
 ShowStatusWindow()
 {
 	global
@@ -862,6 +876,39 @@ ShowStatusWindow()
 	Gui, 2:Add, Button,ym gButtonHide, Hide for 30s
 	Gui, 2:Show, y0 xCenter NoActivate AutoSize, Status - AutohotkeyAHK
 	GuiControl, Focus, StopButton
+}
+
+SelectNextReviewTask()
+{
+	global
+	Loop
+	{
+		ReviewTask := ReviewTask + 1
+		If (ReviewTask > TaskCount)
+		{
+			CurrentMode := PreviousMode
+			If (!ReviewComplete)
+			{
+				ReAddTask()
+			}
+			Else
+			{
+				MarkAsDone()
+			}
+			Gui, Destroy
+			MsgBox, Review done!
+			Break
+		}
+		
+		If (Tasks%ReviewTask%_3 == 1)
+		{
+			If (!InStr(Tasks%ReviewTask%_2, "D") and InStr(Tasks%ReviewTask%_2, "R"))
+			{
+				ShowReviewWindow()
+				Break
+			}
+		}
+	}
 }
 
 GuiClose:
@@ -909,7 +956,7 @@ Else If (Tasks%CurrentTask%_1 == "Change to forward mode")
 	CurrentTask := 1
 	SelectNextActivePage()
 	SelectNextTask()
-	ShowWorkWindow()
+	()
 }
 Else
 {
@@ -961,6 +1008,29 @@ Return
 
 ButtonStop:
 	Work()
+Return
+
+ButtonReviewYes:
+Tasks%ReviewTask%_2 := Tasks%ReviewTask%_2 . " D" . A_Now
+Tasks%ReviewTask%_3 := 1
+
+TaskCount := TaskCount + 1
+UnactionedCount := UnactionedCount + 1
+Tasks%Taskcount%_1 := Tasks%ReviewTask%_1
+Tasks%Taskcount%_2 := "A" . A_Now
+Tasks%Taskcount%_3 := 0
+SelectNextReviewTask()
+Return
+
+ButtonReviewNo:
+ReviewComplete := 0
+SelectNextReviewTask()
+Return
+
+ButtonReviewNever:
+Tasks%ReviewTask%_2 := Tasks%ReviewTask%_2 . " D" . A_Now
+Tasks%ReviewTask%_3 := 1
+SelectNextReviewTask()
 Return
 
 About/Help:
