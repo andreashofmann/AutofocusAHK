@@ -3,8 +3,6 @@
 ; CapsLock should not be triggered when pressed
 SetCapslockState AlwaysOff
 
-; Timer for checking whether the Script was modified
-SetTimer,UPDATEDSCRIPT,1000
 SetTimer,MorningRoutine,300000
 
 ; Modi
@@ -80,19 +78,6 @@ TriggerExport:
 Return
 
 
-; If the Script was modified, reload it
-UPDATEDSCRIPT:
-	FileGetAttrib,attribs,%A_ScriptFullPath%
-	IfInString,attribs,A
-	{
-		FileSetAttrib,-A,%A_ScriptFullPath%
-		SplashTextOn,,,Updated AutofocusAHK,
-		Sleep,500
-		SplashTextOff
-		Reload
-	}
-Return 
-
 ; Load tasks from file Tasks.txt
 LoadTasks()
 {
@@ -164,10 +149,11 @@ ShowNextTasks()
 		MsgBox No unactioned tasks!
 		Return
 	}
+	PreviousTask := CurrentTask
 
 	Message := ""
 	Count := 30
-	If (TaskCount < 30)
+	If (UnactionedCount < 30)
 	{
 		Count := TaskCount
 	}
@@ -178,6 +164,7 @@ ShowNextTasks()
 			Message := Message . Tasks%A_Index%_1 . "`n"
 		}
 	}
+	CurrentTask := PreviousTask
 	MsgBox,,AutofocusAHK %Ver%, %Message%
 }
 
@@ -956,7 +943,7 @@ Else If (Tasks%CurrentTask%_1 == "Change to forward mode")
 	CurrentTask := 1
 	SelectNextActivePage()
 	SelectNextTask()
-	()
+	Work()
 }
 Else
 {
