@@ -12,7 +12,7 @@ ReviewMode  := 2
 
 HasReviewModeTask := 0
 HasForwardModeTask := 0
-Ver := "0.8"
+Ver := "0.8.5"
 
 menu, tray, NoStandard
 menu, tray, add, About/Help
@@ -48,10 +48,6 @@ TriggerShowNextTasks:
 	ShowNextTasks()
 Return
 
-; Show current task with CapsLock+c
-TriggerShowCurrentTask:
-	ShowCurrentTask()
-Return
 
 ; Start working with CapsLock+d
 TriggerWork:
@@ -69,14 +65,10 @@ TriggerToggleAutostart:
 	ToggleStartup()
 Return
 
-TriggerShowOnNotice:
-	ShowOnNotice()
-Return
 
 TriggerExport:
 	Export()
 Return
-
 
 ; Load tasks from file Tasks.txt
 LoadTasks()
@@ -150,35 +142,76 @@ ShowNextTasks()
 		Return
 	}
 	PreviousTask := CurrentTask
-
+	CreatingList := 1
+	
 	Message := ""
-	Count := 30
-	If (UnactionedCount < 30)
+	Count := 10
+	If (UnactionedCount < 10)
 	{
-		Count := TaskCount
-	}
-	Loop %Count%
-	{
-		If (Tasks%A_Index%_3 == 0)
-		{
-			Message := Message . Tasks%A_Index%_1 . "`n"
-		}
-	}
-	CurrentTask := PreviousTask
-	MsgBox,,AutofocusAHK %Ver%, %Message%
-}
-
-;Show Current Task
-ShowCurrentTask()
-{
-	global
-	If (UnactionedCount <= 0)
-	{
-		MsgBox No unactioned tasks!
-		Return
+		Count := UnactionedCount
 	}
 	
-	MsgBox % Tasks%CurrentTask%_1
+	Gui, Destroy
+	Gui +LastFound
+	Gui, Font, Bold
+	Gui, Add, Text, xm w600 Center, Next Tasks
+	Gui, Font, Norm
+	Gui, Add, ListView, NoSortHdr Count%Count% -ReadOnly -WantF2 xm r%Count% w600 vNextListView, Description|Added
+	Loop %Count%
+	{
+		GetCurrentMetadata()
+		LV_Add("", Tasks%CurrentTask%_1, CurrentAdded)
+		SelectNextTask()
+	}
+	CurrentTask := PreviousTask
+	CreatingList := 0
+	LV_ModifyCol(2,"Auto")
+	SendMessage, 4125, 1, 0, SysListView321
+	Width := ErrorLevel
+	LV_ModifyCol(1, Width)
+	LV_ModifyCol(2,"AutoHdr")
+	SendMessage, 4125, 1, 0, SysListView321
+	LV_ModifyCol(2, Width)
+	LV_ModifyCol(1, ErrorLevel)
+
+	Gui, Font, Bold
+	Gui, Add, Text, xm w600 Center, On Notice for Review
+	Gui, Font, Norm
+
+	NoticeCount := 0
+	Loop %TaskCount%
+	{
+		If (Tasks%A_Index%_3 == 0 and InStr(Tasks%A_Index%_2, "N"))
+		{
+			NoticeCount += 1
+		}
+	}
+
+	
+	First := 1
+	Loop %TaskCount%
+	{
+		If (Tasks%A_Index%_3 == 0 and InStr(Tasks%A_Index%_2, "N"))
+		{
+			If (First)
+			{
+				First := 0
+				Gui, Add, ListView, NoSortHdr Count%NoticeCount% -ReadOnly -WantF2 xm r%NoticeCount% w600 vNoticeListView, Description|Added
+			}
+			GetTaskMetadata(A_Index)
+			LV_Add("", Tasks%A_Index%_1, TaskAdded)
+		}
+	}
+	If (First == 1)
+	{
+		Gui, Add, Text, xm,There are currently no tasks on notice.
+	}
+
+	LV_ModifyCol(2, Width)
+	LV_ModifyCol(1, ErrorLevel)
+	GuiControl, Disable, NextListView
+	GuiControl, Disable, NoticeListView
+	Gui, Show, AutoSize, Show Tasks - AutofocusAHK %Ver%
 }
 
 ;Add a New Task
@@ -189,7 +222,7 @@ AddTask()
 	Gui, 3:Add, Edit, w400 vNewTask  ; The ym option starts a new column of controls.
 	Gui, 3:Add, Button,ym default gButtonAdd, Add
 	Gui, 3:+LabelGuiAdd
-	Gui, 3:Show, , Add Task - AutofocusAHK %Ver%
+	Gui, 3:Show, AutoSize, Add Task - AutofocusAHK %Ver%
 }
 
 ;Set the current mode
@@ -253,11 +286,14 @@ SelectNextTask()
 				CurrentTask := CurrentTask + 1
 				If (CurrentTask > LastTaskOnPage)
 				{
-					If (ActionOnCurrentPass)
+					If (ActionOnCurrentPass or CreatingList)
 					{
 						CurrentTask := FirstTaskOnPage
-						CurrentPass := CurrentPass + 1
-						ActionOnCurrentPass := 0
+						If (!CreatingList)
+						{
+							CurrentPass := CurrentPass + 1
+							ActionOnCurrentPass := 0
+						}
 					}
 					Else
 					{
@@ -379,20 +415,6 @@ LoadConfig()
 		IniWrite, %HKShowNextTasks%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowNextTasks
 	}
 	Hotkey, %HKShowNextTasks%, TriggerShowNextTasks
-	IniRead, HKShowCurrentTask, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowCurrentTask
-	If (HKShowCurrentTask == "ERROR")
-	{
-		HKShowCurrentTask := "CapsLock & c"
-		IniWrite, %HKShowCurrentTask%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowCurrentTask
-	}
-	Hotkey, %HKShowCurrentTask%, TriggerShowCurrentTask
-	IniRead, HKShowOnNotice, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowOnNotice
-	If (HKShowOnNotice == "ERROR")
-	{
-		HKShowOnNotice := "CapsLock & n"
-		IniWrite, %HKShowOnNotice%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowOnNotice
-	}
-	Hotkey, %HKShowOnNotice%, TriggerShowOnNotice
 	IniRead, HKToggleAutostart, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
 	If (HKToggleAutostart == "ERROR")
 	{
@@ -565,27 +587,6 @@ ToggleStartup()
 		FileDelete, %A_Startup%\AutofocusAHK.lnk
 		StartWithWindows := 0
 		IniWrite, 0, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
-	}
-}
-
-ShowOnNotice()
-{
-	global
-	Message := ""
-	Loop %TaskCount%
-	{
-		If (Tasks%A_Index%_3 == 0 and InStr(Tasks%A_Index%_2, "N"))
-		{
-			Message := Message . "- " . Tasks%A_Index%_1 . "`n"
-		}
-	}
-	If (Message != "")
-	{
-		MsgBox The following tasks are on notice:`n`n%Message%
-	}
-	Else
-	{
-		MsgBox There are currently no tasks on notice.
 	}
 }
 
@@ -894,6 +895,41 @@ SelectNextReviewTask()
 				ShowReviewWindow()
 				Break
 			}
+		}
+	}
+}
+
+GetCurrentMetadata()
+{
+	global
+	GetTaskMetadata(CurrentTask)
+	CurrentDone := TaskDone
+	CurrentReview := TaskReview
+	CurrentAdded := TaskAdded
+}
+
+GetTaskMetadata(Task)
+{
+	global
+	TaskDone := ""
+	TaskReview := ""
+	TaskAdded := ""
+	Loop, Parse, Tasks%Task%_2, %A_Space%
+	{
+		If (InStr(A_LoopField, "D"))
+		{
+			TaskDone := SubStr(A_LoopField, 2)
+			FormatTime, TaskDone, %TaskDone%, yyyy-MM-dd H:mm
+		}
+		If (InStr(A_LoopField, "R"))
+		{
+			TaskReview := SubStr(A_LoopField, 2)
+			FormatTime, TaskReview, %TaskReview%, yyyy-MM-dd H:mm
+		}
+		If (InStr(A_LoopField, "A"))
+		{
+			TaskAdded := SubStr(A_LoopField, 2)
+			FormatTime, TaskAdded, %TaskAdded%, yyyy-MM-dd H:mm
 		}
 	}
 }

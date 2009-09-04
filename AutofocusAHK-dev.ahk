@@ -13,7 +13,6 @@ UPDATEDSCRIPT:
 	IfInString,attribs,A
 	{
 		FileSetAttrib,-A,%A_ScriptDir%\AutofocusAHK.ahk
-		MsgBox %AhkPID%
 		Process, Close, %AhkPID%
 		Run,  autohotkey.exe %A_ScriptDir%\AutofocusAHK.ahk,  %A_ScriptDir%,,AhkPID
 	}
