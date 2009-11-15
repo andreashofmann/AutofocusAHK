@@ -197,3 +197,10 @@ MorningRoutine:
 	FormatTime, Hour, , H
 	DoMorningRoutine()
 Return
+
+GetStandardWindowTitle()
+{
+	Global
+	Title := " - " . System . " - AutofocusAHK " . Ver
+	Return Title
+}

@@ -156,3 +156,25 @@ AF3_DismissTasks()
 		}
 	}
 }
+
+AF3_GetWorkWindowTitle()
+{
+	Global CurrentMode, ForwardMode
+	If (CurrentMode == ForwardMode)
+	{
+		Title := "Forward Mode"
+	}
+	Else
+	{
+		Title := "Reverse Mode"
+	}
+	Title .= GetStandardWindowTitle()
+	Return Title
+}
+
+AF3_GetReviewWindowTitle()
+{
+	Title := "Review Mode"
+	Title .= GetStandardWindowTitle()
+	Return Title
+}

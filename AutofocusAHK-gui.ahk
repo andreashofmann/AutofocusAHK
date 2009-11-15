@@ -1,3 +1,12 @@
+; AutofocusAHK
+;
+; Functions that create/modify the graphical user inferface
+;
+; @author    Andreas Hofmann
+; @license   See LICENSE.txt
+; @version   0.9
+; @since     0.9
+
 
 ; Show Next Tasks
 ShowNextTasks()
@@ -78,7 +87,7 @@ ShowNextTasks()
 	LV_ModifyCol(1, ErrorLevel)
 	GuiControl, Disable, NextListView
 	GuiControl, Disable, NoticeListView
-	Gui, Show, AutoSize, Show Tasks - AutofocusAHK %Ver%
+	Gui, Show, AutoSize, Show Tasks - %System% - AutofocusAHK %Ver%
 }
 
 ;Add a New Task
@@ -89,7 +98,7 @@ AddTask()
 	Gui, 3:Add, Edit, w400 vNewTask  ; The ym option starts a new column of controls.
 	Gui, 3:Add, Button,ym default gButtonAdd, Add
 	Gui, 3:+LabelGuiAdd
-	Gui, 3:Show, AutoSize, Add Task - AutofocusAHK %Ver%
+	Gui, 3:Show, AutoSize, Add Task - %System% - AutofocusAHK %Ver%
 }
 
 ToggleStartup()
@@ -150,15 +159,8 @@ ShowWorkWindow()
 	GuiControlGet, QuestionPos, Pos, QuestionLabel
 	QuestionPosX := QuestionPosX - DiffX
 	GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
-	If (CurrentMode == ForwardMode)
-	{
-		Title := "Forward Mode"
-	}
-	Else
-	{
-		Title := "Reverse Mode"
-	}
-	Gui, Show, Center Autosize, %Title% - AutofocusAHK %Ver%
+	Title := %System%_GetWorkWindowTitle()
+	Gui, Show, Center Autosize, %Title%
 	GuiControl, Focus, NoButton
 	Return
 }
@@ -240,7 +242,8 @@ ShowReviewWindow()
 	QuestionPosX := QuestionPosX - DiffX
 	GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
 	;Gui, +LabelGuiReview
-	Gui, Show, Center Autosize, Review Mode - AutofocusAHK %Ver%
+	Title := %System%_GetReviewWindowTitle
+	Gui, Show, Center Autosize, %Title%
 	GuiControl, Focus, RvNoButton
 	Return
 }
