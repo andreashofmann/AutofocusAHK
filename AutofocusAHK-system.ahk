@@ -89,7 +89,16 @@ DoMorningRoutine()
 	{
 		%System%_DoMorningRoutine()
 	}
-}
+	SaveTasks()
+	BackupTasks()
+	LastRoutine := Now
+	IniWrite, %Now%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, LastRoutine
+	If (Tasks%CurrentTask%_3 == 1) 
+	{
+		SelectNextTask()
+	}
+
+}                                                         
 
 DismissTasks()
 {
