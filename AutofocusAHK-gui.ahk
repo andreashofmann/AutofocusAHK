@@ -518,11 +518,13 @@ Gui, Add, Radio,  checked%RadioChecked% gSystemAF3, Autofocus Version 3 (AF3/RAF
 SystemAF2:
 		System := "AF2"
 		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+    LoadTasks()
 Return
 
 SystemAF3:
 		System := "AF3"
 		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+		LoadTasks()
 Return
 
 AutostartCheckbox:
