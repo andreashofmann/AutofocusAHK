@@ -37,7 +37,7 @@ CapsLock + a	Add a task
 CapsLock + s	Show the next tasks and tasks on notice for review
 CapsLock + d	Start/Stop Working
 CapsLock + e	Export list to HTML
-CapsLock + 1	Toggles autostart
+CapsLock + p	Show preferences
 
 Configuration
 -------------

@@ -42,10 +42,9 @@ TriggerWork:
 	}
 Return
 
-; Trigger to toggle autostart
-TriggerToggleAutostart:
+TriggerPreferences:
 	;Show autostart selection
-	ToggleStartup()
+	ShowPreferences()
 Return
 
 

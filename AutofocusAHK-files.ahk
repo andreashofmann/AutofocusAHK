@@ -63,11 +63,13 @@ SaveTasks()
 LoadConfig()
 {
 	global
+  FirstStart := 0
 	FormatTime, Now, , yyyyMMdd
 	FormatTime, Hour, , H
 	IniRead, System, %A_ScriptDir%\AutofocusAHK.ini, General, System
 	If (System == "ERROR")
 	{
+	  FirstStart := 1
 		System := "AF3"
 		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
 	}
@@ -129,12 +131,10 @@ LoadConfig()
 	}
 	Hotkey, %HKShowNextTasks%, TriggerShowNextTasks
 	IniRead, HKToggleAutostart, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
-	If (HKToggleAutostart == "ERROR")
+	If (HKToggleAutostart != "ERROR")
 	{
-		HKToggleAutostart := "CapsLock & 1"
-		IniWrite, %HKToggleAutostart%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
+		IniDelete, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
 	}
-	Hotkey, %HKToggleAutostart%, TriggerToggleAutostart
 	IniRead, HKExport, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKExport
 	If (HKExport == "ERROR")
 	{
@@ -142,7 +142,18 @@ LoadConfig()
 		IniWrite, %HKExport%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKExport
 	}
 	Hotkey, %HKExport%, TriggerExport
+	IniRead, HKPreferences, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKPreferences
+	If (HKPreferences == "ERROR")
+	{
+		HKPreferences := "CapsLock & p"
+		IniWrite, %HKPreferences%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKPreferences
+	}
+	Hotkey, %HKPreferences%, TriggerPreferences
 
+  If (FirstStart == 1)
+  {
+    ShowPreferences()
+  }
 }
 
 BackupTasks()

@@ -493,3 +493,49 @@ UpdateTime:
 
 	GuiControl, 2: , TimeControl, %TimeString%
 Return
+
+
+
+ShowPreferences()
+{
+	global
+	Gui, Destroy
+	Gui, Font, Bold
+	Gui, Add, Text, w320, Used time management system
+	Gui, Font, Norm
+	RadioChecked := System == "AF2"
+Gui, Add, Radio, vRadioSystem checked%RadioChecked% gSystemAF2, Autofocus Version 2 (AF2)
+	RadioChecked := System == "AF3" || System == ""
+Gui, Add, Radio,  checked%RadioChecked% gSystemAF3, Autofocus Version 3 (AF3/RAF)                   
+	Gui, Font, Bold
+	Gui, Add, Text, w320, Autostart
+	Gui, Font, Norm
+  Gui, Add, Checkbox, vAutostartCheck checked%StartWithWindows%  gAutostartCheckbox, Start AutofocusAHK with Windows                    
+	Gui, Show, Center Autosize, Preferences - AutofocusAHK %Ver%
+	Return
+}
+
+SystemAF2:
+		System := "AF2"
+		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+Return
+
+SystemAF3:
+		System := "AF3"
+		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+Return
+
+AutostartCheckbox:
+  If(StartWithWindows == 0)
+  {
+		FileCreateShortcut, "%A_ScriptFullPath%", %A_Startup%\AutofocusAHK.lnk, %A_ScriptDir% 
+		StartWithWindows := 1
+		IniWrite, 1, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
+	} 
+  Else
+  {
+		FileDelete, %A_Startup%\AutofocusAHK.lnk
+		StartWithWindows := 0
+		IniWrite, 0, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
+  }
+Return
