@@ -1,3 +1,41 @@
+AF3_IsValidTask(TaskName, TaskStats)
+{
+  global
+	If (TaskName == "Change to review mode")
+	{
+		HasReviewModeTask := 1
+		Return 1
+	}
+	If (TaskName == "Change to forward mode")
+	{
+		HasForwardModeTask := 1
+		Return 1
+	}
+	If (TaskName == "---")
+	{
+		Return 0
+	}	
+	Return 1
+}
+
+AF3_PostTaskLoad()
+{
+  global
+	If (TaskCount >= TasksPerPage * 3 and HasForwardModeTask == 0)
+	{
+			TaskCount := TaskCount + 1
+			UnactionedCount := UnactionedCount + 1
+			Tasks%Taskcount%_1 := "Change to forward mode"
+			Tasks%Taskcount%_2 := "A" . A_Now
+			Tasks%Taskcount%_3 := 0
+			HasForwardModeTask := 1
+			SaveTasks()
+	}
+	CurrentTask := TaskCount + 1
+	SelectNextTask()
+
+}
+
 
 AF3_SelectNextTask()
 {

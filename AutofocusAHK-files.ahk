@@ -15,45 +15,35 @@ LoadTasks()
 	UnactionedCount := 0
 	Loop, read, %A_ScriptDir%\Tasks.txt
 	{
-		TaskCount := TaskCount + 1
 		Loop, parse, A_LoopReadLine, %A_Tab%
 		{
-			Tasks%TaskCount%_%A_Index% := A_LoopField
+      NewTask_%A_Index% := A_LoopField
 		}
-		If (InStr(Tasks%TaskCount%_2, "D") or InStr(Tasks%TaskCount%_2, "R"))
-		{
-			Tasks%TaskCount%_3 := 1
-			If (!InStr(Tasks%TaskCount%_2, "D") and InStr(Tasks%TaskCount%_2, "R"))
-			{
-				HasTasksOnReview := 1
-			}
-		}
-		Else
-		{
-			Tasks%TaskCount%_3 := 0
-			UnactionedCount := UnactionedCount +1
-			If (Tasks%TaskCount%_1 == "Change to review mode")
-			{
-				HasReviewModeTask := 1
-			}
-			If (Tasks%TaskCount%_1 == "Change to forward mode")
-			{
-				HasForwardModeTask := 1
-			}
-		}
+	  IsValidTask := %System%_IsValidTask(NewTask_1, NewTask_2)
+
+    if (IsValidTask)
+    {
+  		TaskCount := TaskCount + 1
+  	  Tasks%TaskCount%_1 := NewTask_1
+  	  Tasks%TaskCount%_2 := NewTask_2
+	  
+  
+  		If (InStr(Tasks%TaskCount%_2, "D") or InStr(Tasks%TaskCount%_2, "R"))
+  		{
+  			Tasks%TaskCount%_3 := 1
+  			If (!InStr(Tasks%TaskCount%_2, "D") and InStr(Tasks%TaskCount%_2, "R"))
+  			{
+  				HasTasksOnReview := 1
+  			}
+  		}
+  		Else
+  		{
+  			Tasks%TaskCount%_3 := 0
+  			UnactionedCount := UnactionedCount +1
+  		}
+  	}
 	}
-	If (TaskCount >= TasksPerPage * 3 and HasForwardModeTask == 0)
-	{
-			TaskCount := TaskCount + 1
-			UnactionedCount := UnactionedCount + 1
-			Tasks%Taskcount%_1 := "Change to forward mode"
-			Tasks%Taskcount%_2 := "A" . A_Now
-			Tasks%Taskcount%_3 := 0
-			HasForwardModeTask := 1
-			SaveTasks()
-	}
-	CurrentTask := TaskCount + 1
-	SelectNextTask()
+  %System%_PostTaskLoad()
 }
 
 ; Save tasks to file Tasks.txt
