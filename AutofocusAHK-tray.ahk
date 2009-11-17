@@ -14,11 +14,17 @@ SetupTrayMenu()
 	; Remove AutoHotkey standard menu items
 	menu, tray, NoStandard
 
-	; Add About/Help menu item
-	menu, tray, add, About/Help
+	menu, tray, add, Add Task, AddTask
+	menu, tray, add, Show Next Tasks, ShowNextTasks
+	menu, tray, add, Work
+
+	; Add a separator
+	menu, tray, add 
+
+	menu, tray, add, Preferences
 
 	; Add About/Help menu item
-	menu, tray, add, Preferences
+	menu, tray, add, About/Help, About
 
 	; Add a separator
 	menu, tray, add 
@@ -26,18 +32,31 @@ SetupTrayMenu()
 	; Add Exit menu item
 	menu, tray, add, Exit
 
-	; Make About/Help the default (if tray icon is double-clicked)
+	; Make Add Task the default (if tray icon is double-clicked)
 	menu, tray, default, About/Help
 }
 
-About/Help:
-MsgBox, ,About/Help - AutofocusAHK %Ver%, CapsLock + a%A_Tab%Add task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`nCapsLock + p%A_Tab%Show preferences`n`nAutofocus Time Management System`nCopyright (C) 2009 Mark Forster`nhttp://markforster.net`n`nAutofocusAHK`nCopyright (C) 2009 Andreas Hofmann`nhttp://andreashofmann.net
+
+AddTask:
+		AddTask()
+Return
+
+ShowNextTasks:
+  ShowNextTasks()
+Return
+
+Work:
+  Work()
+Return
+
+About:
+  MsgBox, ,About/Help - AutofocusAHK %Ver%, CapsLock + a%A_Tab%Add task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`nCapsLock + p%A_Tab%Show preferences`n`nAutofocus Time Management System`nCopyright (C) 2009 Mark Forster`nhttp://markforster.net`n`nAutofocusAHK`nCopyright (C) 2009 Andreas Hofmann`nhttp://andreashofmann.net
 Return
 
 Preferences:
-ShowPreferences()
+  ShowPreferences()
 Return
 
 Exit:
-ExitApp, 0
+  ExitApp, 0
 Return
