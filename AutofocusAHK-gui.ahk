@@ -501,13 +501,13 @@ ShowPreferences()
 	Gui, Add, Text, w320, Used time management system
 	Gui, Font, Norm
 	RadioChecked := System == "AF1"
-Gui, Add, Radio, vRadioSystem checked%RadioChecked% gSystemAF1, Autofocus Version 1 (AF1/AF)
+  Gui, Add, Radio, vRadioSystem checked%RadioChecked% gSystemAF1, Autofocus Version 1 (AF1/AF)
 	RadioChecked := System == "AF2"
-Gui, Add, Radio, checked%RadioChecked% gSystemAF2, Autofocus Version 2 (AF2)
+  Gui, Add, Radio, checked%RadioChecked% gSystemAF2, Autofocus Version 2 (AF2)
 	RadioChecked := System == "AF3"
-Gui, Add, Radio,  checked%RadioChecked% gSystemAF3, Autofocus Version 3 (AF3/RAF)                   
+  Gui, Add, Radio,  checked%RadioChecked% gSystemAF3, Autofocus Version 3 (AF3/RAF)                   
 	RadioChecked := System == "AF4" || System == ""
-Gui, Add, Radio,  checked%RadioChecked% gSystemAF4, Autofocus Version 4 (AF4)                   
+  Gui, Add, Radio,  checked%RadioChecked% gSystemAF4, Autofocus Version 4 (AF4)                   
 	Gui, Font, Bold
 	Gui, Add, Text, w320, Autostart
 	Gui, Font, Norm

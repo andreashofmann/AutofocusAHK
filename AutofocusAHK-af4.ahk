@@ -28,6 +28,7 @@ AF4_PostTaskLoad()
 		SaveTasks()
 	}
   CurrentPass := 1  
+	ActionOnCurrentPass := 0
 	CurrentTask := 0
 	SelectNextTask()
 }
@@ -161,16 +162,21 @@ AF4_DismissTasks()
 
 AF4_GetWorkWindowTitle()
 {
-	global CurrentMode, OpenListMode
+	global CurrentMode,OpenListMode,CurrentPass,ActionOnCurrentPass
 	If (CurrentMode == OpenListMode)
 	{
 		Title := "Open List"
 	}
-	Else
+	Else                                     
 	{
-		Title := "Closed List (Pass " . CurrentPass . ")"
-	}
-	Title .= GetStandardWindowTitle()
+		Title := "Pass " . CurrentPass
+		MsgBox % ActionOnCurrentPass
+    If (ActionOnCurrentPass == 0)
+    {
+      Title .= "(!)"                                    D
+    }
+  }
+	Title .= " - Closed List" . GetStandardWindowTitle()
 	Return Title
 }
 
