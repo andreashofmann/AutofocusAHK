@@ -25,7 +25,6 @@ AF4_PostTaskLoad()
 	{
 	  HasClosedList := 1
     LastTaskInClosedList := TaskCount
-    MsgBox % LastTaskInClosedList
 		SaveTasks()
 	}
   CurrentPass := 1  

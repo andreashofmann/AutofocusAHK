@@ -353,10 +353,7 @@ Return
 
 ButtonReAdd:
 	Active := 0
-	If (CurrentMode == ForwardMode)
-	{
-		ActionOnCurrentPass := 1
-	}
+  ActionOnCurrentPass := 1
 	ReAddTask()
 	ShowWorkWindow()
 Return
