@@ -26,7 +26,6 @@ ShowNextTasks()
 	{
 		Count := UnactionedCount
 	}
-	
 	Gui, Destroy
 	Gui +LastFound
 	Gui, Font, Bold
@@ -49,44 +48,47 @@ ShowNextTasks()
 	SendMessage, 4125, 1, 0, SysListView321
 	LV_ModifyCol(2, Width)
 	LV_ModifyCol(1, ErrorLevel)
+ 	GuiControl, Disable, NextListView
 
-	Gui, Font, Bold
-	Gui, Add, Text, xm w600 Center, On Notice for Review
-	Gui, Font, Norm
-
-	NoticeCount := 0
-	Loop %TaskCount%
-	{
-		If (Tasks%A_Index%_3 == 0 and InStr(Tasks%A_Index%_2, "N"))
-		{
-			NoticeCount += 1
-		}
-	}
-
-	
-	First := 1
-	Loop %TaskCount%
-	{
-		If (Tasks%A_Index%_3 == 0 and InStr(Tasks%A_Index%_2, "N"))
-		{
-			If (First)
-			{
-				First := 0
-				Gui, Add, ListView, NoSortHdr Count%NoticeCount% -ReadOnly -WantF2 xm r%NoticeCount% w600 vNoticeListView, Description|Added
-			}
-			GetTaskMetadata(A_Index)
-			LV_Add("", Tasks%A_Index%_1, TaskAdded)
-		}
-	}
-	If (First == 1)
-	{
-		Gui, Add, Text, xm,There are currently no tasks on notice.
-	}
-
-	LV_ModifyCol(2, Width)
-	LV_ModifyCol(1, ErrorLevel)
-	GuiControl, Disable, NextListView
-	GuiControl, Disable, NoticeListView
+  If(System == "AF3" or System == "AF2")
+  {
+  	Gui, Font, Bold
+  	Gui, Add, Text, xm w600 Center, On Notice for Review
+  	Gui, Font, Norm
+  
+  	NoticeCount := 0
+  	Loop %TaskCount%
+  	{
+  		If (Tasks%A_Index%_3 == 0 and InStr(Tasks%A_Index%_2, "N"))
+  		{
+  			NoticeCount += 1
+  		}
+  	}
+  
+  	
+  	First := 1
+  	Loop %TaskCount%
+  	{
+  		If (Tasks%A_Index%_3 == 0 and InStr(Tasks%A_Index%_2, "N"))
+  		{
+  			If (First)
+  			{
+  				First := 0
+  				Gui, Add, ListView, NoSortHdr Count%NoticeCount% -ReadOnly -WantF2 xm r%NoticeCount% w600 vNoticeListView, Description|Added
+  			}
+  			GetTaskMetadata(A_Index)
+  			LV_Add("", Tasks%A_Index%_1, TaskAdded)
+  		}
+  	}
+  	If (First == 1)
+  	{
+  		Gui, Add, Text, xm,There are currently no tasks on notice.
+  	}
+  
+  	LV_ModifyCol(2, Width)
+  	LV_ModifyCol(1, ErrorLevel)
+  	GuiControl, Disable, NoticeListView
+  }
 	Gui, Show, AutoSize, Show Tasks - %System% - AutofocusAHK %Ver%
 }
 

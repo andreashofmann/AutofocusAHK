@@ -44,13 +44,16 @@ AF4_SelectNextTask()
    			CurrentTask := CurrentTask + 1
 				If (HasClosedList and CurrentTask == LastTaskInClosedList+1)
 				{
-					If (ActionOnCurrentPass)
+					If (ActionOnCurrentPass or (ActionOnCurrentPass and CreatingList))
 					{
-    				CurrentPass := CurrentPass + 1
-						CurrentTask := FirstTaskOnPage
-						ActionOnCurrentPass := 0
+					  If (!CreatingList)
+					  {
+      				CurrentPass := CurrentPass + 1
+  						ActionOnCurrentPass := 0
+						}
+            CurrentTask := 1
 					}
-					Else
+					Else If (!CreatingList)
 					{
  						If (CurrentPass == 1)
 						{
