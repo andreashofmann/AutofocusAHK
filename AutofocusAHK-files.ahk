@@ -49,11 +49,15 @@ LoadTasks()
 ; Save tasks to file Tasks.txt
 SaveTasks()
 {
-	global TaskCount
+	global
 	Content := ""
 	Loop %TaskCount%
 	{
 		Content := Content . Tasks%A_Index%_1 . A_Tab . Tasks%A_Index%_2 . "`n"
+		If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList)
+		{
+		  Content := Content . "---`n"    
+    }
 	}
 	FileDelete, %A_ScriptDir%\Tasks.txt
 	FileAppend, %Content%, %A_ScriptDir%\Tasks.txt
@@ -222,12 +226,29 @@ Export()
 		. "</head><body>"
 		. "<h1>AutofocusAHK</h1>"
 		. "<h2>Export " . ExportTime . "</h2><table cellspacing=""0"">"
-		. "<tr><th colspan=""4"">Page 1</th></tr>"
-		. "<tr><th>Task</th><th>Added</th><th>On&nbsp;Review</th><th><nobr>Done/Re-Added</nobr></th></tr>"
+		
+  If (System == "AF1" or System == "AF3")
+  {
+    Export .= "<tr><th colspan=""4"">Page 1</th></tr>"
+  }
+  If (System == "AF4")
+  {
+    Export .= "<tr><th colspan=""4"">"
+    If (HasClosedList)
+    {
+      Export .= "Closed List"
+    }
+    Else
+    {
+      Export .= "Open List"    
+    }
+          Export .= "</th></tr>"
+  }
+		Export .= "<tr><th>Task</th><th>Added</th><th>On&nbsp;Review</th><th><nobr>Done/Re-Added</nobr></th></tr>"
 		ExportPage := 1
 	Loop, %TaskCount%
 	{
-		If (ExportPage < ceil(A_Index/TasksPerPage))
+		If ((System == "AF1" or System == "AF3") and ExportPage < ceil(A_Index/TasksPerPage))
 		{
 			ExportPage := ExportPage + 1
 			Export .= "<tr><th colspan=""4"">Page " . ExportPage . "</th></tr>"
@@ -284,7 +305,12 @@ Export()
 				. "</nobr></td>"
 		
 		Export .= "</tr>"
-	}
+		If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList and LastTaskInClosedList != TaskCount)
+		{
+			Export .= "<tr><th colspan=""4"">Open List</th></tr>"
+			. "<tr><th>Task</th><th>Added</th><th>On Review</th><th><nobr>Done/Re-Added</nobr></th></tr>"
+		}
+  }
 	
 	Export .= "</table></body></html>"
 	

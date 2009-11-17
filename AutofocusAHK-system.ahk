@@ -32,6 +32,9 @@ Initialize()
 	; Does a "change to forward mode" task exist?
 	HasForwardModeTask := 0
 	
+	; Does a closed list exist?
+	HasClosedList := 0
+
 	; Setup tray menu
 	SetupTrayMenu()
 
