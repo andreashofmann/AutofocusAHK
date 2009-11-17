@@ -5,6 +5,7 @@ in AutohHotkey.
 
 History
 -------
+2009-09-04 - Released version 0.9   - support for switching between AF1-4, AF4 support still lacks review
 2009-09-04 - Released version 0.8.5 - improved gui for review mode, show next tasks and tasks on notice
 2009-08-28 - Released version 0.8   - HTML export
 2009-08-27 - Released version 0.7   - new user interface for adding and doing, status window with timer
