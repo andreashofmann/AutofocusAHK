@@ -98,7 +98,7 @@ AF3_SelectNextTask()
 						}
 					}
 				}
-				If (Tasks%CurrentTask%_3 == 0) 
+				If (Tasks%CurrentTask%_3 == 0 or UnactionedCount == 0) 
 				{
 					Break
 				}

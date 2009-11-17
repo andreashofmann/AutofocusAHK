@@ -315,7 +315,8 @@ Return
 
 ButtonNotReady:
 SelectNextTask()
-ShowWorkWindow()
+Gui, Destroy
+Work()
 Return
 
 ButtonReady:
@@ -340,7 +341,8 @@ Else If (Tasks%CurrentTask%_1 == "Change to forward mode")
 	CurrentTask := 1
 	SelectNextActivePage()
 	SelectNextTask()
-	Work()
+	Gui, Destroy
+  Work()
 }
 Else
 {
@@ -355,7 +357,8 @@ ButtonReAdd:
 	Active := 0
   ActionOnCurrentPass := 1
 	ReAddTask()
-	ShowWorkWindow()
+ 	Gui, Destroy
+  Work()
 Return
 
 ButtonNoReAdd:
@@ -365,7 +368,8 @@ ButtonNoReAdd:
 		ActionOnCurrentPass := 1
 	}
 	MarkAsDone()
-	ShowWorkWindow()
+	Gui, Destroy
+  Work()
 Return
 
 ButtonAdd:
@@ -388,7 +392,8 @@ ButtonHide:
 Return
 
 ButtonStop:
-	Work()
+	Gui, Destroy
+  Work()
 Return
 
 ButtonReviewYes:

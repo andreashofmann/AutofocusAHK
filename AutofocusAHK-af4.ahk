@@ -44,20 +44,16 @@ AF4_SelectNextTask()
    			CurrentTask := CurrentTask + 1
 				If (HasClosedList and CurrentTask == LastTaskInClosedList+1)
 				{
-				  MsgBox End of closed list
 					If (ActionOnCurrentPass)
 					{
-					  MsgBox Action was taken
     				CurrentPass := CurrentPass + 1
 						CurrentTask := FirstTaskOnPage
 						ActionOnCurrentPass := 0
 					}
 					Else
 					{
-					  MsgBox No Action was taken
  						If (CurrentPass == 1)
 						{
-						  MsgBox Firt Pass
               AF4_DismissTasks()
 							CurrentPass := 1
 							ActionOnCurrentPass := 0
@@ -65,7 +61,6 @@ AF4_SelectNextTask()
 						}
 						Else
 						{
-						  MsgBox Later Pass
 							CurrentPass := 1
 							ActionOnCurrentPass := 0
 						}
@@ -75,7 +70,7 @@ AF4_SelectNextTask()
 				{
 						CurrentTask := 1
         }
-				If (Tasks%CurrentTask%_3 == 0) 
+				If (Tasks%CurrentTask%_3 == 0 or UnactionedCount == 0) 
 				{
 					Break
 				}
@@ -170,7 +165,6 @@ AF4_GetWorkWindowTitle()
 	Else                                     
 	{
 		Title := "Pass " . CurrentPass
-		MsgBox % ActionOnCurrentPass
     If (ActionOnCurrentPass == 0)
     {
       Title .= "(!)"                                    D

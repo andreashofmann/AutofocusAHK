@@ -37,7 +37,7 @@ AF2_SelectNextTask()
 			{
 				CurrentTask := TaskCount
 			}
-			If (Tasks%CurrentTask%_3 == 0) 
+			If (Tasks%CurrentTask%_3 == 0 or UnactionedCount == 0) 
 			{
 				Break
 			}
