@@ -519,6 +519,15 @@ ShowPreferences()
 	Gui, Add, Text, w320, Autostart
 	Gui, Font, Norm
   Gui, Add, Checkbox, vAutostartCheck checked%StartWithWindows%  gAutostartCheckbox, Start AutofocusAHK with Windows                    
+	Gui, Add, Text, w320, Backups
+  Gui, Add, Checkbox, vBackupCheck checked%DoBackups%  gBackupCheckbox, Create daily backups of task list
+  Gui, Add, Text, vBackupLabel, Number of Backups to keep:                   
+	GuiControlGet, BackupLabelPos, Pos, BackupLabel
+	NewX := BackupLabelPosX + BackupLabelPosW + 10
+	Gui, Add, Edit, vBackupEdit w30 gBackupEditBox,%BackupsToKeep%
+	GuiControlGet, BackupEditPos, Pos, BackupEdit,
+	NewY := BackupLabelPosY - (BackupEditPosH - BackupLabelPosH)/2
+	GuiControl, Move, BackupEdit, x%NewX% y%NewY% 
 	Gui, Show, Center Autosize, Preferences - AutofocusAHK %Ver%
 	Return
 }
@@ -561,3 +570,35 @@ AutostartCheckbox:
 		IniWrite, 0, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
   }
 Return
+
+BackupCheckbox:
+  If(DoBackups == 0)
+  {
+		FileCreateShortcut, "%A_ScriptFullPath%", %A_Startup%\AutofocusAHK.lnk, %A_ScriptDir% 
+		DoBackups := 1
+		IniWrite, 1, %A_ScriptDir%\AutofocusAHK.ini, General, DoBackups
+	} 
+  Else
+  {
+		FileDelete, %A_Startup%\AutofocusAHK.lnk
+		DoBackups := 0
+		IniWrite, 0, %A_ScriptDir%\AutofocusAHK.ini, General, DoBackups
+  }
+Return
+
+BackupEditBox:
+    GuiControlGet, PreBackupsToKeep,,BackupEdit
+    If PreBackupsToKeep is digit
+    {
+        Gui, Font
+        GuiControl, Font, BackupEdit
+		BackupsToKeep := PreBackupsToKeep
+		IniWrite, %BackupsToKeep%, %A_ScriptDir%\AutofocusAHK.ini, General, BackupsToKeep
+    }
+    Else
+    {
+        Gui, Font, cRed
+        GuiControl, Font, BackupEdit
+        Gui, Font
+    }
+Return 
