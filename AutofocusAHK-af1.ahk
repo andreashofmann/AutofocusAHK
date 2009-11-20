@@ -1,3 +1,13 @@
+; AutofocusAHK
+;
+; This file holds all functions specific to the Autofocus 1 system. 
+;
+; @author    Andreas Hofmann
+; @license   See LICENSE.txt
+; @version   0.9
+; @since     0.9
+
+
 AF1_IsValidTask(TaskName, TaskStats)
 {
   global

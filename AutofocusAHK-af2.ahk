@@ -1,3 +1,12 @@
+; AutofocusAHK
+;
+; This file holds all functions specific to the Autofocus 2 system. 
+;
+; @author    Andreas Hofmann
+; @license   See LICENSE.txt
+; @version   0.9
+; @since     0.9
+
 AF2_IsValidTask(TaskName, TaskStats)
 {
   global

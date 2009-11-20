@@ -1,3 +1,14 @@
+; AutofocusAHK
+;
+; Start this script if you want to work on AutofocusAHK source in real-time.
+; It monitors all source files and restarts the main script if it detects
+; changes.
+;
+; @author    Andreas Hofmann
+; @license   See LICENSE.txt
+; @version   0.9
+; @since     0.9
+
 #Persistent
 #NoEnv
 SendMode Input
