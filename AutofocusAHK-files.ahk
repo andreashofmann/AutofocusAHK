@@ -74,7 +74,7 @@ LoadConfig()
 	If (System == "ERROR")
 	{
 	  FirstStart := 1
-		System := "AF3"
+		System := "AF4"
 		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
 	}
 	IniRead, StartWithWindows, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
