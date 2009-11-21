@@ -169,8 +169,8 @@ AF4_DismissTasks()
 
 AF4_GetWorkWindowTitle()
 {
-	global CurrentMode,OpenListMode,CurrentPass,ActionOnCurrentPass
-	If (CurrentMode == OpenListMode)
+	global CurrentTask,LastTaskInClosedList,CurrentPass,ActionOnCurrentPass
+	If (CurrentTask > LastTaskInClosedList)
 	{
 		Title := "Open List"
 	}
@@ -179,7 +179,7 @@ AF4_GetWorkWindowTitle()
 		Title := "Pass " . CurrentPass
     If (ActionOnCurrentPass == 0)
     {
-      Title .= "(!)"                                    D
+      Title .= "(!)"                                   
     }
   }
 	Title .= " - Closed List" . GetStandardWindowTitle()
