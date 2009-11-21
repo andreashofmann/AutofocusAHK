@@ -519,7 +519,9 @@ ShowPreferences()
 	Gui, Add, Text, w320, Autostart
 	Gui, Font, Norm
   Gui, Add, Checkbox, vAutostartCheck checked%StartWithWindows%  gAutostartCheckbox, Start AutofocusAHK with Windows                    
+	Gui, Font, Bold
 	Gui, Add, Text, w320, Backups
+	Gui, Font, Norm
   Gui, Add, Checkbox, vBackupCheck checked%DoBackups%  gBackupCheckbox, Create daily backups of task list
   Gui, Add, Text, vBackupLabel, Number of Backups to keep:                   
 	GuiControlGet, BackupLabelPos, Pos, BackupLabel
