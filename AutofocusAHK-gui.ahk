@@ -136,7 +136,7 @@ ShowWorkWindow()
 	global
 	Gui, Destroy
 	Gui, Font, Bold
-	Gui, Add, Text, Y20 w400 Center vTaskControl, % Tasks%CurrentTask%_1
+	Gui, Add, Text, Y20 w500 Center vTaskControl, % Tasks%CurrentTask%_1
 	Gui, Font, Norm
 	GuiControlGet, TaskPos, Pos, TaskControl
 	NewY := TaskPosY + TaskPosH + 20
