@@ -88,6 +88,13 @@ Configuration
 History
 -------
 
+  Version 0.9.1 (2009-11-21)
+    - Added automatic review to AF4 mode
+    - AF4 is now the default system
+    - Status window keeps focus, added shortcuts for stop and hide
+    - Fix: Working window title displays correctly when in open list
+    - Fix: Don't show both preferences and autostart prompt at first start
+
   Version 0.9 (2009-11-17)
     - Support for switching between AF1-4
     - AF4 support still lacks automatic review
