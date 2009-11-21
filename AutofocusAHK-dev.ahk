@@ -6,7 +6,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9
+; @version   0.9.1
 ; @since     0.9
 
 #Persistent
