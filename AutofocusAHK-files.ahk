@@ -81,7 +81,7 @@ LoadConfig()
 	If (StartWithWindows == "ERROR")
 	{
 		StartWithWindows := 0
-		ToggleStartup()
+		IniWrite, %StartWithWindows%, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
 	}
 	IniRead, DoBackups, %A_ScriptDir%\AutofocusAHK.ini, General, DoBackups
 	If (DoBackups == "ERROR")
