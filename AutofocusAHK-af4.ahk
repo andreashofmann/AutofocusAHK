@@ -7,6 +7,11 @@
 ; @version   0.9
 ; @since     0.9
 
+AF4_IsReviewOptional()
+{
+    Return 0
+}
+
 AF4_IsValidTask(TaskName, TaskStats)
 {
   global
@@ -45,12 +50,23 @@ AF4_PostTaskLoad()
 AF4_SelectNextTask()
 {
 	global
-	If (UnactionedCount > 0)
+	If (UnactionedCount > 0 or HasTasksOnReview)
 	{
 			Start := CurrentTask
 			Loop
 			{
-   			CurrentTask := CurrentTask + 1
+      			CurrentTask := CurrentTask + 1
+          		If (!InStr(Tasks%CurrentTask%_2, "D") and InStr(Tasks%CurrentTask%_2, "R"))
+	 			{
+  	 			    If (CurrentMode != ReviewMode)
+	 			    {
+                      ReviewComplete := 1
+  	                  ReviewTask := CurrentTask
+  	                  PreviousMode := CurrentMode
+                      CurrentMode := ReviewMode
+                    } 
+                }
+
 				If (HasClosedList and CurrentTask == LastTaskInClosedList+1)
 				{
 					If (ActionOnCurrentPass or (ActionOnCurrentPass and CreatingList))
@@ -60,29 +76,29 @@ AF4_SelectNextTask()
       				CurrentPass := CurrentPass + 1
   						ActionOnCurrentPass := 0
 						}
-            CurrentTask := 1
+            CurrentTask := 0
 					}
 					Else If (!CreatingList)
 					{
  						If (CurrentPass == 1)
 						{
-              AF4_DismissTasks()
+                            AF4_DismissTasks()
 							CurrentPass := 1
 							ActionOnCurrentPass := 0
-							SelectNextActivePage()
 						}
 						Else
-						{
+						{                              
 							CurrentPass := 1
 							ActionOnCurrentPass := 0
+							
 						}
 					}
 				}
 				If (CurrentTask > TaskCount)
 				{
-						CurrentTask := 1
+						CurrentTask := 0
         }
-				If (Tasks%CurrentTask%_3 == 0 or UnactionedCount == 0) 
+				If (Tasks%CurrentTask%_3 == 0 or (UnactionedCount == 0 and HasTasksOnReview == 0) (UnactionedCount == 0 and CurrentMode == ReviewMode and HasTasksOnReview == 1)) 
 				{
 					Break
 				}

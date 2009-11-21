@@ -78,7 +78,7 @@ MarkAsDone()
 	Tasks%CurrentTask%_3 := 1
 	UnactionedCount := UnactionedCount - 1
 	SaveTasks()
-	If (CurrentMode == ReverseMode)
+	If (System == "AF2" or (System == "AF3" and CurrentMode == ReverseMode))
 	{
 		CurrentTask := TaskCount + 1
 	}

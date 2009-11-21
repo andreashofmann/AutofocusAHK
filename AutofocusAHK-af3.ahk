@@ -7,6 +7,11 @@
 ; @version   0.9
 ; @since     0.9
 
+AF3_IsReviewOptional()
+{
+    Return 1
+}
+
 AF3_IsValidTask(TaskName, TaskStats)
 {
   global

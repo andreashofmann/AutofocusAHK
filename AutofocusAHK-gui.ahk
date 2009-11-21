@@ -213,40 +213,55 @@ ShowReviewWindow()
 {
 	global
 	Gui, Destroy
+	Gui, Add, Text, vReviewing, The following task is on review:
+	GuiControlGet, ReviewingPos, Pos, Reviewing
+	NewY :=ReviewingPosY + ReviewingPosH + 20
 	Gui, Font, Bold
-	Gui, Add, Text, Y20 w400 Center vTaskControl, % Tasks%ReviewTask%_1
+	Gui, Add, Text, x%ReviewingPosX% Y%NewY% w500 Center vTaskControl, % Tasks%ReviewTask%_1
 	Gui, Font, Norm
 	GuiControlGet, TaskPos, Pos, TaskControl
 	NewY := TaskPosY + TaskPosH + 20
 	NewYT := NewY + 5
 	GuiControl, Text, ModeControl, ForwardMode
-	;GuiControl, Move, TaskControl, w200 h100
 	Gui, Add, Text, vQuestionLabel Y%NewYT%,Do you want to re-add this task?
-	Gui, Add, Button, gButtonReviewYes vRvYesButton Y%NewY%, &Yes
-	Gui, Add, Button, gButtonReviewNo vRvNoButton Y%NewY% Default, &Not now
-	Gui, Add, Button, gButtonReviewNever vRvNeverButton Y%NewY%, Ne&ver
-	;Gui, Add, Button, vCancelButton Y%NewY%, &Cancel
-	;GuiControlGet, CancelPos, Pos, CancelButton
-	;DiffX := CancelPosX + CancelPosW - TaskPosX - TaskPosW
-	;CancelPosX := CancelPosX - DiffX
-	;GuiControl, Move, CancelButton, x%CancelPosX% y%CancelPosY% w%CancelPosW% h%CancelPosH%
-	GuiControlGet, NeverPos, Pos, RvNeverButton
-	DiffX := NeverPosX + NeverPosW - TaskPosX - TaskPosW
-	NeverPosX := NeverPosX - DiffX
-	GuiControl, Move, RvNeverButton, x%NeverPosX% y%NeverPosY% w%NeverPosW% h%NeverPosH%
-	GuiControlGet, YesPos, Pos, RvYesButton
-	YesPosX := YesPosX - DiffX
-	GuiControl, Move, RvYesButton, x%YesPosX% y%YesPosY% w%YesPosW% h%YesPosH%
-	GuiControlGet, NoPos, Pos, RvNoButton
-	NoPosX := NoPosX - DiffX
-	GuiControl, Move, RvNoButton, x%NoPosX% y%NoPosY% w%NoPosW% h%NoPosH%
+
+    If (%System%_IsReviewOptional)
+    {
+      Gui, Add, Button, gButtonReviewYes vRvYesButton Y%NewY%, &Yes
+      Gui, Add, Button, gButtonReviewNo vRvNoButton Y%NewY% , &Not now
+      Gui, Add, Button, gButtonReviewNever vRvNeverButton Y%NewY% Default, Ne&ver
+      GuiControlGet, NeverPos, Pos, RvNeverButton
+      DiffX := NeverPosX + NeverPosW - TaskPosX - TaskPosW
+      NeverPosX := NeverPosX - DiffX
+      GuiControl, Move, RvNeverButton, x%NeverPosX% y%NeverPosY% w%NeverPosW% h%NeverPosH%
+      GuiControlGet, YesPos, Pos, RvYesButton
+      YesPosX := YesPosX - DiffX
+      GuiControl, Move, RvYesButton, x%YesPosX% y%YesPosY% w%YesPosW% h%YesPosH%
+      GuiControlGet, NoPos, Pos, RvNoButton
+      NoPosX := NoPosX - DiffX
+      GuiControl, Move, RvNoButton, x%NoPosX% y%NoPosY% w%NoPosW% h%NoPosH%
+    }
+    Else
+    {
+      Gui, Add, Button, gButtonReviewYes vRvYesButton Y%NewY%, &Yes
+      Gui, Add, Button, gButtonReviewNever vRvNeverButton Y%NewY% Default, &No
+      GuiControlGet, NeverPos, Pos, RvNeverButton
+      DiffX := NeverPosX + NeverPosW - TaskPosX - TaskPosW
+      NeverPosX := NeverPosX - DiffX
+      GuiControl, Move, RvNeverButton, x%NeverPosX% y%NeverPosY% w%NeverPosW% h%NeverPosH%
+      GuiControlGet, YesPos, Pos, RvYesButton
+      YesPosX := YesPosX - DiffX
+      GuiControl, Move, RvYesButton, x%YesPosX% y%YesPosY% w%YesPosW% h%YesPosH%
+    }
+
 	GuiControlGet, QuestionPos, Pos, QuestionLabel
 	QuestionPosX := QuestionPosX - DiffX
-	GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
-	;Gui, +LabelGuiReview
-	Title := %System%_GetReviewWindowTitle
+    GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
+
+
+	Title := %System%_GetReviewWindowTitle()
 	Gui, Show, Center Autosize, %Title%
-	GuiControl, Focus, RvNoButton
+	GuiControl, Focus, RvNeverButton
 	Return
 }
 
@@ -273,16 +288,19 @@ SelectNextReviewTask()
 		If (ReviewTask > TaskCount)
 		{
 			CurrentMode := PreviousMode
-			If (!ReviewComplete)
+			If (HasReviewModeTask)
 			{
-				ReAddTask()
-			}
-			Else
-			{
-				MarkAsDone()
-			}
+              If (!ReviewComplete)
+    		  {
+    		    ReAddTask()
+    		  }
+    		  Else
+    		  {
+    		    MarkAsDone()
+    		  }
+    		}
 			Gui, Destroy
-			MsgBox, Review done!
+			SaveTasks()
 			Break
 		}
 		
@@ -290,11 +308,11 @@ SelectNextReviewTask()
 		{
 			If (!InStr(Tasks%ReviewTask%_2, "D") and InStr(Tasks%ReviewTask%_2, "R"))
 			{
-				ShowReviewWindow()
 				Break
 			}
 		}
 	}
+	Work()
 }
 
 GuiClose:
