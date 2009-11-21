@@ -523,7 +523,7 @@ ShowPreferences()
 	global
 	Gui, Destroy
 	Gui, Font, Bold
-	Gui, Add, Text, w320, Used time management system
+	Gui, Add, Text, w250, Used time management system
 	Gui, Font, Norm
 	RadioChecked := System == "AF1"
   Gui, Add, Radio, vRadioSystem checked%RadioChecked% gSystemAF1, Autofocus Version 1 (AF1/AF)
@@ -534,11 +534,11 @@ ShowPreferences()
 	RadioChecked := System == "AF4" || System == ""
   Gui, Add, Radio,  checked%RadioChecked% gSystemAF4, Autofocus Version 4 (AF4)                   
 	Gui, Font, Bold
-	Gui, Add, Text, w320, Autostart
+	Gui, Add, Text, ym w250, Autostart
 	Gui, Font, Norm
   Gui, Add, Checkbox, vAutostartCheck checked%StartWithWindows%  gAutostartCheckbox, Start AutofocusAHK with Windows                    
 	Gui, Font, Bold
-	Gui, Add, Text, w320, Backups
+	Gui, Add, Text, w250, Backups
 	Gui, Font, Norm
   Gui, Add, Checkbox, vBackupCheck checked%DoBackups%  gBackupCheckbox, Create daily backups of task list
   Gui, Add, Text, vBackupLabel, Number of Backups to keep:                   
