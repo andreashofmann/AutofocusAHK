@@ -1,0 +1,79 @@
+History
+-------
+  
+  Version 0.9.1.1 (2009-11-22)
+    - Bug fix release:
+      - Fixed window title for AF4 open list
+      - The first open list will be closed without restarting the application
+
+  Version 0.9.1 (2009-11-21)
+    - Added automatic review to AF4 mode
+    - AF4 is now the default system
+    - Status window keeps focus, added shortcuts for stop and hide
+    - Fix: Working window title displays correctly when in open list
+    - Fix: Don't show both preferences and autostart prompt at first start
+
+  Version 0.9 (2009-11-17)
+    - Support for switching between AF1-4
+    - AF4 support still lacks automatic review
+    - Improved tray menu
+    - Added preferences menu for
+      - selecting the used system
+      - toggle autostart
+    - New hotkeys:
+        Capslock+p: Show preferences
+    - Removed hotkeys:
+        CapsLock+1
+
+  Version 0.8.5 (2009-09-04)
+    - New user interface for
+      - review mode
+    - Combined new user interface for
+      - Showing next tasks
+      - Showing tasks on notice
+    - Removed hotkeys:
+        CapsLock+c
+        CapsLock+n
+ 
+  Version 0.8 (2009-08-28)
+    - Added HTML export
+    - New hotkeys:
+        CapsLock+e: Create and show HTML export
+
+  Version 0.7 (2009-08-27)
+    - Added status window with timer
+    - New user interface for
+      - adding new task
+      - selecting a task
+
+  Version 0.6 (2009-08-25)
+    - Added forward mode
+    - New hotkeys:
+        CapsLock+1: Toggle autostart
+
+  Version 0.5 (2009-08-22)
+    - Hotkeys are now configurable via ini file
+    - New hotkeys:
+        CapsLock+n: Show tasks on notice
+
+  Version 0.4 (2009-08-22)
+    - Option to autostart with Windows
+
+  Version 0.3 (2009-08-22)
+    - Added automatic daily backup
+    - Option to keep a certain number of backups
+
+  Version 0.2 (2009-08-22)
+    - Added configuration file (AutofocusAHK.ini)
+    - Added Morning routine (Putting on notice, dismissal)
+    - Added basic review mode
+
+  Version 0.1 (2009-08-21)
+    - Aiming to implement Revised Autofocus (AF3)
+    - Added basic reverse mode
+    - New hotkeys:
+        CapsLock+a: Add/Re-Add task to list
+        CapsLock+s: Show next tasks
+        CapsLock+d: Do
+        CapsLock+c: Show current task
+    - No forward or review mode yet
