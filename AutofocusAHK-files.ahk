@@ -207,7 +207,7 @@ Export()
 	{
 		FileCreateDir, %A_ScriptDir%\Export
 	}
-	FormatTime, ExportTime, , yyyy-MM-dd
+	FormatTime, ExportTime, , yyyy-MM-dd-hh-mm-ss
 	Export := ""
 	Export := "<!doctype html>" 
 		. "<html><head><title>Export " . ExportTime . " - AutofocusAHK</title>"
