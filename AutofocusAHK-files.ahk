@@ -217,6 +217,7 @@ Export()
 		. "th,td {border:1px solid #666;} "
 		. ".done {background:#CDFF7F;} "
 		. ".review {background:#F5FF7F;} "
+		. ".current {font-weight:bold;} "
 		. ".datefield {whitespace:nowrap;} "
 		. ".hidedone .done {display:none;} "
 		. ".hidereview .review {display:none;} "
@@ -285,7 +286,11 @@ Export()
 		Else
 		{
 			Export .= " unactioned"            
-          }
+        }
+        If (A_Index == CurrentTask)
+        {
+			Export .= " current"                    
+        }
 		Export .= """"
 		Export .= ">"
 				. "<td>" 
