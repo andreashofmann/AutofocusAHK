@@ -218,14 +218,32 @@ Export()
 		. ".done {background:#CDFF7F;} "
 		. ".review {background:#F5FF7F;} "
 		. ".datefield {whitespace:nowrap;} "
+		. ".hidedone .done {display:none;} "
+		. ".hidereview .review {display:none;} "
+		. ".hideunactioned .unactioned {display:none;} "
 		. "th {text-align:center;background:#DDD; font-weight:bold;} "
 		. "th,td {padding:0.3em;} "
-		. "h1 {font-size:16px; color:#666; padding:0; margin:0.5em auto; width:90%;}"
-		. "h2 {font-size:24px; color:#666; padding:0; margin:0.5em auto; width:90%;}"
+		. "h1 {font-size:16px; color:#666; padding:0; margin:0.5em 0;}"
+		. "h2 {font-size:24px; color:#666; padding:0; margin:0.5em 0;}"
+        . "#header {margin:0.5em auto; width:90%; position:relative;}"
+		. "#displaysettings {display:none;position:absolute;top:0;right:0;margin:0;padding:0;list-style:none;}"
+		. "#displaysettings li {cursor:pointer;float:left;margin:0 0.3em; padding:0.2em 0.5em;}"
+		. "#displaysettings:before {content: ""Show:"" float:left;}"
+		. "#uaswitch { background-color:#999; color:#FFF; border:1px solid #999;}"
+		. ".hideunactioned #uaswitch {background-color:#FFF; color:#AAA; border:1px solid #AAA;}"
+		. "#rswitch { background-color:#990; color:#FFF; border:1px solid #990;}"
+		. ".hidereview #rswitch {background-color:#FFF; color:#AA0; border:1px solid #AA0;}"
+		. "#dswitch { background-color:#090; color:#FFF; border:1px solid #090;}"
+		. ".hidedone #dswitch {background-color:#FFF; color:#0A0; border:1px solid #0A0;}"
+
 		. "</style>"
-		. "</head><body>"
-		. "<h1>AutofocusAHK</h1>"
-		. "<h2>Export " . ExportTime . "</h2><table cellspacing=""0"">"
+		. "</head><body class=""hidedone hidereview"">"
+ 		. "<div id=""header"">"
+        . "<h1>AutofocusAHK</h1>"
+		. "<h2>Export " . ExportTime . "</h2>"
+        . "<ul id=""displaysettings""><li id=""uaswitch"" onclick=""toggleUnactioned()"">unactioned</li><li id=""dswitch"" onclick=""toggleDone()"">done</li><li id=""rswitch"" onclick=""toggleReview()"">on review</li></ul>"
+        . "</div>"
+        . "<table cellspacing=""0"">"
 		
   If (System == "AF1" or System == "AF3")
   {
@@ -255,19 +273,20 @@ Export()
 			. "<tr><th>Task</th><th>Added</th><th>On Review</th><th><nobr>Done/Re-Added</nobr></th></tr>"
 		}
 		Export .= "<tr"
-		If (Tasks%A_Index%_3 == 1)
+		Export .= " class="""
+		If (InStr(Tasks%A_Index%_2, "R"))
 		{
-			Export .= " class="""
-			If (InStr(Tasks%A_Index%_2, "R"))
-			{
-				Export .= "review"
-			}
-			Else If (InStr(Tasks%A_Index%_2, "D"))
-			{
-				Export .= " done"
-			}
-			Export .= """"
+			Export .= "review"
 		}
+		Else If (InStr(Tasks%A_Index%_2, "D"))
+		{
+			Export .= " done"
+		}
+		Else
+		{
+			Export .= " unactioned"            
+          }
+		Export .= """"
 		Export .= ">"
 				. "<td>" 
 					. Tasks%A_Index%_1
@@ -312,7 +331,39 @@ Export()
 		}
   }
 	
-	Export .= "</table></body></html>"
+	Export .= "</table>"
+    Export .= "<script type=""text/javascript"">"
+                . "var unactionedHidden = false;"
+                . "var reviewHidden = true;"
+                . "var doneHidden = true;"
+                . "setBodyClass();"
+                . "function setBodyClass()"
+                . "{"
+                . "var b = document.body;"
+                . "b.className = """";"
+                . "b.className = unactionedHidden ? b.className + ' hideunactioned' : b.className;"
+                . "b.className = reviewHidden ? b.className + ' hidereview' : b.className;"
+                . "b.className = doneHidden ? b.className + ' hidedone' : b.className;"
+                . "var s = document.getElementById('displaysettings');"
+                . "s.style.display = 'block';"
+                . "}"
+                . "function toggleUnactioned()"
+                . "{"
+                . "unactionedHidden = unactionedHidden ? false : true;"
+                . "setBodyClass();"
+                . "}"
+                . "function toggleDone()"
+                . "{"
+                . "doneHidden = doneHidden ? false : true;"
+                . "setBodyClass();"
+                . "}"
+                . "function toggleReview()"
+                . "{"
+                . "reviewHidden = reviewHidden ? false : true;"
+                . "setBodyClass();"
+                . "}"
+           . "</script>"
+    Export .= "</body></html>"
 	
 	FileDelete, %A_ScriptDir%\Export\Tasks-%ExportTime%.html
 	FileAppend, %Export%, %A_ScriptDir%\Export\Tasks-%ExportTime%.html 
