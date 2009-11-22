@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.1a
+; @version   0.9.1.1
 ; @since     0.9
 
 AF3_IsReviewOptional()
@@ -50,6 +50,9 @@ AF3_PostTaskLoad()
 
 }
 
+AF3_PostTaskAdd()
+{
+}
 
 AF3_SelectNextTask()
 {

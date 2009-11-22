@@ -401,7 +401,9 @@ ButtonAdd:
 		Tasks%Taskcount%_1 := NewTask
 		Tasks%Taskcount%_2 := "A" . A_Now
 		Tasks%Taskcount%_3 := 0
+    	%System%_PostTaskAdd()
 		SaveTasks()
+
 	}
 	Gui, Hide
 Return

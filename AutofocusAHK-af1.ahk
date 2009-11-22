@@ -38,6 +38,10 @@ AF1_PostTaskLoad()
 	SelectNextTask()
 }
 
+AF1_PostTaskAdd()
+{
+}
+
 
 AF1_SelectNextTask()
 {

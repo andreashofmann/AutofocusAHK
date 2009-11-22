@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.1a
+; @version   0.9.1.1
 ; @since     0.9
 
 AF4_IsReviewOptional()
@@ -45,6 +45,17 @@ AF4_PostTaskLoad()
 	ActionOnCurrentPass := 0
 	CurrentTask := 0
 	SelectNextTask()
+}
+
+AF4_PostTaskAdd()
+{
+  global
+	If (TaskCount >= TasksPerPage and HasClosedList == 0)
+	{
+	  HasClosedList := 1
+    LastTaskInClosedList := TaskCount
+		SaveTasks()
+	}
 }
 
 AF4_SelectNextTask()

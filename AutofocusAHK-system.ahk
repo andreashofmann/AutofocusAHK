@@ -69,6 +69,7 @@ ReAddTask()
 	Tasks%Taskcount%_2 := "A" . A_Now
 	Tasks%Taskcount%_3 := 0
 	MarkAsDone()
+	%System%_PostTaskAdd()
 }
 
 MarkAsDone()

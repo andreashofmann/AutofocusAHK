@@ -87,6 +87,11 @@ Configuration
    				 
 History
 -------
+  
+  Version 0.9.1.1 (2009-11-22)
+    - Bug fix release:
+      - Fixed window title for AF4 open list
+      - The first open list will be closed without restarting the application
 
   Version 0.9.1 (2009-11-21)
     - Added automatic review to AF4 mode

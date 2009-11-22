@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.1a
+; @version   0.9.1.1
 ; @since     0.9
 
 AF2_IsReviewOptional()
@@ -37,6 +37,10 @@ AF2_PostTaskLoad()
 	CurrentTask := TaskCount + 1
 	SelectNextTask()
 
+}
+
+AF2_PostTaskAdd()
+{
 }
 
 AF2_SelectNextTask()
