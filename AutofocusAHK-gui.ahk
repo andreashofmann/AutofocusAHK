@@ -143,7 +143,7 @@ ShowWorkWindow()
 	GuiControlGet, TaskPos, Pos, TaskControl
 	NewY := TaskPosY + TaskPosH + 20
 	NewYT := NewY + 5
-	Gui, Add, Button, gButtonShowNotes vShowNotesButton x%TaskPosX% Y%NewY%, Show &Notes
+	Gui, Add, Button, gButtonShowNotes vShowNotesButton x%TaskPosX% Y%NewY%, &Show Notes
 	GuiControl, Text, ModeControl, ForwardMode
 	;GuiControl, Move, TaskControl, w200 h100
 	Gui, Add, Text, vQuestionLabel Y%NewYT%,Does this task feel ready to be done? 
@@ -199,7 +199,7 @@ ShowDoneWindow()
 	Gui, Add, Button, gButtonRephrase vRephraseButton x%TaskPosX% Y%NewY%, &Rephrase
 	GuiControlGet, RephrasePos, Pos, RephraseButton
 	NewX := RephrasePosX + RephrasePosX + RephrasePosW
-	Gui, Add, Button, gButtonShowNotes vShowNotesButton X%NewX% Y%NewY%, Edit &Notes
+	Gui, Add, Button, gButtonShowNotes vShowNotesButton X%NewX% Y%NewY%, &Edit Notes
 	Gui, Add, Text, vQuestionLabel Y%NewYT%,Do you want to re-add this task?
 	Gui, Add, Button, gButtonReAdd vYesButton Y%NewY%, &Yes
 	Gui, Add, Button, gButtonNoReAdd vNoButton Y%NewY% Default, &No
@@ -248,7 +248,7 @@ ShowReviewWindow()
 	Gui, Add, Button, gButtonRephrase vRephraseButton x%TaskPosX% Y%NewY%, &Rephrase
 	GuiControlGet, RephrasePos, Pos, RephraseButton
 	NewX := RephrasePosX + RephrasePosX + RephrasePosW
-	Gui, Add, Button, gButtonShowNotes vShowNotesButton X%NewX% Y%NewY%, Edit &Notes
+	Gui, Add, Button, gButtonShowNotes vShowNotesButton X%NewX% Y%NewY%, &Edit Notes
 	Gui, Add, Text, vQuestionLabel Y%NewYT%,Do you want to re-add this task?
 
     If (%System%_IsReviewOptional)
