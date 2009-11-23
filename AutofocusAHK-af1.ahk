@@ -80,7 +80,7 @@ AF1_SelectNextTask()
 						}
 					}
 				}
-				If (Tasks%CurrentTask%_3 == 0 or UnactionedCount == 0) 
+				If (Tasks%CurrentTask%_4 == 0 or UnactionedCount == 0) 
 				{
 					Break
 				}
@@ -124,10 +124,10 @@ AF1_DismissTasks()
 	ToBeDismissed := FirstTaskOnPage
 	Loop %TasksPerPage%
 	{
-		If (Tasks%ToBeDismissed%_3 == 0)
+		If (Tasks%ToBeDismissed%_4 == 0)
 		{
 			Tasks%ToBeDismissed%_2 := Tasks%ToBeDismissed%_2 . " R" . A_Now
-			Tasks%ToBeDismissed%_3 := 1
+			Tasks%ToBeDismissed%_4 := 1
 			UnactionedCount := UnactionedCount - 1
 			Message := Message . "- " . Tasks%ToBeDismissed%_1 . "`n"
 		}
@@ -147,7 +147,8 @@ AF1_DismissTasks()
 			UnactionedCount := UnactionedCount + 1
 			Tasks%Taskcount%_1 := "Change to review mode"
 			Tasks%Taskcount%_2 := "A" . A_Now
-			Tasks%Taskcount%_3 := 0
+			Tasks%Taskcount%_3 := ""
+			Tasks%Taskcount%_4 := 0
 			HasReviewModeTask := 1
 		}
 	}

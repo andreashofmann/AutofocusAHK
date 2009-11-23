@@ -41,7 +41,8 @@ AF3_PostTaskLoad()
 			UnactionedCount := UnactionedCount + 1
 			Tasks%Taskcount%_1 := "Change to forward mode"
 			Tasks%Taskcount%_2 := "A" . A_Now
-			Tasks%Taskcount%_3 := 0
+			Tasks%Taskcount%_3 := ""
+			Tasks%Taskcount%_4 := 0
 			HasForwardModeTask := 1
 			SaveTasks()
 	}
@@ -68,7 +69,7 @@ AF3_SelectNextTask()
 				{
 					CurrentTask := TaskCount
 				}
-				If (Tasks%CurrentTask%_3 == 0) 
+				If (Tasks%CurrentTask%_4 == 0) 
 				{
 					Break
 				}
@@ -100,7 +101,8 @@ AF3_SelectNextTask()
 							UnactionedCount := UnactionedCount + 1
 							Tasks%Taskcount%_1 := "Change to forward mode"
 							Tasks%Taskcount%_2 := "A" . A_Now
-							Tasks%Taskcount%_3 := 0
+							Tasks%Taskcount%_3 := ""
+							Tasks%Taskcount%_4 := 0
 							HasForwardModeTask := 1
 							SaveTasks()
 							CurrentTask := TaskCount + 1
@@ -115,7 +117,7 @@ AF3_SelectNextTask()
 						}
 					}
 				}
-				If (Tasks%CurrentTask%_3 == 0 or UnactionedCount == 0) 
+				If (Tasks%CurrentTask%_4 == 0 or UnactionedCount == 0) 
 				{
 					Break
 				}
@@ -180,10 +182,10 @@ AF3_DismissTasks()
 	Message := ""
 	Loop %TaskCount%
 	{
-		If (Tasks%A_Index%_3 == 0 and InStr(Tasks%A_Index%_2, "N"))
+		If (Tasks%A_Index%_4 == 0 and InStr(Tasks%A_Index%_2, "N"))
 		{
 			Tasks%A_Index%_2 := Tasks%A_Index%_2 . " R" . A_Now
-			Tasks%A_Index%_3 := 1
+			Tasks%A_Index%_4 := 1
 			UnactionedCount := UnactionedCount - 1
 			Message := Message . "- " . Tasks%A_Index%_1 . "`n"
 		}
@@ -198,7 +200,8 @@ AF3_DismissTasks()
 			UnactionedCount := UnactionedCount + 1
 			Tasks%Taskcount%_1 := "Change to review mode"
 			Tasks%Taskcount%_2 := "A" . A_Now
-			Tasks%Taskcount%_3 := 0
+			Tasks%Taskcount%_3 := ""
+			Tasks%Taskcount%_4 := 0
 			HasReviewModeTask := 1
 		}
 	}

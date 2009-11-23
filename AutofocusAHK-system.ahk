@@ -63,11 +63,30 @@ SelectNextTask()
 ReAddTask()
 {
 	global
+	MsgBox Readd
 	TaskCount := TaskCount + 1
 	UnactionedCount := UnactionedCount + 1
-	Tasks%Taskcount%_1 := Tasks%CurrentTask%_1
+	GuiControlGet,RephraseBoxContent,,RephraseBox
+	MsgBox RephraseBoxContent
+	If (RephraseBoxContent)
+	{
+        Tasks%Taskcount%_1 := RephraseBoxContent ;Tasks%CurrentTask%_1
+    }
+    Else
+    {
+        Tasks%Taskcount%_1 := Tasks%CurrentTask%_1
+    }
 	Tasks%Taskcount%_2 := "A" . A_Now
-	Tasks%Taskcount%_3 := 0
+	GuiControlGet,ShowNotesBoxContent,,ShowNotesBox
+	If (ShowNotesBoxContent)
+	{
+        Tasks%Taskcount%_3 := ShowNotesBoxContent ;Tasks%CurrentTask%_3
+	}
+	Else
+	{
+        Tasks%Taskcount%_3 := Tasks%CurrentTask%_3
+    }
+    Tasks%Taskcount%_4 := 0
 	MarkAsDone()
 	%System%_PostTaskAdd()
 }
@@ -76,7 +95,7 @@ MarkAsDone()
 {
 	global
 	Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . " D" . A_Now . " T" . TimePassed
-	Tasks%CurrentTask%_3 := 1
+	Tasks%CurrentTask%_4 := 1
 	UnactionedCount := UnactionedCount - 1
 	SaveTasks()
 	If (System == "AF2" or (System == "AF3" and CurrentMode == ReverseMode))
@@ -97,7 +116,7 @@ DoMorningRoutine()
 	BackupTasks()
 	LastRoutine := Now
 	IniWrite, %Now%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, LastRoutine
-	If (Tasks%CurrentTask%_3 == 1) 
+	If (Tasks%CurrentTask%_4 == 1) 
 	{
 		SelectNextTask()
 	}
@@ -118,7 +137,7 @@ PutTasksOnNotice()
 	{
 		If (BlockStarted)
 		{
-			If (Tasks%A_Index%_3 == 1)
+			If (Tasks%A_Index%_4 == 1)
 			{
 				Break
 			}
@@ -130,7 +149,7 @@ PutTasksOnNotice()
 		}
 		Else
 		{
-			If (Tasks%A_Index%_3 == 0 && Tasks%A_Index%_1 != "Change to review mode" and Tasks%A_Index%_1 != "Change to forward mode")
+			If (Tasks%A_Index%_4 == 0 && Tasks%A_Index%_1 != "Change to review mode" and Tasks%A_Index%_1 != "Change to forward mode")
 			{
 				BlockStarted := 1
 				Tasks%A_Index%_2 := Tasks%A_Index%_2 . " N"
@@ -159,7 +178,7 @@ SelectNextActivePage()
 	{
 		Loop
 		{
-			If (Tasks%CurrentTask%_3 == 0)
+			If (Tasks%CurrentTask%_4 == 0)
 			{
 				Break
 			}

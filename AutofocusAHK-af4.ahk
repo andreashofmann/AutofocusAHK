@@ -109,7 +109,7 @@ AF4_SelectNextTask()
 				{
 						CurrentTask := 0
         }
-				If (Tasks%CurrentTask%_3 == 0 or (UnactionedCount == 0 and HasTasksOnReview == 0) (UnactionedCount == 0 and CurrentMode == ReviewMode and HasTasksOnReview == 1)) 
+				If (Tasks%CurrentTask%_4 == 0 or (UnactionedCount == 0 and HasTasksOnReview == 0) (UnactionedCount == 0 and CurrentMode == ReviewMode and HasTasksOnReview == 1)) 
 				{
 					Break
 				}
@@ -177,10 +177,10 @@ AF4_DismissTasks()
 	  {
       Break
     }
-		If (Tasks%A_Index%_3 == 0)
+		If (Tasks%A_Index%_4 == 0)
 		{
 			Tasks%A_Index%_2 := Tasks%A_Index%_2 . " R" . A_Now
-			Tasks%A_Index%_3 := 1
+			Tasks%A_Index%_4 := 1
 			UnactionedCount := UnactionedCount - 1
 			Message := Message . "- " . Tasks%A_Index%_1 . "`n"
 		}

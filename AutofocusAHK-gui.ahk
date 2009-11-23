@@ -59,7 +59,7 @@ ShowNextTasks()
   	NoticeCount := 0
   	Loop %TaskCount%
   	{
-  		If (Tasks%A_Index%_3 == 0 and InStr(Tasks%A_Index%_2, "N"))
+  		If (Tasks%A_Index%_4 == 0 and InStr(Tasks%A_Index%_2, "N"))
   		{
   			NoticeCount += 1
   		}
@@ -69,7 +69,7 @@ ShowNextTasks()
   	First := 1
   	Loop %TaskCount%
   	{
-  		If (Tasks%A_Index%_3 == 0 and InStr(Tasks%A_Index%_2, "N"))
+  		If (Tasks%A_Index%_4 == 0 and InStr(Tasks%A_Index%_2, "N"))
   		{
   			If (First)
   			{
@@ -98,7 +98,9 @@ AddTask()
 	global
 	Gui, 3:Destroy
 	Gui, 3:Add, Edit, w400 vNewTask  ; The ym option starts a new column of controls.
-	Gui, 3:Add, Button,ym default gButtonAdd, Add
+	Gui, 3:Add, Button,ym vAddNotesButton gButtonAddNotes, &Notes
+	Gui, 3:Add, Button,ym default gButtonAdd vAddTaskButton, &Add
+	Gui, 3:Add, Edit,xm Hidden R10 default vAddNotesBox
 	Gui, 3:+LabelGuiAdd
 	Gui, 3:Show, AutoSize, Add Task - %System% - AutofocusAHK %Ver%
 }
@@ -141,6 +143,7 @@ ShowWorkWindow()
 	GuiControlGet, TaskPos, Pos, TaskControl
 	NewY := TaskPosY + TaskPosH + 20
 	NewYT := NewY + 5
+	Gui, Add, Button, gButtonShowNotes vShowNotesButton x%TaskPosX% Y%NewY%, Show &Notes
 	GuiControl, Text, ModeControl, ForwardMode
 	;GuiControl, Move, TaskControl, w200 h100
 	Gui, Add, Text, vQuestionLabel Y%NewYT%,Does this task feel ready to be done? 
@@ -162,6 +165,12 @@ ShowWorkWindow()
 	QuestionPosX := QuestionPosX - DiffX
 	GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
 	Title := %System%_GetWorkWindowTitle()
+	If(Tasks%CurrentTask%_3 == "")
+	{
+        GuiControl Disable, ShowNotesButton
+    }
+    StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\n,`n, All
+	Gui, Add, Edit,xm Hidden ReadOnly R10 default vShowNotesBox, %ShowNotesBoxContent%
 	Gui, Show, Center Autosize, %Title%
 	GuiControl, Focus, NoButton
 	Return
@@ -177,13 +186,19 @@ ShowDoneWindow()
 	GuiControlGet, WorkingPos, Pos, WorkingOn
 	NewY := WorkingPosY + WorkingPosH + 20
 	Gui, Font, Bold
-	Gui, Add, Text, x%WorkingPosX% Y%NewY% w400 Center vTaskControl, % Tasks%CurrentTask%_1
+	Gui, Add, Text, x%WorkingPosX% Y%NewY% w500 Center vTaskControl, % Tasks%CurrentTask%_1
 	Gui, Font, Norm
 	GuiControlGet, TaskPos, Pos, TaskControl
+	Gui, Add, Edit,X%TaskPosX% Y%TaskPosY% W%TaskPosW% Hidden vRephraseBox, % Tasks%CurrentTask%_1
+    
 	NewY := TaskPosY + TaskPosH + 20
 	NewYT := NewY + 5
 	GuiControl, Text, ModeControl, ForwardMode
 	;GuiControl, Move, TaskControl, w200 h100
+	Gui, Add, Button, gButtonRephrase vRephraseButton x%TaskPosX% Y%NewY%, &Rephrase
+	GuiControlGet, RephrasePos, Pos, RephraseButton
+	NewX := RephrasePosX + RephrasePosX + RephrasePosW
+	Gui, Add, Button, gButtonShowNotes vShowNotesButton X%NewX% Y%NewY%, Edit &Notes
 	Gui, Add, Text, vQuestionLabel Y%NewYT%,Do you want to re-add this task?
 	Gui, Add, Button, gButtonReAdd vYesButton Y%NewY%, &Yes
 	Gui, Add, Button, gButtonNoReAdd vNoButton Y%NewY% Default, &No
@@ -192,7 +207,8 @@ ShowDoneWindow()
 	;DiffX := CancelPosX + CancelPosW - TaskPosX - TaskPosW
 	;CancelPosX := CancelPosX - DiffX
 	;GuiControl, Move, CancelButton, x%CancelPosX% y%CancelPosY% w%CancelPosW% h%CancelPosH%
-	GuiControlGet, NoPos, Pos, NoButton
+	
+    GuiControlGet, NoPos, Pos, NoButton
 	DiffX := NoPosX + NoPosW - TaskPosX - TaskPosW
 	NoPosX := NoPosX - DiffX
 	GuiControl, Move, NoButton, x%NoPosX% y%NoPosY% w%NoPosW% h%NoPosH%
@@ -202,7 +218,10 @@ ShowDoneWindow()
 	GuiControlGet, QuestionPos, Pos, QuestionLabel
 	QuestionPosX := QuestionPosX - DiffX
 	GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
-	Gui, +LabelGuiDone
+	
+    Gui, +LabelGuiDone
+    StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\n,`n, All
+	Gui, Add, Edit,xm Hidden R10 default vShowNotesBox, %ShowNotesBoxContent%
 	Gui, Show, Center Autosize, Done - AutofocusAHK %Ver% 
 	GuiControl, Focus, YesButton
 	Return
@@ -220,9 +239,14 @@ ShowReviewWindow()
 	Gui, Add, Text, x%ReviewingPosX% Y%NewY% w500 Center vTaskControl, % Tasks%ReviewTask%_1
 	Gui, Font, Norm
 	GuiControlGet, TaskPos, Pos, TaskControl
+	Gui, Add, Edit,X%TaskPosX% Y%TaskPosY% W%TaskPosW% Hidden vRephraseBox, % Tasks%ReviewTask%_1
 	NewY := TaskPosY + TaskPosH + 20
 	NewYT := NewY + 5
-	GuiControl, Text, ModeControl, ForwardMode
+
+	Gui, Add, Button, gButtonRephrase vRephraseButton x%TaskPosX% Y%NewY%, &Rephrase
+	GuiControlGet, RephrasePos, Pos, RephraseButton
+	NewX := RephrasePosX + RephrasePosX + RephrasePosW
+	Gui, Add, Button, gButtonShowNotes vShowNotesButton X%NewX% Y%NewY%, Edit &Notes
 	Gui, Add, Text, vQuestionLabel Y%NewYT%,Do you want to re-add this task?
 
     If (%System%_IsReviewOptional)
@@ -257,6 +281,9 @@ ShowReviewWindow()
 	GuiControlGet, QuestionPos, Pos, QuestionLabel
 	QuestionPosX := QuestionPosX - DiffX
     GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
+
+    StringReplace, ShowNotesBoxContent, Tasks%ReviewTask%_3,\n,`n, All
+	Gui, Add, Edit,xm Hidden R10 default vShowNotesBox, %ShowNotesBoxContent%
 
 
 	Title := %System%_GetReviewWindowTitle()
@@ -304,7 +331,7 @@ SelectNextReviewTask()
 			Break
 		}
 		
-		If (Tasks%ReviewTask%_3 == 1)
+		If (Tasks%ReviewTask%_4 == 1)
 		{
 			If (!InStr(Tasks%ReviewTask%_2, "D") and InStr(Tasks%ReviewTask%_2, "R"))
 			{
@@ -355,7 +382,7 @@ Else If (Tasks%CurrentTask%_1 == "Change to forward mode")
 	CurrentPass := 1
 	ActionOnCurrentPass := 0
 	Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . " D" . A_Now
-	Tasks%CurrentTask%_3 := 1
+	Tasks%CurrentTask%_4 := 1
 	UnactionedCount := UnactionedCount - 1
 	SaveTasks()
 	CurrentTask := 1
@@ -372,6 +399,24 @@ Else
 	SetTimer,UpdateTime,1000
 }
 Return
+
+ButtonShowNotes:
+    GuiControl, Disable, ShowNotesButton
+    GuiControl, Show, ShowNotesBox
+    GuiControl, Move, ShowNotesBox, w%TaskPosW%
+    GuiControl, Focus, ShowNotesBox
+	Gui, Show, AutoSize
+Return
+
+ButtonRephrase:
+    GuiControl, Disable, RephraseButton
+    GuiControl, Hide, TaskControl
+    GuiControl, Show, RephraseBox
+    GuiControl, Focus, RephraseBox
+    Send ^a
+
+Return
+
 
 ButtonReAdd:
 	Active := 0
@@ -400,12 +445,25 @@ ButtonAdd:
 		UnactionedCount := UnactionedCount + 1
 		Tasks%Taskcount%_1 := NewTask
 		Tasks%Taskcount%_2 := "A" . A_Now
-		Tasks%Taskcount%_3 := 0
+	    StringReplace, AddNotesBox, AddNotesBox,`n,\n, All
+        Tasks%Taskcount%_3 := AddNotesBox
+    	Tasks%Taskcount%_4 := 0
     	%System%_PostTaskAdd()
 		SaveTasks()
 
 	}
 	Gui, Hide
+Return
+
+ButtonAddNotes:
+    GuiControl, Disable, AddNotesButton
+    GuiControlGet, AddTaskFieldPos, Pos, NewTask
+    GuiControlGet, AddTaskButtonPos, Pos, AddTaskButton
+    NewW := AddTaskButtonPosX + AddTaskButtonPosW - AddTaskFieldPosX
+    GuiControl, Show, AddNotesBox
+    GuiControl, Move, AddNotesBox, w%NewW%
+    GuiControl, Focus, AddNotesBox
+	Gui, 3:Show, AutoSize
 Return
 
 ButtonHide:
@@ -420,13 +478,32 @@ Return
 
 ButtonReviewYes:
 Tasks%ReviewTask%_2 := Tasks%ReviewTask%_2 . " D" . A_Now
-Tasks%ReviewTask%_3 := 1
+Tasks%ReviewTask%_4 := 1
 
 TaskCount := TaskCount + 1
 UnactionedCount := UnactionedCount + 1
-Tasks%Taskcount%_1 := Tasks%ReviewTask%_1
+GuiControlGet,RephraseBoxContent,,RephraseBox
+If (RephraseBoxContent)
+{
+      Tasks%Taskcount%_1 := RephraseBoxContent
+  }
+  Else
+  {
+      Tasks%Taskcount%_1 := Tasks%ReviewTask%_1
+  }
 Tasks%Taskcount%_2 := "A" . A_Now
-Tasks%Taskcount%_3 := 0
+GuiControlGet,ShowNotesBoxContent,,ShowNotesBox
+If (ShowNotesBoxContent)
+{
+      Tasks%Taskcount%_3 := ShowNotesBoxContent
+}
+Else
+{
+      Tasks%Taskcount%_3 := Tasks%ReviewTask%_3
+  }
+
+Tasks%Taskcount%_4 := 0
+SaveTasks()
 SelectNextReviewTask()
 Return
 

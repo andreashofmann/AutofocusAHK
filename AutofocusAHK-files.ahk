@@ -15,6 +15,9 @@ LoadTasks()
 	UnactionedCount := 0
 	Loop, read, %A_ScriptDir%\Tasks.txt
 	{
+	   NewTask_1 := ""
+	   NewTask_2 := ""
+	   NewTask_3 := ""
 		Loop, parse, A_LoopReadLine, %A_Tab%
 		{
       NewTask_%A_Index% := A_LoopField
@@ -26,11 +29,18 @@ LoadTasks()
   		TaskCount := TaskCount + 1
   	  Tasks%TaskCount%_1 := NewTask_1
   	  Tasks%TaskCount%_2 := NewTask_2
-	  
+	  If (NewTask_3)
+	  {
+        Tasks%TaskCount%_3 := NewTask_3  
+      }
+      Else
+      {
+        Tasks%TaskCount%_3 := ""
+      }
   
   		If (InStr(Tasks%TaskCount%_2, "D") or InStr(Tasks%TaskCount%_2, "R"))
   		{
-  			Tasks%TaskCount%_3 := 1
+  			Tasks%TaskCount%_4 := 1
   			If (!InStr(Tasks%TaskCount%_2, "D") and InStr(Tasks%TaskCount%_2, "R"))
   			{
   				HasTasksOnReview := 1
@@ -38,7 +48,7 @@ LoadTasks()
   		}
   		Else
   		{
-  			Tasks%TaskCount%_3 := 0
+  			Tasks%TaskCount%_4 := 0
   			UnactionedCount := UnactionedCount +1
   		}
   	}
@@ -53,7 +63,7 @@ SaveTasks()
 	Content := ""
 	Loop %TaskCount%
 	{
-		Content := Content . Tasks%A_Index%_1 . A_Tab . Tasks%A_Index%_2 . "`n"
+		Content := Content . Tasks%A_Index%_1 . A_Tab . Tasks%A_Index%_2 . A_Tab . Tasks%A_Index%_3 . "`n"
 		If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList)
 		{
 		  Content := Content . "---`n"    
