@@ -1,6 +1,15 @@
 History
 -------
   
+  Version 0.9.2 (2009-11-23)
+    - Added rephrasing of tasks on re-add
+    - Added notes field
+    - Improved HTML export
+      - Multiple export files per day possible
+      - Current task is bold
+      - Filters to show/hide tasks that are unactioned, done and/or on review
+    - Fix: Fresh AF4 list gets closed work window is opened the first time
+
   Version 0.9.1.1 (2009-11-22)
     - Bug fix release:
       - Fixed window title for AF4 open list
