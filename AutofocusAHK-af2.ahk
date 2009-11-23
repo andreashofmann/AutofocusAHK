@@ -122,6 +122,7 @@ AF2_DismissTasks()
 			HasReviewModeTask := 1
 		}
 	}
+	SaveTasks()
 }
 
 AF2_GetWorkWindowTitle()

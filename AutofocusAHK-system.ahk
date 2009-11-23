@@ -63,11 +63,9 @@ SelectNextTask()
 ReAddTask()
 {
 	global
-	MsgBox Readd
 	TaskCount := TaskCount + 1
 	UnactionedCount := UnactionedCount + 1
 	GuiControlGet,RephraseBoxContent,,RephraseBox
-	MsgBox RephraseBoxContent
 	If (RephraseBoxContent)
 	{
         Tasks%Taskcount%_1 := RephraseBoxContent ;Tasks%CurrentTask%_1

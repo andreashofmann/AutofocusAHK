@@ -205,6 +205,7 @@ AF3_DismissTasks()
 			HasReviewModeTask := 1
 		}
 	}
+	SaveTasks()
 }
 
 AF3_GetWorkWindowTitle()
