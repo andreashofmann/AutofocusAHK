@@ -442,6 +442,10 @@ ButtonAdd:
 	If (NewTask != "")
 	{
 		TaskCount := TaskCount + 1
+		If (UnactionedCount == 0)
+		{
+            CurrentTask := TaskCount
+        }
 		UnactionedCount := UnactionedCount + 1
 		Tasks%Taskcount%_1 := NewTask
 		Tasks%Taskcount%_2 := "A" . A_Now
