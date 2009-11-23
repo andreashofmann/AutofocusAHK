@@ -100,7 +100,7 @@ AddTask()
 	Gui, 3:Add, Edit, w400 vNewTask  ; The ym option starts a new column of controls.
 	Gui, 3:Add, Button,ym vAddNotesButton gButtonAddNotes, &Notes
 	Gui, 3:Add, Button,ym default gButtonAdd vAddTaskButton, &Add
-	Gui, 3:Add, Edit,xm Hidden R10 default vAddNotesBox
+	Gui, 3:Add, Edit,xm Hidden T8 R10 default vAddNotesBox
 	Gui, 3:+LabelGuiAdd
 	Gui, 3:Show, AutoSize, Add Task - %System% - AutofocusAHK %Ver%
 }
@@ -169,8 +169,9 @@ ShowWorkWindow()
 	{
         GuiControl Disable, ShowNotesButton
     }
-    StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\n,`n, All
-	Gui, Add, Edit,xm Hidden ReadOnly R10 default vShowNotesBox, %ShowNotesBoxContent%
+    StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\t,%A_Tab%, All
+    StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
+	Gui, Add, Edit,xm Hidden ReadOnly T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
 	Gui, Show, Center Autosize, %Title%
 	GuiControl, Focus, NoButton
 	Return
@@ -220,8 +221,9 @@ ShowDoneWindow()
 	GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
 	
     Gui, +LabelGuiDone
-    StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\n,`n, All
-	Gui, Add, Edit,xm Hidden R10 default vShowNotesBox, %ShowNotesBoxContent%
+    StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\t,%A_Tab% , All
+    StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
+	Gui, Add, Edit,xm Hidden T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
 	Gui, Show, Center Autosize, Done - AutofocusAHK %Ver% 
 	GuiControl, Focus, YesButton
 	Return
@@ -282,8 +284,9 @@ ShowReviewWindow()
 	QuestionPosX := QuestionPosX - DiffX
     GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
 
-    StringReplace, ShowNotesBoxContent, Tasks%ReviewTask%_3,\n,`n, All
-	Gui, Add, Edit,xm Hidden R10 default vShowNotesBox, %ShowNotesBoxContent%
+    StringReplace, ShowNotesBoxContent, Tasks%ReviewTask%_3,\t,%A_Tab%, All
+    StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
+	Gui, Add, Edit,xm Hidden T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
 
 
 	Title := %System%_GetReviewWindowTitle()
@@ -449,6 +452,7 @@ ButtonAdd:
 		UnactionedCount := UnactionedCount + 1
 		Tasks%Taskcount%_1 := NewTask
 		Tasks%Taskcount%_2 := "A" . A_Now
+	    StringReplace, AddNotesBox, AddNotesBox,%A_Tab%,\t, All
 	    StringReplace, AddNotesBox, AddNotesBox,`n,\n, All
         Tasks%Taskcount%_3 := AddNotesBox
     	Tasks%Taskcount%_4 := 0
