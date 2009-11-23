@@ -12,7 +12,7 @@ Initialize()
 	global 
 	
 	; Version number that is displayed in GUI windows
-	Ver := "0.9.2"
+	Ver := "0.9.2.1"
 
 	; Is the user currently working on a task?
 	Active := 0
