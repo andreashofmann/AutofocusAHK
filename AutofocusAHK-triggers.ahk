@@ -51,3 +51,17 @@ Return
 TriggerExport:
 	Export()
 Return
+
+TriggerQuit:
+	MsgBox, 4, AutofocusAHK %Ver%, Do you want to exit AutofocusAHK?
+	IfMsgBox Yes
+	{
+	ExitApp
+	}
+Return
+
+
+TriggerReload:
+	Reload
+Return
+

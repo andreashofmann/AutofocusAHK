@@ -163,6 +163,20 @@ LoadConfig()
 		IniWrite, %HKPreferences%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKPreferences
 	}
 	Hotkey, %HKPreferences%, TriggerPreferences
+	IniRead, HKReload, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKReload
+	If (HKReload == "ERROR")
+	{
+		HKReload := "CapsLock & r"
+		IniWrite, %HKReload%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKReload
+	}
+	Hotkey, %HKReload%, TriggerReload
+	IniRead, HKQuit, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKQuit
+	If (HKQuit == "ERROR")
+	{
+		HKQuit := "CapsLock & q"
+		IniWrite, %HKQuit%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKQuit
+	}
+	Hotkey, %HKQuit%, TriggerQuit
 
   If (FirstStart == 1)
   {
