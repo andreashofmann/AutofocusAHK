@@ -137,6 +137,13 @@ AF4_Work()
 			MsgBox No unactioned tasks!
 			Return
 		}
+		If (HasClosedList == 0)
+    	{
+    	  HasClosedList := 1
+        LastTaskInClosedList := TaskCount
+    		SaveTasks()
+    	}
+
 		ShowWorkWindow()
 	}
 }
