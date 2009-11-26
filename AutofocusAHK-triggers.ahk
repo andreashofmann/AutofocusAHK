@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.2
+; @version   0.9.3
 ; @since     0.9
 
 ; Trigger for adding a new task
@@ -62,6 +62,10 @@ Return
 
 
 TriggerReload:
-	Reload
+	MsgBox, 4, AutofocusAHK %Ver%, Do you want to reload AutofocusAHK?
+	IfMsgBox Yes
+	{
+    	Reload
+   	}
 Return
 
