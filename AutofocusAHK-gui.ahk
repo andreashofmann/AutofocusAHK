@@ -533,6 +533,12 @@ Return
 
 UpdateTime:
 	TimePassed := TimePassed + 1
+  TimeString := SecondsToFormattedTime(TimePassed)
+	GuiControl, 2: , TimeControl, %TimeString%
+Return
+
+SecondsToFormattedTime(TimePassed)
+{
 	TimeTemp := TimePassed
 	If (TimePassed < 60)
 	{
@@ -599,11 +605,9 @@ UpdateTime:
 		TimeString := TimeString . "0"
 	}
 	TimeString := TimeString . Seconds
-
-	GuiControl, 2: , TimeControl, %TimeString%
-Return
-
-
+  
+  Return TimeString
+}
 
 ShowPreferences()
 {

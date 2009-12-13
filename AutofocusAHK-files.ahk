@@ -272,11 +272,11 @@ Export()
 		
   If (System == "AF1" or System == "AF3")
   {
-    Export .= "<tr><th colspan=""4"">Page 1</th></tr>"
+    Export .= "<tr><th colspan=""5"">Page 1</th></tr>"
   }
   If (System == "AF4")
   {
-    Export .= "<tr><th colspan=""4"">"
+    Export .= "<tr><th colspan=""5"">"
     If (HasClosedList)
     {
       Export .= "Closed List"
@@ -287,15 +287,15 @@ Export()
     }
           Export .= "</th></tr>"
   }
-		Export .= "<tr><th>Task</th><th>Added</th><th>On&nbsp;Review</th><th><nobr>Done/Re-Added</nobr></th></tr>"
+		Export .= "<tr><th>Task</th><th>Added</th><th>On&nbsp;Review</th><th><nobr>Done/Re-Added</nobr></th><th>Time</th></tr>"
 		ExportPage := 1
 	Loop, %TaskCount%
 	{
 		If ((System == "AF1" or System == "AF3") and ExportPage < ceil(A_Index/TasksPerPage))
 		{
 			ExportPage := ExportPage + 1
-			Export .= "<tr><th colspan=""4"">Page " . ExportPage . "</th></tr>"
-			. "<tr><th>Task</th><th>Added</th><th>On Review</th><th><nobr>Done/Re-Added</nobr></th></tr>"
+			Export .= "<tr><th colspan=""5"">Page " . ExportPage . "</th></tr>"
+			. "<tr><th>Task</th><th>Added</th><th>On Review</th><th><nobr>Done/Re-Added</nobr></th><th>Time</th></tr>"
 		}
 		Export .= "<tr"
 		Export .= " class="""
@@ -323,6 +323,7 @@ Export()
 		ExportAdded := ""
 		ExportReview := ""
 		ExportDone := ""
+    ExportTime := ""
 		Loop, Parse, Tasks%A_Index%_2, %A_Space%
 		{
 			If (InStr(A_LoopField, "D"))
@@ -340,6 +341,11 @@ Export()
 				ExportAdded := SubStr(A_LoopField, 2)
 				FormatTime, ExportAdded, %ExportAdded%, yyyy-MM-dd'&nbsp;'H:mm
 			}
+			If (InStr(A_LoopField, "T"))
+			{
+				ExportTime := SubStr(A_LoopField, 2)
+				ExportTime := SecondsToFormattedTime(ExportTime)
+			}
 
 		}
 		Export .= "<td><nobr>" 
@@ -351,12 +357,15 @@ Export()
 				. "<td><nobr>" 
 					. ExportDone
 				. "</nobr></td>"
+				. "<td><nobr>" 
+					. ExportTime
+				. "</nobr></td>"
 		
 		Export .= "</tr>"
 		If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList and LastTaskInClosedList != TaskCount)
 		{
-			Export .= "<tr><th colspan=""4"">Open List</th></tr>"
-			. "<tr><th>Task</th><th>Added</th><th>On Review</th><th><nobr>Done/Re-Added</nobr></th></tr>"
+			Export .= "<tr><th colspan=""5"">Open List</th></tr>"
+			. "<tr><th>Task</th><th>Added</th><th>On Review</th><th><nobr>Done/Re-Added</nobr></th><th>Time</th></tr>"
 		}
   }
 	
