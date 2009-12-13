@@ -30,6 +30,8 @@ Usage
   CapsLock + d	Start/Stop Working
   CapsLock + e	Export list to HTML
   CapsLock + p	Show preferences
+  CapsLock + r  Reload the tasks list from Tasks.txt
+  CapsLock + q  Quit the application
 
 Configuration
 -------------

@@ -1,6 +1,11 @@
 History
 -------
-  
+
+  Version 0.9.2.2 (2009-12-14)
+    - Confirmation before reloading task list
+    - Added time column to HTML export
+    - CapsLock doesn't get blocked if no hotkeys use it.
+      
   Version 0.9.2.1 (2009-11-23)
     - Fix: Shortcut conflict between "notes" and "no" buttons
     - New hotkeys:
