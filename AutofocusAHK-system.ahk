@@ -234,3 +234,8 @@ GetStandardWindowTitle()
 	Title := " - " . System . " - AutofocusAHK " . Ver
 	Return Title
 }
+
+CheckCapsLock:
+  SetCapslockState, Off
+  SetCapslockState, AlwaysOff
+Return

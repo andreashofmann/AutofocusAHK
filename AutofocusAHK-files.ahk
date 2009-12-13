@@ -123,6 +123,9 @@ LoadConfig()
 		TasksPerPage := 20
 		IniWrite, %TasksPerPage%, %A_ScriptDir%\AutofocusAHK.ini, ForwardMode, TasksPerPage
 	}
+	
+	SetHotkeys := ""
+
 	IniRead, HKAddTask, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKAddTask
 	If (HKAddTask == "ERROR")
 	{
@@ -130,6 +133,8 @@ LoadConfig()
 		IniWrite, %HKAddTask%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKAddTask
 	}
 	Hotkey, %HKAddTask%, TriggerAddTask
+  SetHotkeys .= HKAddTask	
+	
 	IniRead, HKWork, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKWork
 	If (HKWork == "ERROR")
 	{
@@ -137,6 +142,8 @@ LoadConfig()
 		IniWrite, %HKWork%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKWork
 	}
 	Hotkey, %HKWork%, TriggerWork
+  SetHotkeys .= HKWork	
+
 	IniRead, HKShowNextTasks, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowNextTasks
 	If (HKShowNextTasks == "ERROR")
 	{
@@ -144,18 +151,23 @@ LoadConfig()
 		IniWrite, %HKShowNextTasks%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowNextTasks
 	}
 	Hotkey, %HKShowNextTasks%, TriggerShowNextTasks
+  SetHotkeys .= HKShowNextTasks	
+
 	IniRead, HKToggleAutostart, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
 	If (HKToggleAutostart != "ERROR")
 	{
 		IniDelete, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
 	}
+
 	IniRead, HKExport, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKExport
-	If (HKExport == "ERROR")
+  If (HKExport == "ERROR")
 	{
 		HKExport := "CapsLock & e"
 		IniWrite, %HKExport%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKExport
 	}
 	Hotkey, %HKExport%, TriggerExport
+  SetHotkeys .= HKExport	
+
 	IniRead, HKPreferences, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKPreferences
 	If (HKPreferences == "ERROR")
 	{
@@ -163,6 +175,8 @@ LoadConfig()
 		IniWrite, %HKPreferences%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKPreferences
 	}
 	Hotkey, %HKPreferences%, TriggerPreferences
+  SetHotkeys .= HKPreferences	
+
 	IniRead, HKReload, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKReload
 	If (HKReload == "ERROR")
 	{
@@ -170,6 +184,8 @@ LoadConfig()
 		IniWrite, %HKReload%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKReload
 	}
 	Hotkey, %HKReload%, TriggerReload
+  SetHotkeys .= HKReload	
+
 	IniRead, HKQuit, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKQuit
 	If (HKQuit == "ERROR")
 	{
@@ -177,6 +193,12 @@ LoadConfig()
 		IniWrite, %HKQuit%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKQuit
 	}
 	Hotkey, %HKQuit%, TriggerQuit
+  SetHotkeys .= HKQuit
+  
+	If (InStr(SetHotkeys,"CapsLock"))
+	{
+      SetTimer, CheckCapslock, 1000
+  }	
 
   If (FirstStart == 1)
   {

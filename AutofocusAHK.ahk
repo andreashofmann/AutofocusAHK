@@ -13,9 +13,6 @@
 ; Make sure the script stays in memory
 #Persistent
 
-; CapsLock should not be triggered when pressed
-SetCapslockState AlwaysOff
-
 ; The script will check every 5 minutes if the conditions for the morning routine are met.
 SetTimer,MorningRoutine,300000
 
