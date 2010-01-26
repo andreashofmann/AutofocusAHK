@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.2.2
+; @version   0.9.2.3
 ; @since     0.9
 
 
@@ -302,10 +302,11 @@ ShowStatusWindow()
 	Gui, 2:+AlwaysOnTop -SysMenu +Owner -Caption Resize MinSize MaxSize
 	Gui, 2:Add, Text, y10, % Tasks%CurrentTask%_1
 	Gui, 2:Add, Text, y10 Right vTimeControl, 00:00:00
-	Gui, 2:Add, Button,ym default gButtonStop vStopButton, &Stop
+	Gui, 2:Add, Button,ym gButtonShowStatusNotes vStatusNotesButton, Show no&tes
 	Gui, 2:Add, Button,ym gButtonHide, &Hide for 30s
+	Gui, 2:Add, Button,ym default gButtonStop vStopButton, &Stop
 	Gui, 2:Show, y0 xCenter AutoSize, Status - AutohotkeyAHK
-	GuiControl, Focus, StopButton
+	GuiControl, 2:Focus, StopButton
 
 }
 
@@ -356,6 +357,19 @@ GuiDoneEscape:
 	ShowStatusWindow()
 	SetTimer,UpdateTime,1000
 Return
+
+GuiNotesClose:
+GuiNotesEscape:
+  GuiControl, 2:Enable, StatusNotesButton
+  GuiControlGet,ShowNotesBoxContent,,ShowStatusNotesBox
+  If (ShowNotesBoxContent)
+  {
+        Tasks%CurrentTask%_3 := ShowNotesBoxContent
+  }
+
+  Gui, 4:Destroy  
+Return
+
 
 GuiAddClose:
 GuiAddEscape:
@@ -477,6 +491,24 @@ Return
 ButtonHide:
 	SetTimer,ReShowStatusWindow,30000
 	Gui, 2:Hide
+Return
+
+ButtonShowStatusNotes:
+	  GuiControl, Disable, StatusNotesButton
+  Gui, 4:Destroy
+	Gui, 4:Font, Bold
+	Gui, 4:Add, Text,  w500 Center vTaskNotesControl, % Tasks%CurrentTask%_1
+	Gui, 4:Font, Norm
+	GuiControlGet, TaskPos, Pos, TaskNotesControl
+	NewY := TaskPosY + TaskPosH + 20
+	NewYT := NewY + 5
+    StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\t,%A_Tab%, All
+    StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
+  Gui, 4:+LabelGuiNotes
+	Gui, 4:Add, Edit,xm w500 T8 R10 default vShowStatusNotesBox, %ShowNotesBoxContent%
+	Gui, 4:Show, Center Autosize, Notes - AutofocusAHK %Ver%
+	Return
+
 Return
 
 ButtonStop:
