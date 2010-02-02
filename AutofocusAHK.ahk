@@ -38,7 +38,7 @@ Return
 #include AutofocusAHK-af2.ahk
 #include AutofocusAHK-af3.ahk
 #include AutofocusAHK-af4.ahk
-
+#include AutofocusAHK-af5.ahk
 
 
 

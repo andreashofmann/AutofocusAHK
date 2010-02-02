@@ -25,9 +25,7 @@ AF5_IsValidTask(TaskName, TaskStats)
 	}
 	If (TaskName == "---")
 	{
-	  HasClosedList := 1
-    LastTaskInClosedList := TaskCount
-		Return 0
+	Return 0
 	}	
 	Return 1
 }
@@ -61,57 +59,19 @@ AF5_PostTaskAdd()
 AF5_SelectNextTask()
 {
 	global
-	If (UnactionedCount > 0 or HasTasksOnReview)
+	If (UnactionedCount > 0)
 	{
 			Start := CurrentTask
 			Loop
 			{
       			CurrentTask := CurrentTask + 1
-          		If (!InStr(Tasks%CurrentTask%_2, "D") and InStr(Tasks%CurrentTask%_2, "R"))
-	 			{
-  	 			    If (CurrentMode != ReviewMode)
-	 			    {
-                      ReviewComplete := 1
-  	                  ReviewTask := CurrentTask
-  	                  PreviousMode := CurrentMode
-                      CurrentMode := ReviewMode
-                    } 
-                }
-
-				If (HasClosedList and CurrentTask == LastTaskInClosedList+1)
-				{
-					If (ActionOnCurrentPass or (ActionOnCurrentPass and CreatingList))
-					{
-					  If (!CreatingList)
-					  {
-      				CurrentPass := CurrentPass + 1
-  						ActionOnCurrentPass := 0
-						}
-            CurrentTask := 0
-					}
-					Else If (!CreatingList)
-					{
- 						If (CurrentPass == 1)
-						{
-                            AF5_DismissTasks()
-							CurrentPass := 1
-							ActionOnCurrentPass := 0
-						}
-						Else
-						{                              
-							CurrentPass := 1
-							ActionOnCurrentPass := 0
-							
-						}
-					}
-				}
 				If (CurrentTask > TaskCount)
 				{
 						CurrentTask := 0
         }
-				If (Tasks%CurrentTask%_4 == 0 or (UnactionedCount == 0 and HasTasksOnReview == 0) (UnactionedCount == 0 and CurrentMode == ReviewMode and HasTasksOnReview == 1)) 
+				If (Tasks%CurrentTask%_4 == 0 or UnactionedCount == 0) 
 				{
-					Break
+					Break                          
 				}
 			}
 	}
@@ -121,12 +81,7 @@ AF5_SelectNextTask()
 AF5_Work()
 {
 	global
-	
-	If (CurrentMode == ReviewMode)
-	{
-		ShowReviewWindow()
-	}
-	Else If (Active == 1)
+    If (Active == 1)
 	{
 		ShowDoneWindow()
 	}
@@ -137,36 +92,10 @@ AF5_Work()
 			MsgBox No unactioned tasks!
 			Return
 		}
-		If (HasClosedList == 0)
-    	{
-    	  HasClosedList := 1
-        LastTaskInClosedList := TaskCount
-    		SaveTasks()
-    	}
-
 		ShowWorkWindow()
 	}
 }
 
-SetBacklogStats()
-{
-	global
-	CurrentPage := Ceil(CurrentTask/TasksPerPage)
-	If (TaskCount < TasksPerPage)
-	{
-		LastTaskOnPage := TaskCount
-		FirstTaskOnPage := 1
-	}
-	Else
-	{
-		LastTaskOnPage := CurrentPage * TasksPerPage
-		FirstTaskOnPage := LastTaskOnPage - TasksPerPage + 1
-		If (LastTaskOnPage > TaskCount)
-		{
-			LastTaskOnPage := TaskCount
-		}
-	}
-}
 
 AF5_DoMorningRoutine()
 {
