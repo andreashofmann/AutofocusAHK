@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.2.3
+; @version   0.9.2.4
 ; @since     0.9
 
 ; Load tasks from file Tasks.txt
