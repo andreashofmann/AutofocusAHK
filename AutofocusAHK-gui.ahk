@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.2.3
+; @version   0.9.2.4
 ; @since     0.9
 
 
@@ -303,12 +303,26 @@ ShowStatusWindow()
 	Gui, 2:Add, Text, y10, % Tasks%CurrentTask%_1
 	Gui, 2:Add, Text, y10 Right vTimeControl, 00:00:00
 	Gui, 2:Add, Button,ym gButtonShowStatusNotes vStatusNotesButton, Show no&tes
-	Gui, 2:Add, Button,ym gButtonHide, &Hide for 30s
+	Gui, 2:Add, Button,ym gButtonHide vHideButton, &Hide for 30s
 	Gui, 2:Add, Button,ym default gButtonStop vStopButton, &Stop
 	Gui, 2:Show, y0 xCenter AutoSize, Status - AutohotkeyAHK
 	GuiControl, 2:Focus, StopButton
 
 }
+                                        
+~Shift::
+{
+  GuiControl, 2:Text, HideButton, Hide
+  HidePermanently := 1
+}
+Return
+
+~Shift Up::
+{
+  GuiControl, 2:Text, HideButton, &Hide for 30s
+  HidePermanently := 0
+}
+Return
 
 SelectNextReviewTask()
 {
@@ -489,8 +503,11 @@ ButtonAddNotes:
 Return
 
 ButtonHide:
-	SetTimer,ReShowStatusWindow,30000
-	Gui, 2:Hide
+	If (HidePermanently != 1)
+  {
+    SetTimer,ReShowStatusWindow,30000
+	}
+  Gui, 2:Hide
 Return
 
 ButtonShowStatusNotes:
