@@ -1,18 +1,18 @@
 ; AutofocusAHK
 ;
-; This file holds all functions specific to the Autofocus 4 system. 
+; This file holds all functions specific to the Autofocus 5 system. 
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
 ; @version   0.9.3
-; @since     0.9
+; @since     0.9.3
 
-AF4_IsReviewOptional()
+AF5_IsReviewOptional()
 {
     Return 0
 }
 
-AF4_IsValidTask(TaskName, TaskStats)
+AF5_IsValidTask(TaskName, TaskStats)
 {
   global
 	If (TaskName == "Change to review mode")
@@ -32,7 +32,7 @@ AF4_IsValidTask(TaskName, TaskStats)
 	Return 1
 }
 
-AF4_PostTaskLoad()
+AF5_PostTaskLoad()
 {
   global
 	If (TaskCount >= TasksPerPage and HasClosedList == 0)
@@ -47,7 +47,7 @@ AF4_PostTaskLoad()
   }
 }
 
-AF4_PostTaskAdd()
+AF5_PostTaskAdd()
 {
   global
 	If (TaskCount >= TasksPerPage and HasClosedList == 0)
@@ -58,7 +58,7 @@ AF4_PostTaskAdd()
 	}
 }
 
-AF4_SelectNextTask()
+AF5_SelectNextTask()
 {
 	global
 	If (UnactionedCount > 0 or HasTasksOnReview)
@@ -93,7 +93,7 @@ AF4_SelectNextTask()
 					{
  						If (CurrentPass == 1)
 						{
-                            AF4_DismissTasks()
+                            AF5_DismissTasks()
 							CurrentPass := 1
 							ActionOnCurrentPass := 0
 						}
@@ -118,7 +118,7 @@ AF4_SelectNextTask()
 }
 
 
-AF4_Work()
+AF5_Work()
 {
 	global
 	
@@ -168,13 +168,13 @@ SetBacklogStats()
 	}
 }
 
-AF4_DoMorningRoutine()
+AF5_DoMorningRoutine()
 {
 		SaveTasks()
 		BackupTasks()
 }
 
-AF4_DismissTasks()
+AF5_DismissTasks()
 {
 	global
 	Message := ""
@@ -201,7 +201,7 @@ AF4_DismissTasks()
 	SaveTasks()
 }
 
-AF4_GetWorkWindowTitle()
+AF5_GetWorkWindowTitle()
 {
 	global CurrentTask,LastTaskInClosedList,CurrentPass,ActionOnCurrentPass
 	If (CurrentTask > LastTaskInClosedList)
@@ -221,7 +221,7 @@ AF4_GetWorkWindowTitle()
 	Return Title
 }
 
-AF4_GetReviewWindowTitle()
+AF5_GetReviewWindowTitle()
 {
 	Title := "Review"
 	Title .= GetStandardWindowTitle()
