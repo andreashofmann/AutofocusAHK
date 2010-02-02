@@ -56,8 +56,12 @@ Work()
 
 SelectNextTask()
 {
-	global System
+	global System, CurrentTask,CurrentPass,ActionOnCurrentPass
 	%System%_SelectNextTask()
+	IniWrite, %CurrentTask%, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentTask
+	IniWrite, %CurrentPass%, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentPass
+	IniWrite, %ActionOnCurrentPass%, %A_ScriptDir%\AutofocusAHK.ini, General, ActionOnCurrentPass
+
 }
 
 ReAddTask()

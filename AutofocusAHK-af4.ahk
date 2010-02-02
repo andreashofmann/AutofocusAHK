@@ -41,10 +41,10 @@ AF4_PostTaskLoad()
     LastTaskInClosedList := TaskCount
 		SaveTasks()
 	}
-  CurrentPass := 1  
-	ActionOnCurrentPass := 0
-	CurrentTask := 0
-	SelectNextTask()
+  If (CurrentTask == 0 or Tasks%CurrentTask%_3 == 4)
+  {
+  	SelectNextTask()
+  }
 }
 
 AF4_PostTaskAdd()

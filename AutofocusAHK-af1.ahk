@@ -34,8 +34,10 @@ AF1_IsValidTask(TaskName, TaskStats)
 AF1_PostTaskLoad()
 {
   global
-	CurrentTask := 0
-	SelectNextTask()
+  If (CurrentTask == 0 or Tasks%CurrentTask%_3 == 4)
+  {
+  	SelectNextTask()
+  }
 }
 
 AF1_PostTaskAdd()

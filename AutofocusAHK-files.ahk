@@ -123,6 +123,24 @@ LoadConfig()
 		TasksPerPage := 20
 		IniWrite, %TasksPerPage%, %A_ScriptDir%\AutofocusAHK.ini, ForwardMode, TasksPerPage
 	}
+	IniRead, CurrentTask, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentTask
+	If (CurrentTask == "ERROR")
+	{
+		CurrentTask := 0
+		IniWrite, %CurrentTask%, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentTask
+	}
+	IniRead, ActionOnCurrentPass, %A_ScriptDir%\AutofocusAHK.ini, General, ActionOnCurrentPass
+	If (ActionOnCurrentPass == "ERROR")
+	{
+		ActionOnCurrentPass := 0
+		IniWrite, %ActionOnCurrentPass%, %A_ScriptDir%\AutofocusAHK.ini, General, ActionOnCurrentPass
+	}
+	IniRead, CurrentPass, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentPass
+	If (CurrentPass == "ERROR")
+	{
+		CurrentPass := 1
+		IniWrite, %CurrentPass%, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentPass
+	}
 	
 	SetHotkeys := ""
 
