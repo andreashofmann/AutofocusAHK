@@ -479,7 +479,10 @@ ButtonAdd:
         }
 		UnactionedCount := UnactionedCount + 1
 		Tasks%Taskcount%_1 := NewTask
-		Tasks%Taskcount%_2 := "A" . A_Now
+		Added := A_Now
+		Expires := Added
+		Expires += 30, days
+		Tasks%Taskcount%_2 := "A" . Added . " E" . Expires
 	    StringReplace, AddNotesBox, AddNotesBox,%A_Tab%,\t, All
 	    StringReplace, AddNotesBox, AddNotesBox,`n,\n, All
         Tasks%Taskcount%_3 := AddNotesBox

@@ -26,34 +26,89 @@ AF5_IsValidTask(TaskName, TaskStats)
 	If (TaskName == "---")
 	{
 	Return 0
-	}	
+	}
+  If (ePos := InStr(TaskStats, "E"))
+  {
+    Expires := SubStr(TaskStats, ePos + 1, 8)
+    
+    FormatTime, Today, , yyyyMMdd
+    
+    If (Today >= Expires)
+    {
+      ListOfExpiredTasks .= TaskName . "`n"
+      Return 0
+    }
+  }  	
 	Return 1
 }
 
 AF5_PostTaskLoad()
 {
   global
-	If (TaskCount >= TasksPerPage and HasClosedList == 0)
-	{
-	  HasClosedList := 1
-    LastTaskInClosedList := TaskCount
-		SaveTasks()
-	}
-  If (CurrentTask == 0 or Tasks%CurrentTask%_3 == 4)
+  If (CurrentTask == 0 or Tasks%CurrentTask%_4 == 1)
   {
   	SelectNextTask()
+  }
+  
+  If (ListOfExpiredTasks)
+  {
+    MsgBox, 0 , Expiration - AF5 - AutofocusAHK %Ver%, The following tasks expired:`n`n%ListOfExpiredTasks% 
   }
 }
 
 AF5_PostTaskAdd()
 {
   global
-	If (TaskCount >= TasksPerPage and HasClosedList == 0)
-	{
-	  HasClosedList := 1
-    LastTaskInClosedList := TaskCount
-		SaveTasks()
-	}
+  FormatTime, NewExpires, %Expires%, yyyyMMdd
+  NewTask_1 := Tasks%TaskCount%_1
+  NewTask_2 := Tasks%TaskCount%_2
+  NewTask_3 := Tasks%TaskCount%_3
+  NewTask_4 := Tasks%TaskCount%_4
+  Counter := TaskCount
+  
+  Loop, %TaskCount%
+  {
+    OldCounter := Counter
+    Counter -= 1
+    
+    
+    If (Counter == 0)
+    {
+      Break
+    }
+    
+    
+    ePos := InStr(Tasks%Counter%_2, "E")
+  
+    Expires := SubStr(Tasks%Counter%_2, ePos + 1, 8)
+    
+    
+    If (NewExpires >= Expires)
+    {
+      Break
+    }
+
+    Tasks%OldCounter%_1 := Tasks%Counter%_1
+    Tasks%OldCounter%_2 := Tasks%Counter%_2
+    Tasks%OldCounter%_3 := Tasks%Counter%_3
+    Tasks%OldCounter%_4 := Tasks%Counter%_4 
+    
+  }
+  
+  If (OldCounter != TaskCount)
+  {
+    Tasks%OldCounter%_1 := NewTask_1
+    Tasks%OldCounter%_2 := NewTask_2
+    Tasks%OldCounter%_3 := NewTask_3
+    Tasks%OldCounter%_4 := NewTask_4    
+    
+    SaveTasks()
+  }
+  
+  If (Tasks%CurrentTask%_4 == 1)
+  {
+    SelectNextTask()
+  }
 }
 
 AF5_SelectNextTask()
@@ -96,11 +151,11 @@ AF5_Work()
 	}
 }
 
-
 AF5_DoMorningRoutine()
 {
 		SaveTasks()
 		BackupTasks()
+		LoadTasks()
 }
 
 AF5_DismissTasks()
@@ -155,4 +210,4 @@ AF5_GetReviewWindowTitle()
 	Title := "Review"
 	Title .= GetStandardWindowTitle()
 	Return Title
-}
+}              

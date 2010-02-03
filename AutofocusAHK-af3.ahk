@@ -28,7 +28,7 @@ AF3_IsValidTask(TaskName, TaskStats)
 	If (TaskName == "---")
 	{
 		Return 0
-	}	
+	}	                              
 	Return 1
 }
 

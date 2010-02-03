@@ -48,7 +48,13 @@ LoadTasks()
   		}
   		Else
   		{
-  			Tasks%TaskCount%_4 := 0
+    		If (!InStr(Tasks%TaskCount%_2, "E"))
+    		{
+    		  Expires := A_Now
+    		  Expires += 30, days
+    		  Tasks%TaskCount%_2 .= " E" . Expires
+    		}
+      	Tasks%TaskCount%_4 := 0
   			UnactionedCount := UnactionedCount +1
   		}
   	}
