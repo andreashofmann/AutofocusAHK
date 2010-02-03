@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.2.4
+; @version   0.9.3
 ; @since     0.9
 
 Initialize()
@@ -12,7 +12,7 @@ Initialize()
 	global 
 	
 	; Version number that is displayed in GUI windows
-	Ver := "0.9.2.4"
+	Ver := "0.9.3"
 
 	; Is the user currently working on a task?
 	Active := 0
@@ -78,7 +78,10 @@ ReAddTask()
     {
         Tasks%Taskcount%_1 := Tasks%CurrentTask%_1
     }
-	Tasks%Taskcount%_2 := "A" . A_Now
+		Added := A_Now
+		Expires := Added
+		Expires += 7, days
+		Tasks%Taskcount%_2 := "A" . Added . " E" . Expires
 	GuiControlGet,ShowNotesBoxContent,,ShowNotesBox
 	If (ShowNotesBoxContent)
 	{

@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.2.4
+; @version   0.9.3
 ; @since     0.9
 
 ; Load tasks from file Tasks.txt
@@ -48,7 +48,13 @@ LoadTasks()
   		}
   		Else
   		{
-  			Tasks%TaskCount%_4 := 0
+    		If (!InStr(Tasks%TaskCount%_2, "E"))
+    		{
+    		  Expires := A_Now
+    		  Expires += 30, days
+    		  Tasks%TaskCount%_2 .= " E" . Expires
+    		}
+      	Tasks%TaskCount%_4 := 0
   			UnactionedCount := UnactionedCount +1
   		}
   	}
@@ -300,6 +306,9 @@ Export()
 		. ".hidereview #rswitch {background-color:#FFF; color:#AA0; border:1px solid #AA0;}"
 		. "#dswitch { background-color:#090; color:#FFF; border:1px solid #090;}"
 		. ".hidedone #dswitch {background-color:#FFF; color:#0A0; border:1px solid #0A0;}"
+		. ".warning {color:#900; }"
+		. ".warning th { background:#FDD; border:1px solid #900; }"
+		. ".warning td { border:1px solid #900; }"
 
 		. "</style>"
 		. "</head><body class=""hidedone hidereview"">"
@@ -313,6 +322,7 @@ Export()
   If (System == "AF1" or System == "AF3")
   {
     Export .= "<tr><th colspan=""5"">Page 1</th></tr>"
+		Export .= "<tr><th>Task</th><th>Added</th><th>On&nbsp;Review</th><th><nobr>Done/Re-Added</nobr></th><th>Time</th></tr>"
   }
   If (System == "AF4")
   {
@@ -326,12 +336,65 @@ Export()
       Export .= "Open List"    
     }
           Export .= "</th></tr>"
-  }
 		Export .= "<tr><th>Task</th><th>Added</th><th>On&nbsp;Review</th><th><nobr>Done/Re-Added</nobr></th><th>Time</th></tr>"
+  }
 		ExportPage := 1
+		FormatTime, Today,, yyyyMMdd
+		Tomorrow := A_Now
+		Tomorrow += 1, days
+		FormatTime, Tomorrow, %Tomorrow%, yyyyMMdd		
+		ExprtCurrentExpires := Today
 	Loop, %TaskCount%
 	{
-		If ((System == "AF1" or System == "AF3") and ExportPage < ceil(A_Index/TasksPerPage))
+	  If (System != "AF5" or Tasks%A_Index%_4 == 0)
+		Loop, Parse, Tasks%A_Index%_2, %A_Space%
+		{
+			If (InStr(A_LoopField, "D"))
+			{
+				ExportDone := SubStr(A_LoopField, 2)
+				FormatTime, ExportDone, %ExportDone%, yyyy-MM-dd'&nbsp;'H:mm
+			}
+			If (InStr(A_LoopField, "R"))
+			{
+				ExportReview := SubStr(A_LoopField, 2)
+				FormatTime, ExportReview, %ExportReview%, yyyy-MM-dd'&nbsp;'H:mm
+			}
+			If (InStr(A_LoopField, "A"))
+			{
+				ExportAdded := SubStr(A_LoopField, 2)
+				FormatTime, ExportAdded, %ExportAdded%, yyyy-MM-dd'&nbsp;'H:mm
+			}
+			If (InStr(A_LoopField, "T"))
+			{
+				ExprtTime := SubStr(A_LoopField, 2)
+				ExprtTime := SecondsToFormattedTime(ExprtTime)
+			}
+
+			If (System == "AF5" and InStr(A_LoopField, "E"))
+			{
+				ExprtExpires := SubStr(A_LoopField, 2,8)
+				If (ExprtCurrentExpires < ExprtExpires)
+				{
+				  ExprtCurrentExpires := ExprtExpires
+				  If (ExprtCurrentExpires == Tomorrow)
+				  {
+            ExprtHeading := "Expiring Tomorrow"
+            WarningClass := " class=""warning"""
+          }
+          Else
+          {
+            FormatTime, ExprtFormattedExpires, %ExprtCurrentExpires%, yyyy-MM-dd
+            ExprtHeading := "Expiring " . ExprtFormattedExpires
+            WarningClass := ""
+          }
+  			Export .= "<tr" . WarningClass . "><th colspan=""5"">" . ExprtHeading . "</th></tr>"
+			. "<tr" . WarningClass . "><th>Task</th><th>Added</th><th>On Review</th><th><nobr>Done/Re-Added</nobr></th><th>Time</th></tr>"
+				
+        }
+			}
+
+		}
+    If ((System == "AF1" or System == "AF3") and ExportPage < ceil(A_Index/TasksPerPage))
 		{
 			ExportPage := ExportPage + 1
 			Export .= "<tr><th colspan=""5"">Page " . ExportPage . "</th></tr>"
@@ -355,6 +418,10 @@ Export()
         {
 			Export .= " current"                    
         }
+        If (WarningClass)
+        {
+			Export .= " warning"                    
+        }
 		Export .= """"
 		Export .= ">"
 				. "<td>" 
@@ -363,31 +430,8 @@ Export()
 		ExportAdded := ""
 		ExportReview := ""
 		ExportDone := ""
-    ExportTime := ""
-		Loop, Parse, Tasks%A_Index%_2, %A_Space%
-		{
-			If (InStr(A_LoopField, "D"))
-			{
-				ExportDone := SubStr(A_LoopField, 2)
-				FormatTime, ExportDone, %ExportDone%, yyyy-MM-dd'&nbsp;'H:mm
-			}
-			If (InStr(A_LoopField, "R"))
-			{
-				ExportReview := SubStr(A_LoopField, 2)
-				FormatTime, ExportReview, %ExportReview%, yyyy-MM-dd'&nbsp;'H:mm
-			}
-			If (InStr(A_LoopField, "A"))
-			{
-				ExportAdded := SubStr(A_LoopField, 2)
-				FormatTime, ExportAdded, %ExportAdded%, yyyy-MM-dd'&nbsp;'H:mm
-			}
-			If (InStr(A_LoopField, "T"))
-			{
-				ExportTime := SubStr(A_LoopField, 2)
-				ExportTime := SecondsToFormattedTime(ExportTime)
-			}
+    ExprtTime := ""
 
-		}
 		Export .= "<td><nobr>" 
 					. ExportAdded
 				. "<nobr></td>"
@@ -398,8 +442,9 @@ Export()
 					. ExportDone
 				. "</nobr></td>"
 				. "<td><nobr>" 
-					. ExportTime
+					. ExprtTime
 				. "</nobr></td>"
+				
 		
 		Export .= "</tr>"
 		If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList and LastTaskInClosedList != TaskCount)

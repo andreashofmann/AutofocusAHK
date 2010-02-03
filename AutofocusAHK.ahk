@@ -5,7 +5,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.2.4
+; @version   0.9.3
 ; @since     0.1
 
 ;; ENVIRONMENT
@@ -38,7 +38,7 @@ Return
 #include AutofocusAHK-af2.ahk
 #include AutofocusAHK-af3.ahk
 #include AutofocusAHK-af4.ahk
-
+#include AutofocusAHK-af5.ahk
 
 
 

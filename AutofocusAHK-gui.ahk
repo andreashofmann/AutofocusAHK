@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.2.4
+; @version   0.9.3
 ; @since     0.9
 
 
@@ -479,7 +479,10 @@ ButtonAdd:
         }
 		UnactionedCount := UnactionedCount + 1
 		Tasks%Taskcount%_1 := NewTask
-		Tasks%Taskcount%_2 := "A" . A_Now
+		Added := A_Now
+		Expires := Added
+		Expires += 30, days
+		Tasks%Taskcount%_2 := "A" . Added . " E" . Expires
 	    StringReplace, AddNotesBox, AddNotesBox,%A_Tab%,\t, All
 	    StringReplace, AddNotesBox, AddNotesBox,`n,\n, All
         Tasks%Taskcount%_3 := AddNotesBox
@@ -673,6 +676,8 @@ ShowPreferences()
   Gui, Add, Radio,  checked%RadioChecked% gSystemAF3, Autofocus Version 3 (AF3/RAF)                   
 	RadioChecked := System == "AF4" || System == ""
   Gui, Add, Radio,  checked%RadioChecked% gSystemAF4, Autofocus Version 4 (AF4)                   
+	RadioChecked := System == "AF5" || System == ""
+  Gui, Add, Radio,  checked%RadioChecked% gSystemAF5, Autofocus Version 5 (AF5/DIT2)                   
 	Gui, Font, Bold
 	Gui, Add, Text, ym w250, Autostart
 	Gui, Font, Norm
@@ -712,6 +717,12 @@ Return
 
 SystemAF4:
 		System := "AF4"
+		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+		LoadTasks()
+Return
+
+SystemAF5:
+		System := "AF5"
 		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
 		LoadTasks()
 Return

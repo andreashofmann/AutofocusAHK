@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.2.4
+; @version   0.9.3
 ; @since     0.9
 
 AF3_IsReviewOptional()
@@ -28,7 +28,7 @@ AF3_IsValidTask(TaskName, TaskStats)
 	If (TaskName == "---")
 	{
 		Return 0
-	}	
+	}	                              
 	Return 1
 }
 
