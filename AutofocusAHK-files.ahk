@@ -306,6 +306,9 @@ Export()
 		. ".hidereview #rswitch {background-color:#FFF; color:#AA0; border:1px solid #AA0;}"
 		. "#dswitch { background-color:#090; color:#FFF; border:1px solid #090;}"
 		. ".hidedone #dswitch {background-color:#FFF; color:#0A0; border:1px solid #0A0;}"
+		. ".warning {color:#900; }"
+		. ".warning th { background:#FDD; border:1px solid #900; }"
+		. ".warning td { border:1px solid #900; }"
 
 		. "</style>"
 		. "</head><body class=""hidedone hidereview"">"
@@ -319,6 +322,7 @@ Export()
   If (System == "AF1" or System == "AF3")
   {
     Export .= "<tr><th colspan=""5"">Page 1</th></tr>"
+		Export .= "<tr><th>Task</th><th>Added</th><th>On&nbsp;Review</th><th><nobr>Done/Re-Added</nobr></th><th>Time</th></tr>"
   }
   If (System == "AF4")
   {
@@ -332,44 +336,17 @@ Export()
       Export .= "Open List"    
     }
           Export .= "</th></tr>"
-  }
 		Export .= "<tr><th>Task</th><th>Added</th><th>On&nbsp;Review</th><th><nobr>Done/Re-Added</nobr></th><th>Time</th></tr>"
+  }
 		ExportPage := 1
+		FormatTime, Today,, yyyyMMdd
+		Tomorrow := A_Now
+		Tomorrow += 1, days
+		FormatTime, Tomorrow, %Tomorrow%, yyyyMMdd		
+		ExprtCurrentExpires := Today
 	Loop, %TaskCount%
 	{
-		If ((System == "AF1" or System == "AF3") and ExportPage < ceil(A_Index/TasksPerPage))
-		{
-			ExportPage := ExportPage + 1
-			Export .= "<tr><th colspan=""5"">Page " . ExportPage . "</th></tr>"
-			. "<tr><th>Task</th><th>Added</th><th>On Review</th><th><nobr>Done/Re-Added</nobr></th><th>Time</th></tr>"
-		}
-		Export .= "<tr"
-		Export .= " class="""
-		If (InStr(Tasks%A_Index%_2, "R"))
-		{
-			Export .= "review"
-		}
-		Else If (InStr(Tasks%A_Index%_2, "D"))
-		{
-			Export .= " done"
-		}
-		Else
-		{
-			Export .= " unactioned"            
-        }
-        If (A_Index == CurrentTask)
-        {
-			Export .= " current"                    
-        }
-		Export .= """"
-		Export .= ">"
-				. "<td>" 
-					. Tasks%A_Index%_1
-				. "</td>"
-		ExportAdded := ""
-		ExportReview := ""
-		ExportDone := ""
-    ExprtTime := ""
+	  If (System != "AF5" or Tasks%A_Index%_4 == 0)
 		Loop, Parse, Tasks%A_Index%_2, %A_Space%
 		{
 			If (InStr(A_LoopField, "D"))
@@ -393,7 +370,68 @@ Export()
 				ExprtTime := SecondsToFormattedTime(ExprtTime)
 			}
 
+			If (System == "AF5" and InStr(A_LoopField, "E"))
+			{
+				ExprtExpires := SubStr(A_LoopField, 2,8)
+				If (ExprtCurrentExpires < ExprtExpires)
+				{
+				  ExprtCurrentExpires := ExprtExpires
+				  If (ExprtCurrentExpires == Tomorrow)
+				  {
+            ExprtHeading := "Expiring Tomorrow"
+            WarningClass := " class=""warning"""
+          }
+          Else
+          {
+            FormatTime, ExprtFormattedExpires, %ExprtCurrentExpires%, yyyy-MM-dd
+            ExprtHeading := "Expiring " . ExprtFormattedExpires
+            WarningClass := ""
+          }
+  			Export .= "<tr" . WarningClass . "><th colspan=""5"">" . ExprtHeading . "</th></tr>"
+			. "<tr" . WarningClass . "><th>Task</th><th>Added</th><th>On Review</th><th><nobr>Done/Re-Added</nobr></th><th>Time</th></tr>"
+				
+        }
+			}
+
 		}
+    If ((System == "AF1" or System == "AF3") and ExportPage < ceil(A_Index/TasksPerPage))
+		{
+			ExportPage := ExportPage + 1
+			Export .= "<tr><th colspan=""5"">Page " . ExportPage . "</th></tr>"
+			. "<tr><th>Task</th><th>Added</th><th>On Review</th><th><nobr>Done/Re-Added</nobr></th><th>Time</th></tr>"
+		}
+		Export .= "<tr"
+		Export .= " class="""
+		If (InStr(Tasks%A_Index%_2, "R"))
+		{
+			Export .= "review"
+		}
+		Else If (InStr(Tasks%A_Index%_2, "D"))
+		{
+			Export .= " done"
+		}
+		Else
+		{
+			Export .= " unactioned"            
+        }
+        If (A_Index == CurrentTask)
+        {
+			Export .= " current"                    
+        }
+        If (WarningClass)
+        {
+			Export .= " warning"                    
+        }
+		Export .= """"
+		Export .= ">"
+				. "<td>" 
+					. Tasks%A_Index%_1
+				. "</td>"
+		ExportAdded := ""
+		ExportReview := ""
+		ExportDone := ""
+    ExprtTime := ""
+
 		Export .= "<td><nobr>" 
 					. ExportAdded
 				. "<nobr></td>"
@@ -406,6 +444,7 @@ Export()
 				. "<td><nobr>" 
 					. ExprtTime
 				. "</nobr></td>"
+				
 		
 		Export .= "</tr>"
 		If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList and LastTaskInClosedList != TaskCount)
