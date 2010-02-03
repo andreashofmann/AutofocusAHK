@@ -369,7 +369,7 @@ Export()
 		ExportAdded := ""
 		ExportReview := ""
 		ExportDone := ""
-    ExportTime := ""
+    ExprtTime := ""
 		Loop, Parse, Tasks%A_Index%_2, %A_Space%
 		{
 			If (InStr(A_LoopField, "D"))
@@ -389,8 +389,8 @@ Export()
 			}
 			If (InStr(A_LoopField, "T"))
 			{
-				ExportTime := SubStr(A_LoopField, 2)
-				ExportTime := SecondsToFormattedTime(ExportTime)
+				ExprtTime := SubStr(A_LoopField, 2)
+				ExprtTime := SecondsToFormattedTime(ExprtTime)
 			}
 
 		}
@@ -404,7 +404,7 @@ Export()
 					. ExportDone
 				. "</nobr></td>"
 				. "<td><nobr>" 
-					. ExportTime
+					. ExprtTime
 				. "</nobr></td>"
 		
 		Export .= "</tr>"
