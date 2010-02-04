@@ -93,6 +93,11 @@ LoadConfig()
 		System := "AF4"
 		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
 	}
+	If (System == "AF5")
+	{
+		System := "DWM"
+		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+	}
 	IniRead, StartWithWindows, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
 	If (StartWithWindows == "ERROR")
 	{
@@ -367,7 +372,7 @@ Export()
 			}
 			If (InStr(A_LoopField, "A"))
 			{
-				ExportAdded := SubStr(A_LoopField, 2)
+				ExportAdded := SubStr(A_LoopField, 2)                               
 				FormatTime, ExportAdded, %ExportAdded%, yyyy-MM-dd'&nbsp;'H:mm
 			}
 			If (InStr(A_LoopField, "T"))
@@ -377,7 +382,7 @@ Export()
 			}
 
       WarningClass := ""
-			If (System == "AF5" and InStr(A_LoopField, "E"))
+			If (System == "DWM" and InStr(A_LoopField, "E"))
 			{
 				ExprtExpires := SubStr(A_LoopField, 2,8)
         If (ExprtCurrentExpires < ExprtExpires)

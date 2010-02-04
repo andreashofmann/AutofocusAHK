@@ -41,7 +41,7 @@ UPDATEDSCRIPT:
 	allattribs .= attribs
 	FileGetAttrib,attribs,%A_ScriptDir%\AutofocusAHK-af4.ahk
 	allattribs .= attribs
-	FileGetAttrib,attribs,%A_ScriptDir%\AutofocusAHK-af5.ahk
+	FileGetAttrib,attribs,%A_ScriptDir%\AutofocusAHK-dwm.ahk
 	allattribs .= attribs
 	IfInString,allattribs,A
 	{
@@ -55,7 +55,7 @@ UPDATEDSCRIPT:
 		FileSetAttrib,-A,%A_ScriptDir%\AutofocusAHK-af2.ahk
 		FileSetAttrib,-A,%A_ScriptDir%\AutofocusAHK-af3.ahk
 		FileSetAttrib,-A,%A_ScriptDir%\AutofocusAHK-af4.ahk
-		FileSetAttrib,-A,%A_ScriptDir%\AutofocusAHK-af5.ahk
+		FileSetAttrib,-A,%A_ScriptDir%\AutofocusAHK-dwm.ahk
 		Process, Close, %AhkPID%
 		Run,  autohotkey.exe %A_ScriptDir%\AutofocusAHK.ahk,  %A_ScriptDir%,,AhkPID
 	}

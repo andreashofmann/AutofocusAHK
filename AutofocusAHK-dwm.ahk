@@ -1,18 +1,18 @@
 ; AutofocusAHK
 ;
-; This file holds all functions specific to the Autofocus 5 system. 
+; This file holds all functions specific to the Daily/Weekly/Monthly system. 
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
 ; @version   0.9.3.1
 ; @since     0.9.3
 
-AF5_IsReviewOptional()
+DWM_IsReviewOptional()
 {
     Return 0
 }
 
-AF5_IsValidTask(TaskName, TaskStats)
+DWM_IsValidTask(TaskName, TaskStats)
 {
   global
 	If (TaskName == "Change to review mode")
@@ -47,7 +47,7 @@ AF5_IsValidTask(TaskName, TaskStats)
 	Return 1
 }
 
-AF5_PostTaskLoad()
+DWM_PostTaskLoad()
 {
   global
   If (CurrentTask == 0 or Tasks%CurrentTask%_4 == 1)
@@ -57,11 +57,11 @@ AF5_PostTaskLoad()
   
   If (ListOfExpiredTasks)
   {
-    MsgBox, 0 , Expiration - AF5 - AutofocusAHK %Ver%, The following tasks expired:`n`n%ListOfExpiredTasks% 
+    MsgBox, 0 , Expiration - %System% - AutofocusAHK %Ver%, The following tasks expired:`n`n%ListOfExpiredTasks% 
   }
 }
 
-AF5_PostTaskAdd()
+DWM_PostTaskAdd()
 {
   global
   FormatTime, NewExpires, %Expires%, yyyyMMdd
@@ -116,7 +116,7 @@ AF5_PostTaskAdd()
   }
 }
 
-AF5_SelectNextTask()
+DWM_SelectNextTask()
 {
 	global
 	If (UnactionedCount > 0)
@@ -138,7 +138,7 @@ AF5_SelectNextTask()
 }
 
 
-AF5_Work()
+DWM_Work()
 {
 	global
     If (Active == 1)
@@ -156,14 +156,14 @@ AF5_Work()
 	}
 }
 
-AF5_DoMorningRoutine()
+DWM_DoMorningRoutine()
 {
 		SaveTasks()
 		BackupTasks()
 		LoadTasks()
 }
 
-AF5_DismissTasks()
+DWM_DismissTasks()
 {
 	global
 	Message := ""
@@ -190,29 +190,17 @@ AF5_DismissTasks()
 	SaveTasks()
 }
 
-AF5_GetWorkWindowTitle()
+DWM_GetWorkWindowTitle()
 {
 	global CurrentTask,LastTaskInClosedList,CurrentPass,ActionOnCurrentPass
-	If (CurrentTask > LastTaskInClosedList)
-	{
-		Title := "Open List"
-	}
-	Else                                     
-	{
-		Title := "Pass " . CurrentPass
-      If (ActionOnCurrentPass == 0)
-      {
-        Title .= "(!)"                                   
-      }
-      Title .= " - Closed List"
-    }
+	Title := "Work"
 	Title .= GetStandardWindowTitle()
 	Return Title
 }
 
-AF5_GetReviewWindowTitle()
+DWM_GetReviewWindowTitle()
 {
-	Title := "Review"
+	Title := "Review"                                                 
 	Title .= GetStandardWindowTitle()
 	Return Title
 }              

@@ -676,8 +676,8 @@ ShowPreferences()
   Gui, Add, Radio,  checked%RadioChecked% gSystemAF3, Autofocus Version 3 (AF3/RAF)                   
 	RadioChecked := System == "AF4" || System == ""
   Gui, Add, Radio,  checked%RadioChecked% gSystemAF4, Autofocus Version 4 (AF4)                   
-	RadioChecked := System == "AF5" || System == ""
-  Gui, Add, Radio,  checked%RadioChecked% gSystemAF5, Autofocus Version 5 (AF5/DIT2)                   
+	RadioChecked := System == "DWM" || System == ""
+  Gui, Add, Radio,  checked%RadioChecked% gSystemDWM, Daily/Weekly/Monthly (DWM)                   
 	Gui, Font, Bold
 	Gui, Add, Text, ym w250, Autostart
 	Gui, Font, Norm
@@ -721,8 +721,8 @@ SystemAF4:
 		LoadTasks()
 Return
 
-SystemAF5:
-		System := "AF5"
+SystemDWM:
+		System := "DWM"
 		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
 		LoadTasks()
 Return
