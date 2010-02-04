@@ -349,7 +349,10 @@ Export()
 		ExprtCurrentExpires := Today
 	Loop, %TaskCount%
 	{
-	  If (System != "AF5" or Tasks%A_Index%_4 == 0)
+		ExportAdded := ""
+		ExportReview := ""
+		ExportDone := ""
+    ExprtTime := ""
 		Loop, Parse, Tasks%A_Index%_2, %A_Space%
 		{
 			If (InStr(A_LoopField, "D"))
@@ -435,11 +438,7 @@ Export()
 				. "<td>" 
 					. Tasks%A_Index%_1
 				. "</td>"
-		ExportAdded := ""
-		ExportReview := ""
-		ExportDone := ""
-    ExprtTime := ""
-
+	
 		Export .= "<td><nobr>" 
 					. ExportAdded
 				. "<nobr></td>"
