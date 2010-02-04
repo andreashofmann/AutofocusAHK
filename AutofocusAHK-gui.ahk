@@ -677,7 +677,7 @@ ShowPreferences()
 	RadioChecked := System == "AF4" || System == ""
   Gui, Add, Radio,  checked%RadioChecked% gSystemAF4, Autofocus Version 4 (AF4)                   
 	RadioChecked := System == "DWM" || System == ""
-  Gui, Add, Radio,  checked%RadioChecked% gSystemDWM, Daily/Weekly/Monthly (DWM)                   
+  Gui, Add, Radio,  checked%RadioChecked% gSystemDWM, Day/Week/Month (DWM)                   
 	Gui, Font, Bold
 	Gui, Add, Text, ym w250, Autostart
 	Gui, Font, Norm
