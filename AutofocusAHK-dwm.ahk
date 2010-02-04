@@ -57,7 +57,7 @@ DWM_PostTaskLoad()
   
   If (ListOfExpiredTasks)
   {
-    MsgBox, 0 , Expiration - %System% - AutofocusAHK %Ver%, The following tasks expired:`n`n%ListOfExpiredTasks% 
+    MsgBox, 0 , Expiration - %System% - %ApplicationName% %Ver%, The following tasks expired:`n`n%ListOfExpiredTasks% 
   }
 }
 

@@ -86,154 +86,154 @@ LoadConfig()
   FirstStart := 0
 	FormatTime, Now, , yyyyMMdd
 	FormatTime, Hour, , H
-	IniRead, System, %A_ScriptDir%\AutofocusAHK.ini, General, System
+	IniRead, System, %A_ScriptDir%\%ApplicationName%.ini, General, System
 	If (System == "ERROR")
 	{
 	  FirstStart := 1
 		System := "AF4"
-		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+		IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
 	}
 	If (System == "AF5")
 	{
 		System := "DWM"
-		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+		IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
 	}
-	IniRead, StartWithWindows, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
+	IniRead, StartWithWindows, %A_ScriptDir%\%ApplicationName%.ini, General, StartWithWindows
 	If (StartWithWindows == "ERROR")
 	{
 		StartWithWindows := 0
-		IniWrite, %StartWithWindows%, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
+		IniWrite, %StartWithWindows%, %A_ScriptDir%\%ApplicationName%.ini, General, StartWithWindows
 	}
-	IniRead, DoBackups, %A_ScriptDir%\AutofocusAHK.ini, General, DoBackups
+	IniRead, DoBackups, %A_ScriptDir%\%ApplicationName%.ini, General, DoBackups
 	If (DoBackups == "ERROR")
 	{
 		DoBackups := 1
-		IniWrite, %DoBackups%, %A_ScriptDir%\AutofocusAHK.ini, General, DoBackups
+		IniWrite, %DoBackups%, %A_ScriptDir%\%ApplicationName%.ini, General, DoBackups
 	}
-	IniRead, BackupsToKeep, %A_ScriptDir%\AutofocusAHK.ini, General, BackupsToKeep
+	IniRead, BackupsToKeep, %A_ScriptDir%\%ApplicationName%.ini, General, BackupsToKeep
 	If (BackupsToKeep == "ERROR")
 	{
 		BackupsToKeep := 10
-		IniWrite, %BackupsToKeep%, %A_ScriptDir%\AutofocusAHK.ini, General, BackupsToKeep
+		IniWrite, %BackupsToKeep%, %A_ScriptDir%\%ApplicationName%.ini, General, BackupsToKeep
 	}
-	IniRead, LastRoutine, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, LastRoutine
+	IniRead, LastRoutine, %A_ScriptDir%\%ApplicationName%.ini, ReviewMode, LastRoutine
 	If (LastRoutine == "ERROR")
 	{
 		LastRoutine := Now
-		IniWrite, %LastRoutine%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, LastRoutine
+		IniWrite, %LastRoutine%, %A_ScriptDir%\%ApplicationName%.ini, ReviewMode, LastRoutine
 	}
-	IniRead, StartRoutineAt, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, StartRoutineAt
+	IniRead, StartRoutineAt, %A_ScriptDir%\%ApplicationName%.ini, ReviewMode, StartRoutineAt
 	If (StartRoutineAt == "ERROR")
 	{
 		StartRoutineAt := 6
-		IniWrite, %StartRoutineAt%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, StartRoutineAt
+		IniWrite, %StartRoutineAt%, %A_ScriptDir%\%ApplicationName%.ini, ReviewMode, StartRoutineAt
 	}
-	IniRead, TasksPerPage, %A_ScriptDir%\AutofocusAHK.ini, ForwardMode, TasksPerPage
+	IniRead, TasksPerPage, %A_ScriptDir%\%ApplicationName%.ini, ForwardMode, TasksPerPage
 	If (TasksPerPage == "ERROR")
 	{
 		TasksPerPage := 20
-		IniWrite, %TasksPerPage%, %A_ScriptDir%\AutofocusAHK.ini, ForwardMode, TasksPerPage
+		IniWrite, %TasksPerPage%, %A_ScriptDir%\%ApplicationName%.ini, ForwardMode, TasksPerPage
 	}
-	IniRead, CurrentTask, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentTask
+	IniRead, CurrentTask, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentTask
 	If (CurrentTask == "ERROR")
 	{
 		CurrentTask := 0
-		IniWrite, %CurrentTask%, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentTask
+		IniWrite, %CurrentTask%, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentTask
 	}
-	IniRead, ActionOnCurrentPass, %A_ScriptDir%\AutofocusAHK.ini, General, ActionOnCurrentPass
+	IniRead, ActionOnCurrentPass, %A_ScriptDir%\%ApplicationName%.ini, General, ActionOnCurrentPass
 	If (ActionOnCurrentPass == "ERROR")
 	{
 		ActionOnCurrentPass := 0
-		IniWrite, %ActionOnCurrentPass%, %A_ScriptDir%\AutofocusAHK.ini, General, ActionOnCurrentPass
+		IniWrite, %ActionOnCurrentPass%, %A_ScriptDir%\%ApplicationName%.ini, General, ActionOnCurrentPass
 	}
-	IniRead, CurrentPass, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentPass
+	IniRead, CurrentPass, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentPass
 	If (CurrentPass == "ERROR")
 	{
 		CurrentPass := 1
-		IniWrite, %CurrentPass%, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentPass
+		IniWrite, %CurrentPass%, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentPass
 	}
 
-	IniRead, ExpirationNew, %A_ScriptDir%\AutofocusAHK.ini, DWM, ExpirationNew
+	IniRead, ExpirationNew, %A_ScriptDir%\%ApplicationName%.ini, DWM, ExpirationNew
 	If (ExpirationNew == "ERROR")
 	{
 		ExpirationNew := 28
-		IniWrite, %ExpirationNew%, %A_ScriptDir%\AutofocusAHK.ini, DWM, ExpirationNew
+		IniWrite, %ExpirationNew%, %A_ScriptDir%\%ApplicationName%.ini, DWM, ExpirationNew
 	}
 
-	IniRead, ExpirationReAdd, %A_ScriptDir%\AutofocusAHK.ini, DWM, ExpirationReAdd
+	IniRead, ExpirationReAdd, %A_ScriptDir%\%ApplicationName%.ini, DWM, ExpirationReAdd
 	If (ExpirationReAdd == "ERROR")
 	{
 		ExpirationReAdd := 7
-		IniWrite, %ExpirationReAdd%, %A_ScriptDir%\AutofocusAHK.ini, DWM, ExpirationReAdd
+		IniWrite, %ExpirationReAdd%, %A_ScriptDir%\%ApplicationName%.ini, DWM, ExpirationReAdd
 	}
 	
 	SetHotkeys := ""
 
-	IniRead, HKAddTask, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKAddTask
+	IniRead, HKAddTask, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKAddTask
 	If (HKAddTask == "ERROR")
 	{
 		HKAddTask := "CapsLock & a"
-		IniWrite, %HKAddTask%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKAddTask
+		IniWrite, %HKAddTask%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKAddTask
 	}
 	Hotkey, %HKAddTask%, TriggerAddTask
   SetHotkeys .= HKAddTask	
 	
-	IniRead, HKWork, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKWork
+	IniRead, HKWork, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKWork
 	If (HKWork == "ERROR")
 	{
 		HKWork := "CapsLock & d"
-		IniWrite, %HKWork%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKWork
+		IniWrite, %HKWork%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKWork
 	}
 	Hotkey, %HKWork%, TriggerWork
   SetHotkeys .= HKWork	
 
-	IniRead, HKShowNextTasks, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowNextTasks
+	IniRead, HKShowNextTasks, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKShowNextTasks
 	If (HKShowNextTasks == "ERROR")
 	{
 		HKShowNextTasks := "CapsLock & s"
-		IniWrite, %HKShowNextTasks%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKShowNextTasks
+		IniWrite, %HKShowNextTasks%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKShowNextTasks
 	}
 	Hotkey, %HKShowNextTasks%, TriggerShowNextTasks
   SetHotkeys .= HKShowNextTasks	
 
-	IniRead, HKToggleAutostart, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
+	IniRead, HKToggleAutostart, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKToggleAutostart
 	If (HKToggleAutostart != "ERROR")
 	{
-		IniDelete, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKToggleAutostart
+		IniDelete, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKToggleAutostart
 	}
 
-	IniRead, HKExport, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKExport
+	IniRead, HKExport, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKExport
   If (HKExport == "ERROR")
 	{
 		HKExport := "CapsLock & e"
-		IniWrite, %HKExport%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKExport
+		IniWrite, %HKExport%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKExport
 	}
 	Hotkey, %HKExport%, TriggerExport
   SetHotkeys .= HKExport	
 
-	IniRead, HKPreferences, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKPreferences
+	IniRead, HKPreferences, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKPreferences
 	If (HKPreferences == "ERROR")
 	{
 		HKPreferences := "CapsLock & p"
-		IniWrite, %HKPreferences%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKPreferences
+		IniWrite, %HKPreferences%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKPreferences
 	}
 	Hotkey, %HKPreferences%, TriggerPreferences
   SetHotkeys .= HKPreferences	
 
-	IniRead, HKReload, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKReload
+	IniRead, HKReload, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKReload
 	If (HKReload == "ERROR")
 	{
 		HKReload := "CapsLock & r"
-		IniWrite, %HKReload%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKReload
+		IniWrite, %HKReload%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKReload
 	}
 	Hotkey, %HKReload%, TriggerReload
   SetHotkeys .= HKReload	
 
-	IniRead, HKQuit, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKQuit
+	IniRead, HKQuit, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKQuit
 	If (HKQuit == "ERROR")
 	{
 		HKQuit := "CapsLock & q"
-		IniWrite, %HKQuit%, %A_ScriptDir%\AutofocusAHK.ini, HotKeys, HKQuit
+		IniWrite, %HKQuit%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKQuit
 	}
 	Hotkey, %HKQuit%, TriggerQuit
   SetHotkeys .= HKQuit
@@ -299,7 +299,7 @@ Export()
 	FormatTime, ExportTime, , yyyy-MM-dd-hh-mm-ss
 	Export := ""
 	Export := "<!doctype html>" 
-		. "<html><head><title>Export " . ExportTime . " - AutofocusAHK</title>"
+		. "<html><head><title>Export " . ExportTime . " - " . ApplicationName . "</title>"
 		. "<style type=""text/css"">"
 		. "body {background-color: #FFF;font-family: Corbel, ""Lucida Grande"", ""Lucida Sans Unicode"", ""Lucida Sans"", ""DejaVu Sans"", ""Bitstream Vera Sans"", ""Liberation Sans"", Verdana, ""Verdana Ref"", sans-serif;} "
 		. "table {width:90%; margin:0 auto;border-collapse: collapse;border-spacing: 0;} "
@@ -335,7 +335,7 @@ Export()
 		. "</style>"
 		. "</head><body class=""hidedone hidereview"">"
  		. "<div id=""header"">"
-        . "<h1>AutofocusAHK</h1>"
+        . "<h1>" . ApplicationName . "</h1>"
 		. "<h2>Export " . ExportTime . "</h2>"
         . "<ul id=""displaysettings""><li id=""uaswitch"" onclick=""toggleUnactioned()"">unactioned</li><li id=""dswitch"" onclick=""toggleDone()"">done</li><li id=""rswitch"" onclick=""toggleReview()"">on review</li></ul>"
         . "</div>"

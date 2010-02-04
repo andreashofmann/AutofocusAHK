@@ -11,6 +11,9 @@ Initialize()
 {
 	global 
 	
+	; Application Name
+	ApplicationName := "AutofocusAHK"
+	
 	; Version number that is displayed in GUI windows
 	Ver := "0.9.3.1"
 
@@ -58,9 +61,9 @@ SelectNextTask()
 {
 	global System, CurrentTask,CurrentPass,ActionOnCurrentPass
 	%System%_SelectNextTask()
-	IniWrite, %CurrentTask%, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentTask
-	IniWrite, %CurrentPass%, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentPass
-	IniWrite, %ActionOnCurrentPass%, %A_ScriptDir%\AutofocusAHK.ini, General, ActionOnCurrentPass
+	IniWrite, %CurrentTask%, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentTask
+	IniWrite, %CurrentPass%, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentPass
+	IniWrite, %ActionOnCurrentPass%, %A_ScriptDir%\%ApplicationName%.ini, General, ActionOnCurrentPass
 
 }
 
@@ -120,7 +123,7 @@ DoMorningRoutine()
 	SaveTasks()
 	BackupTasks()
 	LastRoutine := Now
-	IniWrite, %Now%, %A_ScriptDir%\AutofocusAHK.ini, ReviewMode, LastRoutine
+	IniWrite, %Now%, %A_ScriptDir%\%ApplicationName%.ini, ReviewMode, LastRoutine
 	If (Tasks%CurrentTask%_4 == 1) 
 	{
 		SelectNextTask()
@@ -238,7 +241,7 @@ Return
 GetStandardWindowTitle()
 {
 	Global
-	Title := " - " . System . " - AutofocusAHK " . Ver
+	Title := " - " . System . " - " . ApplicationName . " " . Ver
 	Return Title
 }
 

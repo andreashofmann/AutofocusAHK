@@ -9,7 +9,7 @@
 
 ; Trigger for adding a new task
 TriggerAddTask:
-	If (WinActive("Add Task - AutofocusAHK"))
+	If (WinActive("Add Task - " . ApplicationName))
 	{
 		; If "Add Task" window is active, close it
 		WinClose
@@ -30,7 +30,7 @@ Return
 
 ; Trigger to start/stop working
 TriggerWork:
-	If (WinActive("Reverse Mode - AutofocusAHK") or WinActive("Forward Mode - AutofocusAHK") or WinActive("Done - AutofocusAHK") or WinActive("Forward Mode - AutofocusAHK") or WinActive("Review Mode - AutofocusAHK"))
+	If (WinActive("Reverse Mode - " . ApplicationName) or WinActive("Forward Mode - " . ApplicationName) or WinActive("Done - " . ApplicationName) or WinActive("Forward Mode - " . ApplicationName) or WinActive("Review Mode - " . ApplicationName))
 	{
 		; If work window is active, close it
 		WinClose
@@ -53,7 +53,7 @@ TriggerExport:
 Return
 
 TriggerQuit:
-	MsgBox, 4, AutofocusAHK %Ver%, Do you want to exit AutofocusAHK?
+	MsgBox, 4, %ApplicationName% %Ver%, Do you want to exit %ApplicationName%?
 	IfMsgBox Yes
 	{
 	ExitApp
@@ -62,7 +62,7 @@ Return
 
 
 TriggerReload:
-	MsgBox, 4, AutofocusAHK %Ver%, Do you want to reload AutofocusAHK?
+	MsgBox, 4, %ApplicationName% %Ver%, Do you want to reload %ApplicationName%?
 	IfMsgBox Yes
 	{
     	Reload

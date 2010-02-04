@@ -89,7 +89,7 @@ ShowNextTasks()
   	LV_ModifyCol(1, ErrorLevel)
   	GuiControl, Disable, NoticeListView
   }
-	Gui, Show, AutoSize, Show Tasks - %System% - AutofocusAHK %Ver%
+	Gui, Show, AutoSize, Show Tasks - %System% - %ApplicationName% %Ver%
 }
 
 ;Add a New Task
@@ -102,7 +102,7 @@ AddTask()
 	Gui, 3:Add, Button,ym default gButtonAdd vAddTaskButton, &Add
 	Gui, 3:Add, Edit,xm Hidden T8 R10 default vAddNotesBox
 	Gui, 3:+LabelGuiAdd
-	Gui, 3:Show, AutoSize, Add Task - %System% - AutofocusAHK %Ver%
+	Gui, 3:Show, AutoSize, Add Task - %System% - %ApplicationName% %Ver%
 }
 
 ToggleStartup()
@@ -115,20 +115,20 @@ ToggleStartup()
 	{
 		Message := "Autostart is currently disabled."
 	}
-	Message := Message . "`n`nDo you want AutofocusAHK to start with Windows in the future?"
+	Message := Message . "`n`nDo you want " . ApplicationName . " to start with Windows in the future?"
 
-	MsgBox, 4, AutofocusAHK %Ver%, %Message%
+	MsgBox, 4, %ApplicationName% %Ver%, %Message%
 	IfMsgBox Yes
 	{
-		FileCreateShortcut, "%A_ScriptFullPath%", %A_Startup%\AutofocusAHK.lnk, %A_ScriptDir% 
+		FileCreateShortcut, "%A_ScriptFullPath%", %A_Startup%\%ApplicationName%.lnk, %A_ScriptDir% 
 		StartWithWindows := 1
-		IniWrite, 1, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
+		IniWrite, 1, %A_ScriptDir%\%ApplicationName%.ini, General, StartWithWindows
 	}
 	IfMsgBox No
 	{
-		FileDelete, %A_Startup%\AutofocusAHK.lnk
+		FileDelete, %A_Startup%\%ApplicationName%.lnk
 		StartWithWindows := 0
-		IniWrite, 0, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
+		IniWrite, 0, %A_ScriptDir%\%ApplicationName%.ini, General, StartWithWindows
 	}
 }
 
@@ -224,7 +224,7 @@ ShowDoneWindow()
     StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\t,%A_Tab% , All
     StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
 	Gui, Add, Edit,xm Hidden T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
-	Gui, Show, Center Autosize, Done - AutofocusAHK %Ver% 
+	Gui, Show, Center Autosize, Done - %ApplicationName% %Ver% 
 	GuiControl, Focus, YesButton
 	Return
 }
@@ -526,7 +526,7 @@ ButtonShowStatusNotes:
     StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
   Gui, 4:+LabelGuiNotes
 	Gui, 4:Add, Edit,xm w500 T8 R10 default vShowStatusNotesBox, %ShowNotesBoxContent%
-	Gui, 4:Show, Center Autosize, Notes - AutofocusAHK %Ver%
+	Gui, 4:Show, Center Autosize, Notes - %ApplicationName% %Ver%
 	Return
 
 Return
@@ -681,7 +681,7 @@ ShowPreferences()
 	Gui, Font, Bold
 	Gui, Add, Text, ym w250, Autostart
 	Gui, Font, Norm
-  Gui, Add, Checkbox, vAutostartCheck checked%StartWithWindows%  gAutostartCheckbox, Start AutofocusAHK with Windows                    
+  Gui, Add, Checkbox, vAutostartCheck checked%StartWithWindows%  gAutostartCheckbox, Start %ApplicationName% with Windows                    
 	Gui, Font, Bold
 	Gui, Add, Text, w250, Backups
 	Gui, Font, Norm
@@ -693,67 +693,67 @@ ShowPreferences()
 	GuiControlGet, BackupEditPos, Pos, BackupEdit,
 	NewY := BackupLabelPosY - (BackupEditPosH - BackupLabelPosH)/2
 	GuiControl, Move, BackupEdit, x%NewX% y%NewY% 
-	Gui, Show, Center Autosize, Preferences - AutofocusAHK %Ver%
+	Gui, Show, Center Autosize, Preferences - %ApplicationName% %Ver%
 	Return
 }
 
 SystemAF1:
 		System := "AF1"
-		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+		IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
     LoadTasks()
 Return
 
 SystemAF2:
 		System := "AF2"
-		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+		IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
     LoadTasks()
 Return
 
 SystemAF3:
 		System := "AF3"
-		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+		IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
 		LoadTasks()
 Return
 
 SystemAF4:
 		System := "AF4"
-		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+		IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
 		LoadTasks()
 Return
 
 SystemDWM:
 		System := "DWM"
-		IniWrite, %System%, %A_ScriptDir%\AutofocusAHK.ini, General, System
+		IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
 		LoadTasks()
 Return
 
 AutostartCheckbox:
   If(StartWithWindows == 0)
   {
-		FileCreateShortcut, "%A_ScriptFullPath%", %A_Startup%\AutofocusAHK.lnk, %A_ScriptDir% 
+		FileCreateShortcut, "%A_ScriptFullPath%", %A_Startup%\%ApplicationName%.lnk, %A_ScriptDir% 
 		StartWithWindows := 1
-		IniWrite, 1, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
+		IniWrite, 1, %A_ScriptDir%\%ApplicationName%.ini, General, StartWithWindows
 	} 
   Else
   {
-		FileDelete, %A_Startup%\AutofocusAHK.lnk
+		FileDelete, %A_Startup%\%ApplicationName%.lnk
 		StartWithWindows := 0
-		IniWrite, 0, %A_ScriptDir%\AutofocusAHK.ini, General, StartWithWindows
+		IniWrite, 0, %A_ScriptDir%\%ApplicationName%.ini, General, StartWithWindows
   }
 Return
 
 BackupCheckbox:
   If(DoBackups == 0)
   {
-		FileCreateShortcut, "%A_ScriptFullPath%", %A_Startup%\AutofocusAHK.lnk, %A_ScriptDir% 
+		FileCreateShortcut, "%A_ScriptFullPath%", %A_Startup%\%ApplicationName%.lnk, %A_ScriptDir% 
 		DoBackups := 1
-		IniWrite, 1, %A_ScriptDir%\AutofocusAHK.ini, General, DoBackups
+		IniWrite, 1, %A_ScriptDir%\%ApplicationName%.ini, General, DoBackups
 	} 
   Else
   {
-		FileDelete, %A_Startup%\AutofocusAHK.lnk
+		FileDelete, %A_Startup%\%ApplicationName%.lnk
 		DoBackups := 0
-		IniWrite, 0, %A_ScriptDir%\AutofocusAHK.ini, General, DoBackups
+		IniWrite, 0, %A_ScriptDir%\%ApplicationName%.ini, General, DoBackups
   }
 Return
 
@@ -764,7 +764,7 @@ BackupEditBox:
         Gui, Font
         GuiControl, Font, BackupEdit
 		BackupsToKeep := PreBackupsToKeep
-		IniWrite, %BackupsToKeep%, %A_ScriptDir%\AutofocusAHK.ini, General, BackupsToKeep
+		IniWrite, %BackupsToKeep%, %A_ScriptDir%\%ApplicationName%.ini, General, BackupsToKeep
     }
     Else
     {
