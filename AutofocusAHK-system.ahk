@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.3
+; @version   0.9.3.1
 ; @since     0.9
 
 Initialize()
@@ -12,7 +12,7 @@ Initialize()
 	global 
 	
 	; Version number that is displayed in GUI windows
-	Ver := "0.9.3"
+	Ver := "0.9.3.1"
 
 	; Is the user currently working on a task?
 	Active := 0

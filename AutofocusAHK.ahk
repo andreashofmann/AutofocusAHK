@@ -5,7 +5,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.3
+; @version   0.9.3.1
 ; @since     0.1
 
 ;; ENVIRONMENT

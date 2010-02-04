@@ -1,6 +1,14 @@
 History
 -------
 
+  Version 0.9.3.1 (2010-02-04)
+    - Renamed AF5/DIT2 to DWM
+    - Fix: bug that made all export columns except the task name empty
+    - Fix: Handling done and dismissed tasks that don't have an expiration date
+    - DWN tasks now expire at the end of their expiration day instead of the beginning
+    - Tasks expiring today are displayed in red in the HTML export
+    - Tasks expiring tomorrow are displayed in yellow in the HTML export
+
   Version 0.9.3 (2010-02-03)
     - Added support for preliminary AF5/DIT2
 
