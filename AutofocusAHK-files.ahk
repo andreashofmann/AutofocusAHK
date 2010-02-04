@@ -48,14 +48,14 @@ LoadTasks()
   		}
   		Else
   		{
-    		If (!InStr(Tasks%TaskCount%_2, "E"))
-    		{
-    		  Expires := A_Now
-    		  Expires += 30, days
-    		  Tasks%TaskCount%_2 .= " E" . Expires
-    		}
       	Tasks%TaskCount%_4 := 0
   			UnactionedCount := UnactionedCount +1
+     		If (!InStr(Tasks%TaskCount%_2, "E"))
+     		{
+     		  Expires := A_Now
+     		  Expires += 30, days
+     		  Tasks%TaskCount%_2 .= " E" . Expires
+     		}
   		}
   	}
 	}
@@ -379,7 +379,8 @@ Export()
 			If (System == "AF5" and InStr(A_LoopField, "E"))
 			{
 				ExprtExpires := SubStr(A_LoopField, 2,8)
-				If (ExprtCurrentExpires < ExprtExpires)
+				Msgbox %ExprtCurrentExpires% < %ExprtExpires%
+        If (ExprtCurrentExpires < ExprtExpires)
 				{
 				  ExprtCurrentExpires := ExprtExpires
 				  If (ExprtCurrentExpires == Today)

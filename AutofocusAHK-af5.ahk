@@ -27,6 +27,7 @@ AF5_IsValidTask(TaskName, TaskStats)
 	{
 	Return 0
 	}
+	
   If (ePos := InStr(TaskStats, "E"))
   {
     Expires := SubStr(TaskStats, ePos + 1, 8)
@@ -38,6 +39,10 @@ AF5_IsValidTask(TaskName, TaskStats)
       ListOfExpiredTasks .= TaskName . "`n"
       Return 0
     }
+  }
+  Else
+  {
+    Return 0
   }  	
 	Return 1
 }
