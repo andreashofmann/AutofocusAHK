@@ -309,9 +309,9 @@ Export()
 		. ".today {color:#900; }"
 		. ".today th { background:#FDD; border:1px solid #900; }"
 		. ".today td { border:1px solid #900; }"
-		. ".tomorrow {color:#990; }"
-		. ".tomorrow th { background:#FFD; border:1px solid #990; }"
-		. ".tomorrow td { border:1px solid #990; }"
+		. ".tomorrow {color:#770; }"
+		. ".tomorrow th { background:#FFB; border:1px solid #770; }"
+		. ".tomorrow td { border:1px solid #770; }"
 
 		. "</style>"
 		. "</head><body class=""hidedone hidereview"">"
@@ -346,7 +346,7 @@ Export()
 		Tomorrow := A_Now
 		Tomorrow += 1, days
 		FormatTime, Tomorrow, %Tomorrow%, yyyyMMdd		
-		ExprtCurrentExpires := Today
+		ExprtCurrentExpires := 0
 	Loop, %TaskCount%
 	{
 		ExportAdded := ""
@@ -376,10 +376,10 @@ Export()
 				ExprtTime := SecondsToFormattedTime(ExprtTime)
 			}
 
+      WarningClass := ""
 			If (System == "AF5" and InStr(A_LoopField, "E"))
 			{
 				ExprtExpires := SubStr(A_LoopField, 2,8)
-				Msgbox %ExprtCurrentExpires% < %ExprtExpires%
         If (ExprtCurrentExpires < ExprtExpires)
 				{
 				  ExprtCurrentExpires := ExprtExpires
@@ -430,9 +430,13 @@ Export()
         {
 			Export .= " current"                    
         }
-        If (WarningClass)
+        If (WarningClass==" class=""today""")
         {
-			Export .= " warning"                    
+			Export .= " today"                    
+        }
+        Else If (WarningClass==" class=""tomorrow""")
+        {
+			Export .= " tomorrow"                    
         }
 		Export .= """"
 		Export .= ">"

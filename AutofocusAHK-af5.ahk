@@ -34,7 +34,7 @@ AF5_IsValidTask(TaskName, TaskStats)
     
     FormatTime, Today, , yyyyMMdd
     
-    If (Today >= Expires)
+    If (Today > Expires)
     {
       ListOfExpiredTasks .= TaskName . "`n"
       Return 0
