@@ -192,7 +192,6 @@ DWM_DismissTasks()
 
 DWM_GetWorkWindowTitle()
 {
-	global CurrentTask,LastTaskInClosedList,CurrentPass,ActionOnCurrentPass
 	Title := "Work"
 	Title .= GetStandardWindowTitle()
 	Return Title

@@ -481,7 +481,7 @@ ButtonAdd:
 		Tasks%Taskcount%_1 := NewTask
 		Added := A_Now
 		Expires := Added
-		Expires += 30, days
+		Expires += %ExpirationNew%, days
 		Tasks%Taskcount%_2 := "A" . Added . " E" . Expires
 	    StringReplace, AddNotesBox, AddNotesBox,%A_Tab%,\t, All
 	    StringReplace, AddNotesBox, AddNotesBox,`n,\n, All

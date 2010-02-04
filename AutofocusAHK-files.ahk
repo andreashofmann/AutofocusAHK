@@ -53,7 +53,7 @@ LoadTasks()
      		If (!InStr(Tasks%TaskCount%_2, "E"))
      		{
      		  Expires := A_Now
-     		  Expires += 30, days
+     		  Expires += %ExpirationNew%, days
      		  Tasks%TaskCount%_2 .= " E" . Expires
      		}
   		}
@@ -151,6 +151,20 @@ LoadConfig()
 	{
 		CurrentPass := 1
 		IniWrite, %CurrentPass%, %A_ScriptDir%\AutofocusAHK.ini, General, CurrentPass
+	}
+
+	IniRead, ExpirationNew, %A_ScriptDir%\AutofocusAHK.ini, DWM, ExpirationNew
+	If (ExpirationNew == "ERROR")
+	{
+		ExpirationNew := 28
+		IniWrite, %ExpirationNew%, %A_ScriptDir%\AutofocusAHK.ini, DWM, ExpirationNew
+	}
+
+	IniRead, ExpirationReAdd, %A_ScriptDir%\AutofocusAHK.ini, DWM, ExpirationReAdd
+	If (ExpirationReAdd == "ERROR")
+	{
+		ExpirationReAdd := 7
+		IniWrite, %ExpirationReAdd%, %A_ScriptDir%\AutofocusAHK.ini, DWM, ExpirationReAdd
 	}
 	
 	SetHotkeys := ""

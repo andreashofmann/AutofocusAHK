@@ -80,7 +80,7 @@ ReAddTask()
     }
 		Added := A_Now
 		Expires := Added
-		Expires += 7, days
+		Expires += %ExpirationReAdd%, days
 		Tasks%Taskcount%_2 := "A" . Added . " E" . Expires
 	GuiControlGet,ShowNotesBoxContent,,ShowNotesBox
 	If (ShowNotesBoxContent)
