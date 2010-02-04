@@ -1,6 +1,9 @@
 History
 -------
 
+  Version 0.9.3 (2010-02-03)
+    - Added support for preliminary AF5/DIT2
+
   Version 0.9.2.4 (2010-02-02)
     - Remember current task in AF1 and AF4
     - Hide status window permanently by holding shift while clicking the hide button

@@ -306,9 +306,12 @@ Export()
 		. ".hidereview #rswitch {background-color:#FFF; color:#AA0; border:1px solid #AA0;}"
 		. "#dswitch { background-color:#090; color:#FFF; border:1px solid #090;}"
 		. ".hidedone #dswitch {background-color:#FFF; color:#0A0; border:1px solid #0A0;}"
-		. ".warning {color:#900; }"
-		. ".warning th { background:#FDD; border:1px solid #900; }"
-		. ".warning td { border:1px solid #900; }"
+		. ".today {color:#900; }"
+		. ".today th { background:#FDD; border:1px solid #900; }"
+		. ".today td { border:1px solid #900; }"
+		. ".tomorrow {color:#990; }"
+		. ".tomorrow th { background:#FFD; border:1px solid #990; }"
+		. ".tomorrow td { border:1px solid #990; }"
 
 		. "</style>"
 		. "</head><body class=""hidedone hidereview"">"
@@ -376,10 +379,15 @@ Export()
 				If (ExprtCurrentExpires < ExprtExpires)
 				{
 				  ExprtCurrentExpires := ExprtExpires
-				  If (ExprtCurrentExpires == Tomorrow)
+				  If (ExprtCurrentExpires == Today)
+				  {
+            ExprtHeading := "Expiring Today"
+            WarningClass := " class=""today"""
+          }
+				  Else If (ExprtCurrentExpires == Tomorrow)
 				  {
             ExprtHeading := "Expiring Tomorrow"
-            WarningClass := " class=""warning"""
+            WarningClass := " class=""tomorrow"""
           }
           Else
           {
