@@ -1,9 +1,9 @@
-Autofocus Time Management System:
-Copyright (c) 2009, Mark Forster, http://markforster.net
+Autofocus Time Management System, Day/Week/Month Time Management System:
+Copyright (c) 2009-2010, Mark Forster, http://markforster.net
 All rights reserved.
  
 AutofocusAHK Software:
-Copyright (c) 2009, Andreas Hofmann, http://andreashofmann.net
+Copyright (c) 2009-2010, Andreas Hofmann, http://andreashofmann.net
 All rights reserved.
  
 Redistribution and use in source and binary forms, with or without

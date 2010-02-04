@@ -50,7 +50,7 @@ Work:
 Return
 
 About:
-  MsgBox, ,%ApplicationName% %Ver%, CapsLock + a%A_Tab%Add task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`nCapsLock + e%A_Tab%Create HTML Export`nCapsLock + p%A_Tab%Show preferences`nCapsLock + r%A_Tab%Reload tasks list`nCapsLock + q%A_Tab%Quit application`n`nAutofocus Time Management System`nCopyright (C) 2009 Mark Forster`nhttp://markforster.net`n`n%ApplicationName%`nCopyright (C) 2009 Andreas Hofmann`nhttp://andreashofmann.net
+  MsgBox, ,%ApplicationName% %Ver%, CapsLock + a%A_Tab%Add task`nCapsLock + s%A_Tab%Show next tasks`nCapsLock + d%A_Tab%Start/Stop work`nCapsLock + e%A_Tab%Create HTML Export`nCapsLock + p%A_Tab%Show preferences`nCapsLock + r%A_Tab%Reload tasks list`nCapsLock + q%A_Tab%Quit application`n`nAutofocus Time Management System`nDay/Week/Month Time Management System`nCopyright (C) 2009-2010 Mark Forster`nhttp://markforster.net`n`n%ApplicationName%`nCopyright (C) 2009-2010 Andreas Hofmann`nhttp://andreashofmann.net
 Return
 
 Preferences:
