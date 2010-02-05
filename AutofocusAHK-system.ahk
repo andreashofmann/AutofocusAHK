@@ -258,3 +258,26 @@ CheckCapsLock:
   SetCapslockState, Off
   SetCapslockState, AlwaysOff
 Return
+
+CheckForBrowserUrl()
+{
+  Url := ""
+  WinGetActiveTitle, BrowserTitle
+  If (InStr(Browsertitle, "Internet Explorer"))
+  {
+    Send !d
+    Sleep 200
+    Send ^c
+    Sleep 200
+    Url := Clipboard 
+  } 
+  Else If (InStr(Browsertitle, "Mozilla Firefox") or InStr(Browsertitle, "Google Chrome") or InStr(Browsertitle, "Opera"))
+  {
+    Send ^l
+    Sleep 200
+    Send ^c
+    Sleep 200
+    Url := Clipboard 
+  } 
+  Return Url  
+}

@@ -96,14 +96,28 @@ ShowNextTasks()
 AddTask()
 {
 	global
+	NewUrl := CheckForBrowserUrl()
 	Gui, 3:Destroy
 	Gui, 3:Add, Edit, w400 vNewTask  ; The ym option starts a new column of controls.
 	Gui, 3:Add, Button,ym vAddNotesButton gButtonAddNotes, &More ...
 	Gui, 3:Add, Button,ym default gButtonAdd vAddTaskButton, &Add
-  Gui, 3:Add, Text, xm Hidden vAddNotesLabel, Notes:
-	Gui, 3:Add, Edit,xm Hidden T8 R10 vAddNotesBox
-  Gui, 3:Add, Text, xm Hidden vAddUrlLabel, URL:
-	Gui, 3:Add, Edit, xm Hidden vAddUrlBox
+	If (NewUrl)
+  {
+    GuiControlGet, AddTaskFieldPos, 3:Pos, NewTask
+    GuiControlGet, AddTaskButtonPos, 3:Pos, AddTaskButton
+    NewW := AddTaskButtonPosX + AddTaskButtonPosW - AddTaskFieldPosX
+    Gui, 3:Add, Text, xm vAddUrlLabel, URL:
+    Gui, 3:Add, Edit, xm w%NewW% vAddUrlBox, %NewUrl%  
+    Gui, 3:Add, Text, xm Hidden NewW vAddNotesLabel, Notes:
+  	Gui, 3:Add, Edit,xm Hidden T8 R10 vAddNotesBox
+  }
+  Else
+	{
+    Gui, 3:Add, Text, xm Hidden vAddNotesLabel, Notes:
+  	Gui, 3:Add, Edit,xm Hidden T8 R10 vAddNotesBox
+    Gui, 3:Add, Text, xm Hidden vAddUrlLabel, URL:
+    Gui, 3:Add, Edit, xm Hidden vAddUrlBox
+  }
 	Gui, 3:+LabelGuiAdd
 	Gui, 3:Show, AutoSize, Add Task - %System% - %ApplicationName% %Ver%
 }
