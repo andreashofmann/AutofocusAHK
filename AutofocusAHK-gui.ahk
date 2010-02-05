@@ -168,13 +168,16 @@ ShowWorkWindow()
 	QuestionPosX := QuestionPosX - DiffX
 	GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
 	Title := %System%_GetWorkWindowTitle()
-	If(Tasks%CurrentTask%_3 == "")
+	If(Tasks%CurrentTask%_3 == "" and Tasks%CurrentTask%_URL == "")
 	{
         GuiControl Disable, ShowNotesButton
   }
+  Gui, Add, Text, xm Hidden vShowNotesBoxLabel, Notes:
     StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\t,%A_Tab%, All
     StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
 	Gui, Add, Edit,xm Hidden ReadOnly T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
+  Gui, Add, Text, xm Hidden vShowUrlBoxLabel, URL:
+	Gui, Add, Edit,xm Hidden ReadOnly T8 default vShowUrlBox, % Tasks%CurrentTask%_URL
 	Gui, Show, Center Autosize, %Title%
 	GuiControl, Focus, NoButton
 	Return
@@ -227,6 +230,8 @@ ShowDoneWindow()
     StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\t,%A_Tab% , All
     StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
 	Gui, Add, Edit,xm Hidden T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
+  Gui, Add, Text, xm Hidden vShowUrlBoxLabel, URL:
+	Gui, Add, Edit,xm Hidden default vShowUrlBox, % Tasks%CurrentTask%_URL
 	Gui, Show, Center Autosize, Done - %ApplicationName% %Ver% 
 	GuiControl, Focus, YesButton
 	Return
@@ -440,6 +445,10 @@ Return
 
 ButtonShowNotes:
     GuiControl, Disable, ShowNotesButton
+    GuiControl, Show, ShowUrlBoxLabel
+    GuiControl, Show, ShowUrlBox
+    GuiControl, Move, ShowUrlBox, w%TaskPosW%
+    GuiControl, Show, ShowNotesBoxLabel
     GuiControl, Show, ShowNotesBox
     GuiControl, Move, ShowNotesBox, w%TaskPosW%
     GuiControl, Focus, ShowNotesBox
@@ -457,7 +466,7 @@ Return
 
 
 ButtonReAdd:
-	Active := 0
+ 	Active := 0
   ActionOnCurrentPass := 1
 	ReAddTask()
  	Gui, Destroy
@@ -573,6 +582,14 @@ Else
 {
       Tasks%Taskcount%_3 := Tasks%ReviewTask%_3
   }
+	If (ShowUrlBoxContent)
+	{
+        Tasks%Taskcount%_URL := ShowUrlBoxContent ;Tasks%CurrentTask%_3
+	}
+	Else
+	{
+        Tasks%Taskcount%_URL := Tasks%CurrentTask%_URL
+    }
 
 Tasks%Taskcount%_4 := 0
 SaveTasks()

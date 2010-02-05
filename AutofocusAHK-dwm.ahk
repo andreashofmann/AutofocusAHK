@@ -69,6 +69,7 @@ DWM_PostTaskAdd()
   NewTask_2 := Tasks%TaskCount%_2
   NewTask_3 := Tasks%TaskCount%_3
   NewTask_4 := Tasks%TaskCount%_4
+  NewTask_URL := Tasks%TaskCount%_URL
   Counter := TaskCount
   
   Loop, %TaskCount%
@@ -97,6 +98,7 @@ DWM_PostTaskAdd()
     Tasks%OldCounter%_2 := Tasks%Counter%_2
     Tasks%OldCounter%_3 := Tasks%Counter%_3
     Tasks%OldCounter%_4 := Tasks%Counter%_4 
+    Tasks%OldCounter%_URL := Tasks%Counter%_URL 
     
   }
   
@@ -106,6 +108,7 @@ DWM_PostTaskAdd()
     Tasks%OldCounter%_2 := NewTask_2
     Tasks%OldCounter%_3 := NewTask_3
     Tasks%OldCounter%_4 := NewTask_4    
+    Tasks%OldCounter%_URL := NewTask_URL    
     
     SaveTasks()
   }
