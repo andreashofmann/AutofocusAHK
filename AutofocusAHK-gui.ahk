@@ -100,7 +100,10 @@ AddTask()
 	Gui, 3:Add, Edit, w400 vNewTask  ; The ym option starts a new column of controls.
 	Gui, 3:Add, Button,ym vAddNotesButton gButtonAddNotes, &Notes
 	Gui, 3:Add, Button,ym default gButtonAdd vAddTaskButton, &Add
-	Gui, 3:Add, Edit,xm Hidden T8 R10 default vAddNotesBox
+  Gui, 3:Add, Text, xm Hidden vAddNotesLabel, Notes:
+	Gui, 3:Add, Edit,xm Hidden T8 R10 vAddNotesBox
+  Gui, 3:Add, Text, xm Hidden vAddUrlLabel, URL:
+	Gui, 3:Add, Edit, xm Hidden vAddUrlBox
 	Gui, 3:+LabelGuiAdd
 	Gui, 3:Show, AutoSize, Add Task - %System% - %ApplicationName% %Ver%
 }
@@ -486,6 +489,7 @@ ButtonAdd:
 	    StringReplace, AddNotesBox, AddNotesBox,%A_Tab%,\t, All
 	    StringReplace, AddNotesBox, AddNotesBox,`n,\n, All
         Tasks%Taskcount%_3 := AddNotesBox
+        Tasks%Taskcount%_URL := AddUrlBox
     	Tasks%Taskcount%_4 := 0
     	%System%_PostTaskAdd()
 		SaveTasks()
@@ -499,8 +503,12 @@ ButtonAddNotes:
     GuiControlGet, AddTaskFieldPos, Pos, NewTask
     GuiControlGet, AddTaskButtonPos, Pos, AddTaskButton
     NewW := AddTaskButtonPosX + AddTaskButtonPosW - AddTaskFieldPosX
+    GuiControl, Show, AddNotesLabel
     GuiControl, Show, AddNotesBox
     GuiControl, Move, AddNotesBox, w%NewW%
+    GuiControl, Show, AddUrlLabel
+    GuiControl, Show, AddUrlBox
+    GuiControl, Move, AddUrlBox, w%NewW%
     GuiControl, Focus, AddNotesBox
 	Gui, 3:Show, AutoSize
 Return
