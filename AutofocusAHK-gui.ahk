@@ -98,7 +98,7 @@ AddTask()
 	global
 	Gui, 3:Destroy
 	Gui, 3:Add, Edit, w400 vNewTask  ; The ym option starts a new column of controls.
-	Gui, 3:Add, Button,ym vAddNotesButton gButtonAddNotes, &Notes
+	Gui, 3:Add, Button,ym vAddNotesButton gButtonAddNotes, &More ...
 	Gui, 3:Add, Button,ym default gButtonAdd vAddTaskButton, &Add
   Gui, 3:Add, Text, xm Hidden vAddNotesLabel, Notes:
 	Gui, 3:Add, Edit,xm Hidden T8 R10 vAddNotesBox
@@ -146,7 +146,7 @@ ShowWorkWindow()
 	GuiControlGet, TaskPos, Pos, TaskControl
 	NewY := TaskPosY + TaskPosH + 20
 	NewYT := NewY + 5
-	Gui, Add, Button, gButtonShowNotes vShowNotesButton x%TaskPosX% Y%NewY%, &Show Notes
+	Gui, Add, Button, gButtonShowNotes vShowNotesButton x%TaskPosX% Y%NewY%, &More ...
 	GuiControl, Text, ModeControl, ForwardMode
 	;GuiControl, Move, TaskControl, w200 h100
 	Gui, Add, Text, vQuestionLabel Y%NewYT%,Does this task feel ready to be done? 
@@ -205,7 +205,7 @@ ShowDoneWindow()
 	Gui, Add, Button, gButtonRephrase vRephraseButton x%TaskPosX% Y%NewY%, &Rephrase
 	GuiControlGet, RephrasePos, Pos, RephraseButton
 	NewX := RephrasePosX + RephrasePosX + RephrasePosW
-	Gui, Add, Button, gButtonShowNotes vShowNotesButton X%NewX% Y%NewY%, &Edit Notes
+	Gui, Add, Button, gButtonShowNotes vShowNotesButton X%NewX% Y%NewY%, &More ...
 	Gui, Add, Text, vQuestionLabel Y%NewYT%,Do you want to re-add this task?
 	Gui, Add, Button, gButtonReAdd vYesButton Y%NewY%, &Yes
 	Gui, Add, Button, gButtonNoReAdd vNoButton Y%NewY% Default, &No
@@ -256,7 +256,7 @@ ShowReviewWindow()
 	Gui, Add, Button, gButtonRephrase vRephraseButton x%TaskPosX% Y%NewY%, &Rephrase
 	GuiControlGet, RephrasePos, Pos, RephraseButton
 	NewX := RephrasePosX + RephrasePosX + RephrasePosW
-	Gui, Add, Button, gButtonShowNotes vShowNotesButton X%NewX% Y%NewY%, &Edit Notes
+	Gui, Add, Button, gButtonShowNotes vShowNotesButton X%NewX% Y%NewY%, &More ...
 	Gui, Add, Text, vQuestionLabel Y%NewYT%,Do you want to re-add this task?
 
     If (%System%_IsReviewOptional)
@@ -310,7 +310,7 @@ ShowStatusWindow()
 	Gui, 2:+AlwaysOnTop -SysMenu +Owner -Caption Resize MinSize MaxSize
 	Gui, 2:Add, Text, y10, % Tasks%CurrentTask%_1
 	Gui, 2:Add, Text, y10 Right vTimeControl, 00:00:00
-	Gui, 2:Add, Button,ym gButtonShowStatusNotes vStatusNotesButton, Show no&tes
+	Gui, 2:Add, Button,ym gButtonShowStatusNotes vStatusNotesButton, &More ...
 	Gui, 2:Add, Button,ym gButtonHide vHideButton, &Hide for 30s
 	Gui, 2:Add, Button,ym default gButtonStop vStopButton, &Stop
 	Gui, 2:Show, y0 xCenter AutoSize, Status - AutohotkeyAHK
@@ -553,7 +553,7 @@ ButtonShowStatusNotes:
 	Gui, 4:Add, Edit,xm w500 T8 R10 default vShowStatusNotesBox, %ShowNotesBoxContent%
   Gui, 4:Add, Text, xm, URL:
 	Gui, 4:Add, Edit,xm w500 default vShowStatusUrlBox, % Tasks%CurrentTask%_URL
-	Gui, 4:Show, Center Autosize, Notes - %ApplicationName% %Ver%
+	Gui, 4:Show, Center Autosize, Task Info - %ApplicationName% %Ver%
 	Return
 
 Return
