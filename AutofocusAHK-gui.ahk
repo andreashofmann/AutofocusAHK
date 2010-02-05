@@ -171,7 +171,7 @@ ShowWorkWindow()
 	If(Tasks%CurrentTask%_3 == "")
 	{
         GuiControl Disable, ShowNotesButton
-    }
+  }
     StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\t,%A_Tab%, All
     StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
 	Gui, Add, Edit,xm Hidden ReadOnly T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
@@ -427,6 +427,10 @@ Else If (Tasks%CurrentTask%_1 == "Change to forward mode")
 }
 Else
 {
+  If (Tasks%CurrentTask%_URL != "")
+  {
+    Run, % Tasks%CurrentTask%_URL
+  }
 	Active := 1
 	TimePassed := 0
 	ShowStatusWindow()
