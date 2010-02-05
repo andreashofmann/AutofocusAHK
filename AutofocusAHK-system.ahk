@@ -95,8 +95,6 @@ ReAddTask()
         Tasks%Taskcount%_3 := Tasks%CurrentTask%_3
     }
 	GuiControlGet,ShowUrlBoxContent,,ShowUrlBox
-	MsgBox % Tasks%CurrentTask%_URL 
-	MsgBox % ShowUrlBoxContent 
   If (ShowUrlBoxContent)
 	{
         Tasks%Taskcount%_URL := ShowUrlBoxContent ;Tasks%CurrentTask%_3
@@ -105,7 +103,6 @@ ReAddTask()
 	{
         Tasks%Taskcount%_URL := Tasks%CurrentTask%_URL
     }
-  MsgBox % Tasks%Taskcount%_URL
     Tasks%Taskcount%_4 := 0
 	MarkAsDone()
 	%System%_PostTaskAdd()

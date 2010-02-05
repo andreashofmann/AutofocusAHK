@@ -388,6 +388,11 @@ GuiNotesEscape:
   {
         Tasks%CurrentTask%_3 := ShowNotesBoxContent
   }
+  GuiControlGet,ShowUrlBoxContent,,ShowStatusUrlBox
+  If (ShowUrlBoxContent)
+  {
+        Tasks%CurrentTask%_URL := ShowUrlBoxContent
+  }
 
   Gui, 4:Destroy  
 Return
@@ -540,13 +545,14 @@ ButtonShowStatusNotes:
 	Gui, 4:Font, Bold
 	Gui, 4:Add, Text,  w500 Center vTaskNotesControl, % Tasks%CurrentTask%_1
 	Gui, 4:Font, Norm
-	GuiControlGet, TaskPos, Pos, TaskNotesControl
-	NewY := TaskPosY + TaskPosH + 20
-	NewYT := NewY + 5
+
     StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\t,%A_Tab%, All
     StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
   Gui, 4:+LabelGuiNotes
+  Gui, 4:Add, Text, xm w500, Notes:
 	Gui, 4:Add, Edit,xm w500 T8 R10 default vShowStatusNotesBox, %ShowNotesBoxContent%
+  Gui, 4:Add, Text, xm, URL:
+	Gui, 4:Add, Edit,xm w500 default vShowStatusUrlBox, % Tasks%CurrentTask%_URL
 	Gui, 4:Show, Center Autosize, Notes - %ApplicationName% %Ver%
 	Return
 
