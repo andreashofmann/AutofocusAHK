@@ -18,6 +18,7 @@ LoadTasks()
 	   NewTask_1 := ""
 	   NewTask_2 := ""
 	   NewTask_3 := ""
+	   NewTask_4 := ""
 		Loop, parse, A_LoopReadLine, %A_Tab%
 		{
       NewTask_%A_Index% := A_LoopField
@@ -37,7 +38,14 @@ LoadTasks()
       {
         Tasks%TaskCount%_3 := ""
       }
-  
+	  If (NewTask_4)
+	  {
+        Tasks%TaskCount%_URL := NewTask_4  
+      }
+      Else
+      {
+        Tasks%TaskCount%_4 := ""
+      }  
   		If (InStr(Tasks%TaskCount%_2, "D") or InStr(Tasks%TaskCount%_2, "R"))
   		{
   			Tasks%TaskCount%_4 := 1
@@ -69,7 +77,7 @@ SaveTasks()
 	Content := ""
 	Loop %TaskCount%
 	{
-		Content := Content . Tasks%A_Index%_1 . A_Tab . Tasks%A_Index%_2 . A_Tab . Tasks%A_Index%_3 . "`n"
+		Content := Content . Tasks%A_Index%_1 . A_Tab . Tasks%A_Index%_2 . A_Tab . Tasks%A_Index%_3 . A_Tab . Tasks%A_Index%_URL . "`n"
 		If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList)
 		{
 		  Content := Content . "---`n"    
