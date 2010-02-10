@@ -831,9 +831,22 @@ ShowSearchWindow()
 	Gui, 5:Destroy
 	Gui, 5:Add, Edit, gEditSearch w500 vSearchString  ; The ym option starts a new column of controls.
 	Gui, 5:+LabelGuiSearch
-	Gui, 5:Add, ListView, gListSearch Count%UnactionedCount% ReadOnly -WantF2 -Hdr xm r6 w500 vSearchResults, Task|Number
+	Gui, 5:Add, ListView, gListSearch Count%UnactionedCount% ReadOnly AltSubmit -Multi -WantF2 -Hdr xm r6 w500 vSearchResults, Task|Number
   Gui, 5:Add, Text, w500 center, Double-click result to jump to task
-	Gui, 5:Show, AutoSize,  Find - %System% - %ApplicationName% %Ver%
+	Gui, 5:Show, AutoSize, Find - %System% - %ApplicationName% %Ver%
+  GroupAdd, AutofocusAHK, Find - %System% - %ApplicationName% %Ver%
+  Gui, 5:Default
+  Loop, %Taskcount%
+  {
+    If (Tasks%A_Index%_4 == 0)
+    {
+      LV_Add("", Tasks%A_Index%_1, A_Index)
+      LV_ModifyCol(2, 0)
+      LV_ModifyCol(1, 468)
+      
+    }
+  }
+  LV_Modify(1, "Focus Select Vis")
 }
 
 EditSearch:
@@ -847,19 +860,72 @@ Loop, %Taskcount%
     LV_Add("", Tasks%A_Index%_1, A_Index)
     LV_ModifyCol(2, 0)
     LV_ModifyCol(1, 468)
-    
+  
   }
 }
+LV_Modify(1, "Focus Select Vis")
 Return
 
 ListSearch:
 If (A_GuiEvent == "DoubleClick")
 {
   ResultRow := LV_GetNext(0, "Focused")
-  LV_GetText(JumpTask, ResultRow, 2)
-  Gui, 5:Destroy
-  CurrentTask := JumpTask
-  Work()
+  if(ResultRow)
+  {
+    LV_GetText(JumpTask, ResultRow, 2)
+    Gui, 5:Destroy
+    CurrentTask := JumpTask
+    Work()
+  }
+}
+Else If (A_GuiEvent == "Normal" or A_GuiEvent == "F" )
+{
+  SetTimer, RefocusSearch, 50 
 
 }
+Else 
 Return
+
+RefocusSearch:
+  SetTimer, RefocusSearch, off 
+ GuiControl, Focus, SearchString
+ Send {End}
+
+Return
+
+GuiSearchClose:
+GuiSearchEscape:
+	Gui, 5:Destroy
+Return
+
+
+#IfWinActive, ahk_group AutofocusAHK
+Down::
+  Gui, 5:Default
+  ResultRow := LV_GetNext(0, "Focused")
+  LV_Modify(ResultRow + 1, "Focus Select Vis")
+  
+Return
+
+Up::
+  Gui, 5:Default
+  ResultRow := LV_GetNext(0, "Focused")
+  If (ResultRow != 1)
+  LV_Modify(ResultRow - 1, "Focus Select Vis")
+  
+Return
+
+Enter::
+  Gui, 5:Default
+  ResultRow := LV_GetNext(0, "Focused")
+  if(ResultRow)
+  {
+    LV_GetText(JumpTask, ResultRow, 2)
+    Gui, 5:Destroy
+    CurrentTask := JumpTask
+    Work()
+  }
+
+Return
+
+#IfWinActive
