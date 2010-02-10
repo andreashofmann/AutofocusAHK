@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.3.2
+; @version   0.9.4
 ; @since     0.9
 
 ; Load tasks from file Tasks.txt
@@ -236,6 +236,15 @@ LoadConfig()
 	}
 	Hotkey, %HKReload%, TriggerReload
   SetHotkeys .= HKReload	
+
+	IniRead, HKSearch, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKSearch
+	If (HKSearch == "ERROR")
+	{
+		HKSearch := "CapsLock & f"
+		IniWrite, %HKSearch%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKSearch
+	}
+	Hotkey, %HKSearch%, TriggerSearch
+  SetHotkeys .= HKSearch	
 
 	IniRead, HKQuit, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKQuit
 	If (HKQuit == "ERROR")

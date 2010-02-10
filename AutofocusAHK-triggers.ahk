@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.3.2
+; @version   0.9.4
 ; @since     0.9
 
 ; Trigger for adding a new task
@@ -69,3 +69,6 @@ TriggerReload:
    	}
 Return
 
+TriggerSearch:
+  ShowSearchWindow()
+Return

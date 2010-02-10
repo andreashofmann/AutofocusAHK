@@ -28,6 +28,7 @@ Usage
   CapsLock + a	Add a task
   CapsLock + s	Show the next tasks and tasks on notice for review
   CapsLock + d	Start/Stop Working
+  CapsLock + f	Search task list, jump to task
   CapsLock + e	Export list to HTML
   CapsLock + p	Show preferences
   CapsLock + r  Reload the tasks list from Tasks.txt

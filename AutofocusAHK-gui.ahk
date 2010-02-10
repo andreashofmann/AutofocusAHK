@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.3.2
+; @version   0.9.4
 ; @since     0.9
 
 
@@ -31,6 +31,7 @@ ShowNextTasks()
 	Gui, Font, Bold
 	Gui, Add, Text, xm w600 Center, Next Tasks
 	Gui, Font, Norm
+  Gui, Default
 	Gui, Add, ListView, NoSortHdr Count%Count% -ReadOnly -WantF2 xm r%Count% w600 vNextListView, Description|Added
 	Loop %Count%
 	{
@@ -822,3 +823,43 @@ BackupEditBox:
         Gui, Font
     }
 Return 
+
+ShowSearchWindow()
+{
+	global
+	NewUrl := CheckForBrowserUrl()
+	Gui, 5:Destroy
+	Gui, 5:Add, Edit, gEditSearch w500 vSearchString  ; The ym option starts a new column of controls.
+	Gui, 5:+LabelGuiSearch
+	Gui, 5:Add, ListView, gListSearch Count%UnactionedCount% ReadOnly -WantF2 -Hdr xm r6 w500 vSearchResults, Task|Number
+  Gui, 5:Add, Text, w500 center, Double-click result to jump to task
+	Gui, 5:Show, AutoSize,  Find - %System% - %ApplicationName% %Ver%
+}
+
+EditSearch:
+GuiControlGet, Blub, , SearchString
+Gui, 5:Default
+LV_Delete()
+Loop, %Taskcount%
+{
+  If (Tasks%A_Index%_4 == 0 and InStr(Tasks%A_Index%_1, Blub))
+  {
+    LV_Add("", Tasks%A_Index%_1, A_Index)
+    LV_ModifyCol(2, 0)
+    LV_ModifyCol(1, 468)
+    
+  }
+}
+Return
+
+ListSearch:
+If (A_GuiEvent == "DoubleClick")
+{
+  ResultRow := LV_GetNext(0, "Focused")
+  LV_GetText(JumpTask, ResultRow, 2)
+  Gui, 5:Destroy
+  CurrentTask := JumpTask
+  Work()
+
+}
+Return
