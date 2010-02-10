@@ -1,8 +1,12 @@
 History
 -------
 
+  Version 0.9.4.1 (2010-02-10)
+    - Improved keyboard controls of find window
+    - Notes and URL are also searched, but not shown
+    
   Version 0.9.4 (2010-02-10)
-    - Added search function (Casplock+f)
+    - Added find function (real time search, default hotkey Capslock+f)
     - Fix: Buggy saving/retrieving of current task
 
   Version 0.9.3.2 (2010-02-05)
