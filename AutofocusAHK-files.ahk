@@ -23,7 +23,7 @@ LoadTasks()
 		{
       NewTask_%A_Index% := A_LoopField
 		}
-	  IsValidTask := %System%_IsValidTask(NewTask_1, NewTask_2)
+	  IsValidTask := %System%_IsValidTask(NewTask_1, NewTask_2, TaskCount)
 
     if (IsValidTask)
     {
