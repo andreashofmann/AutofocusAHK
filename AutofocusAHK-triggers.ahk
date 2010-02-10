@@ -69,3 +69,6 @@ TriggerReload:
    	}
 Return
 
+TriggerSearch:
+  ShowSearchWindow()
+Return

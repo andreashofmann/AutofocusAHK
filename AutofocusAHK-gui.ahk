@@ -822,3 +822,8 @@ BackupEditBox:
         Gui, Font
     }
 Return 
+
+ShowSearchWindow()
+{
+
+}

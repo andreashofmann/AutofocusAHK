@@ -237,6 +237,15 @@ LoadConfig()
 	Hotkey, %HKReload%, TriggerReload
   SetHotkeys .= HKReload	
 
+	IniRead, HKSearch, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKSearch
+	If (HKSearch == "ERROR")
+	{
+		HKSearch := "CapsLock & f"
+		IniWrite, %HKSearch%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKSearch
+	}
+	Hotkey, %HKSearch%, TriggerSearch
+  SetHotkeys .= HKSearch	
+
 	IniRead, HKQuit, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKQuit
 	If (HKQuit == "ERROR")
 	{
