@@ -12,16 +12,18 @@ AF4_IsReviewOptional()
     Return 0
 }
 
-AF4_IsValidTask(TaskName, TaskStats)
+AF4_IsValidTask(TaskName, TaskStats, TaskIndex)
 {
   global
 	If (TaskName == "Change to review mode")
 	{
+	  If (CurrentTask > TaskIndex) CurrentTask -= CurrentTask
 		Return 0
 	}
 	If (TaskName == "Change to forward mode")
 	{
-	Return 0
+	  If (CurrentTask > TaskIndex) CurrentTask -= CurrentTask
+  	Return 0
 	}
 	If (TaskName == "---")
 	{
@@ -41,7 +43,7 @@ AF4_PostTaskLoad()
     LastTaskInClosedList := TaskCount
 		SaveTasks()
 	}
-  If (CurrentTask == 0 or Tasks%CurrentTask%_4 == 1)
+  If (CurrentTask == 0 or CurrentTask > TaskCount or Tasks%CurrentTask%_4 == 1)
   {
   	SelectNextTask()
   }

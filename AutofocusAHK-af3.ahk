@@ -12,7 +12,7 @@ AF3_IsReviewOptional()
     Return 1
 }
 
-AF3_IsValidTask(TaskName, TaskStats)
+AF3_IsValidTask(TaskName, TaskStats, TaskIndex)
 {
   global
 	If (TaskName == "Change to review mode")

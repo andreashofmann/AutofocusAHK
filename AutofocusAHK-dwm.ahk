@@ -17,15 +17,18 @@ DWM_IsValidTask(TaskName, TaskStats)
   global
 	If (TaskName == "Change to review mode")
 	{
+	  If (CurrentTask > TaskIndex) CurrentTask -= CurrentTask
 		Return 0
 	}
 	If (TaskName == "Change to forward mode")
 	{
-	Return 0
+    If (CurrentTask > TaskIndex) CurrentTask -= CurrentTask
+    Return 0
 	}
 	If (TaskName == "---")
 	{
-	Return 0
+    If (CurrentTask > TaskIndex) CurrentTask -= CurrentTask
+    Return 0
 	}
 	
   If (ePos := InStr(TaskStats, "E"))
@@ -37,11 +40,13 @@ DWM_IsValidTask(TaskName, TaskStats)
     If (Today > Expires)
     {
       ListOfExpiredTasks .= TaskName . "`n"
+   	  If (CurrentTask > TaskIndex) CurrentTask -= CurrentTask
       Return 0
     }
   }
   Else
   {
+	  If (CurrentTask > TaskIndex) CurrentTask -= CurrentTask
     Return 0
   }  	
 	Return 1
@@ -50,7 +55,7 @@ DWM_IsValidTask(TaskName, TaskStats)
 DWM_PostTaskLoad()
 {
   global
-  If (CurrentTask == 0 or Tasks%CurrentTask%_4 == 1)
+  If (CurrentTask <= 0 or CurrentTask > TaskCount or Tasks%CurrentTask%_4 == 1)
   {
   	SelectNextTask()
   }

@@ -59,7 +59,7 @@ Work()
 
 SelectNextTask()
 {
-	global System, CurrentTask,CurrentPass,ActionOnCurrentPass
+	global System, CurrentTask,CurrentPass,ActionOnCurrentPass,ApplicationName
 	%System%_SelectNextTask()
 	IniWrite, %CurrentTask%, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentTask
 	IniWrite, %CurrentPass%, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentPass
