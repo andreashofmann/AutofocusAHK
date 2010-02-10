@@ -855,7 +855,7 @@ Gui, 5:Default
 LV_Delete()
 Loop, %Taskcount%
 {
-  If (Tasks%A_Index%_4 == 0 and InStr(Tasks%A_Index%_1, Blub))
+  If (Tasks%A_Index%_4 == 0 and (InStr(Tasks%A_Index%_1, Blub) or InStr(Tasks%A_Index%_3, Blub) or InStr(Tasks%A_Index%_URL, Blub)))
   {
     LV_Add("", Tasks%A_Index%_1, A_Index)
     LV_ModifyCol(2, 0)
