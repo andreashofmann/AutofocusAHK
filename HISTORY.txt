@@ -3,6 +3,7 @@ History
 
   Version 0.9.4 (2010-02-10)
     - Added search function (Casplock+f)
+    - Fix: Buggy saving/retrieving of current task
 
   Version 0.9.3.2 (2010-02-05)
     - Added URL field
