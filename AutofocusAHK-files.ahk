@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.4.1
+; @version   0.9.4.2
 ; @since     0.9
 
 ; Load tasks from file Tasks.txt
@@ -77,7 +77,10 @@ SaveTasks()
 	Content := ""
 	Loop %TaskCount%
 	{
-		Content := Content . Tasks%A_Index%_1 . A_Tab . Tasks%A_Index%_2 . A_Tab . Tasks%A_Index%_3 . A_Tab . Tasks%A_Index%_URL . "`n"
+    StringReplace, NotesToBeSaved, Tasks%A_Index%_3,%A_Tab%,\t, All
+    StringReplace, NotesToBeSaved, NotesToBeSaved,`n,\n, All
+
+		Content := Content . Tasks%A_Index%_1 . A_Tab . Tasks%A_Index%_2 . A_Tab . NotesToBeSaved . A_Tab . Tasks%A_Index%_URL . "`n"
 		If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList)
 		{
 		  Content := Content . "---`n"    

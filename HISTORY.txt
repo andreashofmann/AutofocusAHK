@@ -1,6 +1,9 @@
 History
 -------
 
+  Version 0.9.4.2 (2010-02-12)
+    - Fixed bug with saving newlines in notes field
+    
   Version 0.9.4.1 (2010-02-10)
     - Improved keyboard controls of find window
     - Notes and URL are also searched, but not shown
