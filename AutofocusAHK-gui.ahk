@@ -115,23 +115,33 @@ AddTask()
 	Gui, 3:Add, Edit, w400 vNewTask r1, %NewTaskDescription%  ; The ym option starts a new column of controls.
 	Gui, 3:Add, Button,ym vAddNotesButton gButtonAddNotes, &More ...
 	Gui, 3:Add, Button,ym default gButtonAdd vAddTaskButton, &Add
+  GuiControlGet, AddTaskFieldPos, 3:Pos, NewTask
+  GuiControlGet, AddTaskButtonPos, 3:Pos, AddTaskButton
+  NewW := AddTaskButtonPosX + AddTaskButtonPosW - AddTaskFieldPosX
+  Gui, 3:Add, Tab2, xm w%NewW%, Notes|Tickler
 	If (NewUrl)
   {
-    GuiControlGet, AddTaskFieldPos, 3:Pos, NewTask
-    GuiControlGet, AddTaskButtonPos, 3:Pos, AddTaskButton
-    NewW := AddTaskButtonPosX + AddTaskButtonPosW - AddTaskFieldPosX
     Gui, 3:Add, Checkbox, xm vAddUrlCheckbox, &Use this URL:
-    Gui, 3:Add, Edit, xm w%NewW% vAddUrlBox, %NewUrl%  
+    Gui, 3:Add, Edit, xm vAddUrlBox, %NewUrl%  
     Gui, 3:Add, Text, xm Hidden NewW vAddNotesLabel, Notes:
-  	Gui, 3:Add, Edit,xm Hidden T8 R10 vAddNotesBox
+    Gui, 3:Add, Edit,xm Hidden T8 R10 vAddNotesBox
   }
   Else
 	{
-    Gui, 3:Add, Text, xm Hidden vAddNotesLabel, Notes:
-  	Gui, 3:Add, Edit,xm Hidden T8 R10 vAddNotesBox
-    Gui, 3:Add, Text, xm Hidden vAddUrlLabel, URL:
-    Gui, 3:Add, Edit, xm Hidden vAddUrlBox
+  	Gui, 3:Add, Edit, T8 R10 vAddNotesBox
+    Gui, 3:Add, Text,   vAddUrlLabel, URL:
+    Gui, 3:Add, Edit,   vAddUrlBox
   }
+  GuiControlGet, AddNotesBoxPos, 3:Pos, AddNotesBox
+  NewW := NewW - AddNotesBoxPosX
+  GuiControl, 3:Move, AddNotesBox, w%NewW%
+  GuiControl, 3:Move, AddUrlBox, w%NewW%
+
+  Gui, 3:Tab, Tickler
+  FormatTime, startdate,,yyyyMMdd
+  Gui, 3:Add, MonthCal, 16 -Multi Range%startdate% 6 gCalendarTicklerAdd vAddTicklerCalendar
+  Gui, 3:Add, Text, w%NewW% vAddTicklerLabel, The task will be added to the list immediately.
+
 	Gui, 3:+LabelGuiAdd
 	Gui, 3:Show, AutoSize, Add Task - %System% - %ApplicationName% %Ver%
 }
@@ -527,19 +537,30 @@ ButtonAdd:
 	Gui, Submit
 	If (NewTask != "")
 	{
+    FormatTime, today, ,yyyyMMdd
 		TaskCount := TaskCount + 1
 		If (UnactionedCount == 0)
 		{
-            CurrentTask := TaskCount
-        }
+      CurrentTask := TaskCount
+    }
 		UnactionedCount := UnactionedCount + 1
 		Tasks%Taskcount%_1 := NewTask
-		Added := A_Now
-		Expires := Added
-		Expires += %ExpirationNew%, days
-		Tasks%Taskcount%_2 := "A" . Added . " E" . Expires
-	    StringReplace, AddNotesBox, AddNotesBox,%A_Tab%,\t, All
-	    StringReplace, AddNotesBox, AddNotesBox,`n,\n, All
+		If (AddTicklerCalendar == today)
+		{
+      Added := A_Now
+      Expires := Added
+      Expires += %ExpirationNew%, days
+      Tasks%Taskcount%_2 := "A" . Added . " E" . Expires
+    }
+    Else
+    {
+      Tickled := AddTicklerCalendar . "000000"
+      Expires := AddTicklerCalendar
+      Expires += %ExpirationNew%, days
+      Tasks%Taskcount%_2 := "T" . Tickled . " E" . Expires
+    }
+      StringReplace, AddNotesBox, AddNotesBox,%A_Tab%,\t, All
+      StringReplace, AddNotesBox, AddNotesBox,`n,\n, All
         Tasks%Taskcount%_3 := AddNotesBox
     If (NewUrl)
     {
@@ -572,6 +593,8 @@ ButtonAddNotes:
     GuiControl, Show, AddUrlLabel
     GuiControl, Show, AddUrlBox
     GuiControl, Move, AddUrlBox, w%NewW%
+    GuiControl, Show, AddTicklerLabel
+    GuiControl, Show, AddTicklerCalendar
     GuiControl, Focus, AddNotesBox
 	Gui, 3:Show, AutoSize
 Return
@@ -973,4 +996,17 @@ ButtonInstantReAdd:
   ReAddTask()
 	Gui, Destroy
   Work()
+Return
+
+CalendarTicklerAdd:
+  FormatTime, cal, %AddTicklerCalendar%, yyyy-MM-dd
+  FormatTime, today, ,yyyy-MM-dd
+  If (cal != today)
+  {
+     GuiControl, Text, AddTicklerLabel, The task will be added to the list on %cal%.
+  }
+  Else
+  {
+    GuiControl, Text, AddTicklerLabel, The task will be added to the list immediately.
+  }
 Return
