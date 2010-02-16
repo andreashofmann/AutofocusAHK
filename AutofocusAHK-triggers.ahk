@@ -17,7 +17,7 @@ TriggerAddTask:
 	Else
 	{
 		; Show "Add Task" window
-		AddTask()
+		ShowAddTaskWindow()
 	}
 Return
 

@@ -54,6 +54,11 @@ LoadTasks()
           HasTasksOnReview := 1
         }
       }
+      Else If (InStr(Tasks%TaskCount%_2, "T"))
+      {
+        Tasks%TaskCount%_4 := 1
+        
+      }
       Else
       {
         Tasks%TaskCount%_4 := 0

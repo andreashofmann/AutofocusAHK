@@ -93,8 +93,7 @@ ShowNextTasks()
 	Gui, Show, AutoSize, Show Tasks - %System% - %ApplicationName% %Ver%
 }
 
-;Add a New Task
-AddTask()
+ShowAddTaskWindow()
 {
 	global
 	NewTaskDescription := ""

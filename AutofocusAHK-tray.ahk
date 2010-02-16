@@ -38,7 +38,7 @@ SetupTrayMenu()
 
 
 AddTask:
-		AddTask()
+    ShowAddTaskWindow()
 Return
 
 ShowNextTasks:
