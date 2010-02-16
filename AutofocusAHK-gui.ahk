@@ -177,6 +177,9 @@ ShowWorkWindow()
 	NewY := TaskPosY + TaskPosH + 20
 	NewYT := NewY + 5
 	Gui, Add, Button, gButtonShowNotes vShowNotesButton x%TaskPosX% Y%NewY%, &More ...
+	GuiControlGet, MoreButtonPos, Pos, ShowNotesButton
+	DoneButtonX := MoreButtonPosX * 2 + MoreButtonPosW 
+  Gui, Add, Button, gButtonMarkDone vShowMarkDone x%DoneButtonX% Y%NewY%, Already &Done
 	GuiControl, Text, ModeControl, ForwardMode
 	;GuiControl, Move, TaskControl, w200 h100
 	Gui, Add, Text, vQuestionLabel Y%NewYT%,Does this task feel ready to be done? 
@@ -955,3 +958,10 @@ Enter::
 Return
 
 #IfWinActive
+
+ButtonMarkDone:
+MarkAsDone()
+SelectNextTask()
+Gui, Destroy
+Work()
+Return
