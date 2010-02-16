@@ -136,3 +136,11 @@ AF2_GetReviewWindowTitle()
 	Title := "Review" . GetStandardWindowTitle()
 	Return Title
 }
+
+AF2_PreShowTaskname()
+{
+}
+
+AF2_PostShowTaskname()
+{
+}

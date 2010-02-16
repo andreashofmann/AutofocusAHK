@@ -202,16 +202,7 @@ DWM_GetWorkWindowTitle()
 {
   global CurrentExpires
   GetCurrentMetadata()
-  Expire := CurrentExpires
-  FormatTime, Today,, yyyy-MM-dd
-  Tomorrow := A_Now
-  Tomorrow += 1, days
-  FormatTime, Tomorrow, %Tomorrow%, yyyy-MM-dd
-  If (Expire == Today)
-    Expire := "Today"
-  Else If (Expire == Tomorrow)
-    Expire := "Tomorrow"
-  Title := "Work - Expires " . Expire
+  Title := "Work - Expires " . CurrentExpires
   Title .= GetStandardWindowTitle()
   Return Title
 }
@@ -222,3 +213,25 @@ DWM_GetReviewWindowTitle()
 	Title .= GetStandardWindowTitle()
 	Return Title
 }              
+
+DWM_PreShowTaskname()
+{
+  global CurrentExpires
+  GetCurrentMetadata()
+  If (CurrentExpires = "Today")
+  {
+    Gui, Color, FFDDDD
+  }
+  Else If (CurrentExpires = "Tomorrow")
+  {
+    Gui, Color, FFFFBB
+  }
+}
+
+DWM_PostShowTaskname()
+{
+  global
+  GuiControl, Hide, TaskControl  
+  GuiControl, +Background00FF00, TaskControl
+  GuiControl, Show, TaskControl
+}

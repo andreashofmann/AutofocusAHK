@@ -170,3 +170,11 @@ AF1_GetReviewWindowTitle()
 	Title .= GetStandardWindowTitle()
 	Return Title
 }
+
+AF1_PreShowTaskname()
+{
+}
+
+AF1_PostShowTaskname()
+{
+}

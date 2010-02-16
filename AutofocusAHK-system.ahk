@@ -244,21 +244,30 @@ GetTaskMetadata(Task)
 		{
 			TaskExpires := SubStr(A_LoopField, 2)
 			FormatTime, TaskExpires, %TaskExpires%, yyyy-MM-dd
-		}
-	}
+      FormatTime, Today,, yyyy-MM-dd
+      Tomorrow := A_Now
+      Tomorrow += 1, days
+      FormatTime, Tomorrow, %Tomorrow%, yyyy-MM-dd
+      If (TaskExpires == Today)
+        TaskExpires := "Today"
+      Else If (TaskExpires == Tomorrow)
+        TaskExpires := "Tomorrow"
+
+    }
+  }
 }
 
 MorningRoutine:
-	FormatTime, Now, , yyyyMMdd
-	FormatTime, Hour, , H
-	DoMorningRoutine()
+  FormatTime, Now, , yyyyMMdd
+  FormatTime, Hour, , H
+  DoMorningRoutine()
 Return
 
 GetStandardWindowTitle()
 {
-	Global
-	Title := " - " . System . " - " . ApplicationName . " " . Ver
-	Return Title
+  Global
+  Title := " - " . System . " - " . ApplicationName . " " . Ver
+  Return Title
 }
 
 CheckCapsLock:

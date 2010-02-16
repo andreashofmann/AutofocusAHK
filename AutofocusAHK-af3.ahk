@@ -229,3 +229,11 @@ AF3_GetReviewWindowTitle()
 	Title .= GetStandardWindowTitle()
 	Return Title
 }
+
+AF3_PreShowTaskname()
+{
+}
+
+AF3_PostShowTaskname()
+{
+}

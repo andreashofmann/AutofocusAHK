@@ -5,6 +5,7 @@ History
     - New features:
     - Tweaks:
       - DWM: Show expiration date in title of work window (thanks to sabre23t)
+      - DWM: Work window changes color when current task expires today/tomorrow
     - Fixed bugs:
 
   Version 0.9.4.2 (2010-02-12)

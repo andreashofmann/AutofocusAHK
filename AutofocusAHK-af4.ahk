@@ -229,3 +229,11 @@ AF4_GetReviewWindowTitle()
 	Title .= GetStandardWindowTitle()
 	Return Title
 }
+
+AF4_PreShowTaskname()
+{
+}
+
+AF4_PostShowTaskname()
+{
+}
