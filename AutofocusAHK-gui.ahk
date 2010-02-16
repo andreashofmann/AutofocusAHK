@@ -345,6 +345,7 @@ ShowStatusWindow()
 	Gui, 2:Add, Text, y10 Right vTimeControl, 00:00:00
 	Gui, 2:Add, Button,ym gButtonShowStatusNotes vStatusNotesButton, &More ...
 	Gui, 2:Add, Button,ym gButtonHide vHideButton, &Hide for 30s
+	Gui, 2:Add, Button,ym gButtonInstantReAdd vIntantReAddButton, &Re-Add
 	Gui, 2:Add, Button,ym default gButtonStop vStopButton, &Stop
 	Gui, 2:Show, y0 xCenter AutoSize, Status - AutohotkeyAHK
 	GuiControl, 2:Focus, StopButton
@@ -964,4 +965,12 @@ MarkAsDone()
 SelectNextTask()
 Gui, Destroy
 Work()
+Return
+
+ButtonInstantReAdd:
+ 	Active := 0
+  ActionOnCurrentPass := 1
+  ReAddTask()
+	Gui, Destroy
+  Work()
 Return

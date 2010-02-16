@@ -6,10 +6,14 @@ History
       - Auto-copy selected text when adding a new task
       - Added checkbox to confirm auto-copied URLs
     - Tweaks:
-      - Added a button to mark tasks as already done without actioning them
+      - Added a button to the work window to mark tasks as already done without
+        actioning them
+      - Added a button to the status window to immediately re-add the current 
+        task 
       - DWM: Show expiration date in title of work window (thanks to sabre23t)
       - DWM: Work window changes color when current task expires today/tomorrow
     - Fixed bugs:
+      - Clipboard content is no longer lost when auto-adding URLs
 
   Version 0.9.4.2 (2010-02-12)
     - Fixed bug with saving newlines in notes field
