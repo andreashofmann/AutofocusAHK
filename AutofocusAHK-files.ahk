@@ -352,6 +352,7 @@ Export()
     . ".tomorrow th { background:#FFB; border:1px solid #770; }"
     . ".tomorrow td { border:1px solid #770; }"
     . ".has,.hideunactioned .hasUnactioned,.hidedone .hasDone,.hidereview .hasReview,.hideunactioned.hidedone .hasUnactionedDone,.hideunactioned.hidereview .hasUnactionedReview,.hidedone.hidereview .hasDoneReview,.hideunactioned.hidedone.hidereview hasUnactionedDoneReview { display: none;}"
+    . ".hidedone .doneCol,.hidereview .reviewCol { display:none;}"
     . "</style>"
     . "</head><body class=""hidedone hidereview"">"
     . "<div id=""header"">"
@@ -552,13 +553,13 @@ Export()
     ExportSegment .= "<td><nobr>" 
           . ExportAdded
         . "<nobr></td>"
-        . "<td><nobr>" 
+        . "<td class=""reviewCol""><nobr>" 
           . ExportReview
         . "<nobr></td>"
-        . "<td><nobr>" 
+        . "<td class=""doneCol""><nobr>" 
           . ExportDone
         . "</nobr></td>"
-        . "<td><nobr>" 
+        . "<td class=""doneCol""><nobr>" 
           . ExprtTime
         . "</nobr></td>"
         

@@ -11,6 +11,7 @@ History
       - Added a button to the status window to immediately re-add the current 
         task 
       - Export: Don't show headers if a section hasn't got visible tasks
+      - Export: Only show needed columns when done/review tasks are hidden
       - DWM: Show expiration date in title of work window (thanks to sabre23t)
       - DWM: Work window changes color when current task expires today/tomorrow
     - Fixed bugs:
