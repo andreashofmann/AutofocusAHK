@@ -351,7 +351,7 @@ ShowStatusWindow()
 	GuiControl, 2:Focus, StopButton
 
 }
-                                        
+
 ~Shift::
 {
   GuiControl, 2:Text, HideButton, Hide
