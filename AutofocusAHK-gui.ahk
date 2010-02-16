@@ -117,19 +117,18 @@ ShowAddTaskWindow()
   GuiControlGet, AddTaskFieldPos, 3:Pos, NewTask
   GuiControlGet, AddTaskButtonPos, 3:Pos, AddTaskButton
   NewW := AddTaskButtonPosX + AddTaskButtonPosW - AddTaskFieldPosX
-  Gui, 3:Add, Tab2, xm w%NewW%, Notes|Tickler
+  Gui, 3:Add, Tab2, xm w%NewW% vAddTabs, Notes|Tickler
+ 	Gui, 3:Add, Edit, T8 R10 vAddNotesBox
 	If (NewUrl)
   {
-    Gui, 3:Add, Checkbox, xm vAddUrlCheckbox, &Use this URL:
-    Gui, 3:Add, Edit, xm vAddUrlBox, %NewUrl%  
-    Gui, 3:Add, Text, xm Hidden NewW vAddNotesLabel, Notes:
-    Gui, 3:Add, Edit,xm Hidden T8 R10 vAddNotesBox
+    Gui, 3:Add, Checkbox,  vAddUrlCheckbox, &Use this URL:
+    Gui, 3:Add, Edit, r1 vAddUrlBox, %NewUrl%  
   }
   Else
 	{
-  	Gui, 3:Add, Edit, T8 R10 vAddNotesBox
     Gui, 3:Add, Text,   vAddUrlLabel, URL:
-    Gui, 3:Add, Edit,   vAddUrlBox
+    Gui, 3:Add, Edit, r1 vAddUrlBox
+    GuiControl, 3:Hide, AddTabs
   }
   GuiControlGet, AddNotesBoxPos, 3:Pos, AddNotesBox
   NewW := NewW - AddNotesBoxPosX
@@ -142,6 +141,8 @@ ShowAddTaskWindow()
   Gui, 3:Add, Text, w%NewW% vAddTicklerLabel, The task will be added to the list immediately.
 
 	Gui, 3:+LabelGuiAdd
+
+
 	Gui, 3:Show, AutoSize, Add Task - %System% - %ApplicationName% %Ver%
 }
 
@@ -548,20 +549,10 @@ ButtonAdd:
 Return
 
 ButtonAddNotes:
-    GuiControl, Disable, AddNotesButton
-    GuiControlGet, AddTaskFieldPos, Pos, NewTask
-    GuiControlGet, AddTaskButtonPos, Pos, AddTaskButton
-    NewW := AddTaskButtonPosX + AddTaskButtonPosW - AddTaskFieldPosX
-    GuiControl, Show, AddNotesLabel
-    GuiControl, Show, AddNotesBox
-    GuiControl, Move, AddNotesBox, w%NewW%
-    GuiControl, Show, AddUrlLabel
-    GuiControl, Show, AddUrlBox
-    GuiControl, Move, AddUrlBox, w%NewW%
-    GuiControl, Show, AddTicklerLabel
-    GuiControl, Show, AddTicklerCalendar
-    GuiControl, Focus, AddNotesBox
-	Gui, 3:Show, AutoSize
+    GuiControl, 3:Disable, AddNotesButton
+    GuiControl, 3:Show, AddTabs
+    GuiControl, 3:Focus, AddNotesBox
+    Gui, 3:Show, AutoSize
 Return
 
 ButtonHide:
