@@ -25,7 +25,7 @@ LoadTasks()
     }
     IsValidTask := %System%_IsValidTask(NewTask_1, NewTask_2, TaskCount)
 
-    if (IsValidTask)
+    if (IsValidTask and !InStr(NewTask_2, "U"))
     {
       TaskCount := TaskCount + 1
       Tasks%TaskCount%_1 := NewTask_1
@@ -54,10 +54,9 @@ LoadTasks()
           HasTasksOnReview := 1
         }
       }
-      Else If (InStr(Tasks%TaskCount%_2, "T"))
+      Else If (TicklePos := InStr(Tasks%TaskCount%_2, "S"))
       {
         Tasks%TaskCount%_4 := 1
-        
       }
       Else
       {
@@ -379,7 +378,7 @@ Export()
   ReviewCounter := 0
   ExportHeader := ""
 
-  If (and System == "AF1" or System == "AF3")
+  If (System == "AF1" or System == "AF3")
   {
     ExportHeader := "<tr class=""CONSISTCLASS""><th colspan=""5"">Page 1</th></tr>"
     ExportHeader .= "<tr class=""CONSISTCLASS""><th>Task</th><th>Added</th><th class=""reviewCol"">On&nbsp;Review</th><th class=""doneCol""><nobr>Done/Re-Added</nobr></th><th class=""doneCol"">Time</th></tr>"
@@ -409,7 +408,7 @@ Export()
 
   Loop, %TaskCount%
   {
-    If (!InStr(Tasks%A_Index%_2, "T"))
+    If (!InStr(Tasks%A_Index%_2, "S"))
     {
       ExportAdded := ""
       ExportReview := ""

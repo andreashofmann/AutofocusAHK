@@ -3,6 +3,7 @@ History
 
   Version 0.9.5 (2010-02-16)
     - New features:
+      - Tickler functionality: Add tasks at a given date
       - Auto-copy selected text when adding a new task
       - Added checkbox to confirm auto-copied URLs
     - Tweaks:

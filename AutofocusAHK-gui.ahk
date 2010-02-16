@@ -536,46 +536,12 @@ ButtonAdd:
 	Gui, Submit
 	If (NewTask != "")
 	{
-    FormatTime, today, ,yyyyMMdd
-		TaskCount := TaskCount + 1
-		If (UnactionedCount == 0)
-		{
-      CurrentTask := TaskCount
-    }
-		UnactionedCount := UnactionedCount + 1
-		Tasks%Taskcount%_1 := NewTask
-		If (AddTicklerCalendar == today)
-		{
-      Added := A_Now
-      Expires := Added
-      Expires += %ExpirationNew%, days
-      Tasks%Taskcount%_2 := "A" . Added . " E" . Expires
-    }
-    Else
+    If (NewUrl and AddUrlCheckbox)
     {
-      Tickled := AddTicklerCalendar . "000000"
-      Expires := AddTicklerCalendar
-      Expires += %ExpirationNew%, days
-      Tasks%Taskcount%_2 := "T" . Tickled . " E" . Expires
+      Tasks%Taskcount%_URL := AddUrlBox
+      NewUrl =
     }
-      StringReplace, AddNotesBox, AddNotesBox,%A_Tab%,\t, All
-      StringReplace, AddNotesBox, AddNotesBox,`n,\n, All
-        Tasks%Taskcount%_3 := AddNotesBox
-    If (NewUrl)
-    {
-      If (AddUrlCheckbox)
-      {
-        Tasks%Taskcount%_URL := AddUrlBox
-      }
-    }
-    Else
-    {
-        Tasks%Taskcount%_URL := AddUrlBox
-    }
-    	Tasks%Taskcount%_4 := 0
-    	%System%_PostTaskAdd()
-		SaveTasks()
-		NewUrl =
+    AddTask(NewTask, AddNotesBox, AddUrlBox, AddTicklerCalendar)
 
 	}
 	Gui, Hide

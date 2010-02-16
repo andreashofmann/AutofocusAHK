@@ -129,6 +129,7 @@ DoMorningRoutine()
 	{
 		%System%_DoMorningRoutine()
 	}
+	CheckTicklers()
 	SaveTasks()
 	BackupTasks()
 	LastRoutine := Now
@@ -298,4 +299,55 @@ CheckForBrowserUrl()
     Url := Clipboard 
   } 
   Return Url  
+}
+
+AddTask(Description, Notes, Url, TickleDate)
+{
+  global
+  FormatTime, today, ,yyyyMMdd
+  TaskCount := TaskCount + 1
+  If (UnactionedCount == 0)
+  {
+    CurrentTask := TaskCount
+  }
+  UnactionedCount := UnactionedCount + 1
+  Tasks%Taskcount%_1 := Description
+  If (TickleDate <= today)
+  {
+    Added := A_Now
+    Expires := Added
+    Expires += %ExpirationNew%, days
+    Tasks%Taskcount%_2 := "A" . Added . " E" . Expires
+  }
+  Else
+  {
+    Tickled := TickleDate . "000000"
+    Expires := TickleDate
+    Expires += %ExpirationNew%, days
+    Tasks%Taskcount%_2 := "S" . Tickled . " E" . Expires
+  }
+  StringReplace, Notes, Notes,%A_Tab%,\t, All
+  StringReplace, Notes, Notes,`n,\n, All
+  Tasks%Taskcount%_3 := Notes
+  Tasks%Taskcount%_URL := Url
+  Tasks%Taskcount%_4 := 0
+  %System%_PostTaskAdd()
+  SaveTasks()
+}
+
+CheckTicklers()
+{
+  global
+  Loop, %TaskCount%
+  {
+    If (TicklePos := InStr(Tasks%A_Index%_2, "S"))
+    {
+      FormatTime, Today,, yyyyMMdd
+      If (SubStr(Tasks%A_Index%_2, %TicklePos%,8) <= Today)
+      {
+        StringReplace, Tasks%A_Index%_2, Tasks%A_Index%_2, S, U 
+        AddTask(Tasks%A_Index%_1, Tasks%A_Index%_3, Tasks%A_Index%_URL, Today)
+      }
+    }
+  }
 }

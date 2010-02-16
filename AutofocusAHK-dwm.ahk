@@ -170,8 +170,11 @@ DWM_Work()
 
 DWM_DoMorningRoutine()
 {
+MsgBox Routine: Save
 		SaveTasks()
+MsgBox Routine: Backup
 		BackupTasks()
+MsgBox Routine: Load
 		LoadTasks()
 }
 
