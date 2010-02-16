@@ -404,201 +404,204 @@ Export()
 
   Loop, %TaskCount%
   {
-    ExportAdded := ""
-    ExportReview := ""
-    ExportDone := ""
-    ExprtTime := ""
-    
-    AllCounter += 1
-    Loop, Parse, Tasks%A_Index%_2, %A_Space%
+    If (!InStr(Tasks%A_Index%_2, "T"))
     {
-      If (InStr(A_LoopField, "D"))
+      ExportAdded := ""
+      ExportReview := ""
+      ExportDone := ""
+      ExprtTime := ""
+      
+      AllCounter += 1
+      Loop, Parse, Tasks%A_Index%_2, %A_Space%
       {
-        ExportDone := SubStr(A_LoopField, 2)
-        FormatTime, ExportDone, %ExportDone%, yyyy-MM-dd'&nbsp;'H:mm
-      }
-      If (InStr(A_LoopField, "R"))
-      {
-        ExportReview := SubStr(A_LoopField, 2)
-        FormatTime, ExportReview, %ExportReview%, yyyy-MM-dd'&nbsp;'H:mm
-      }
-      If (InStr(A_LoopField, "A"))
-      {
-        ExportAdded := SubStr(A_LoopField, 2)                               
-        FormatTime, ExportAdded, %ExportAdded%, yyyy-MM-dd'&nbsp;'H:mm
-      }
-      If (InStr(A_LoopField, "T"))
-      {
-        ExprtTime := SubStr(A_LoopField, 2)
-        ExprtTime := SecondsToFormattedTime(ExprtTime)
-      }
-
-      WarningClass := ""
-      If (System == "DWM" and InStr(A_LoopField, "E"))
-      {
-        ExprtExpires := SubStr(A_LoopField, 2,8)
-        If (ExprtCurrentExpires < ExprtExpires)
+        If (InStr(A_LoopField, "D"))
         {
-          ExprtCurrentExpires := ExprtExpires
-          If (ExprtCurrentExpires == Today)
-          {
-            ExprtHeading := "Expiring Today"
-            WarningClass := " class=""today CONSISTCLASS"""
-          }
-          Else If (ExprtCurrentExpires == Tomorrow)
-          {
-            ExprtHeading := "Expiring Tomorrow"
-            WarningClass := " class=""tomorrow CONSISTCLASS"""
-          }
-          Else
-          {
-            FormatTime, ExprtFormattedExpires, %ExprtCurrentExpires%, yyyy-MM-dd
-            ExprtHeading := "Expiring " . ExprtFormattedExpires
-            WarningClass := " class=""CONSISTCLASS"""
-          }
-        
-          If (ExportHeader != "")
-          {
-            If (AllCounter > 0)
-            {
-              HeaderClass := "has"
-              If (UnactionedCounter > 0)
-              {
-                HeaderClass .= "Unactioned"
-              }
-              If (DoneCounter > 0)
-              {
-                HeaderClass .= "Done"
-              }
-              If (ReviewCounter > 0)
-              {
-                HeaderClass .= "Review"
-              }
-              StringReplace, ExportHeader, ExportHeader, CONSISTCLASS, %HeaderClass%, All
-              
-              Export .= ExportHeader . ExportSegment
-            }
-            ExportSegment := ""
-            AllCounter := 0
-            UnactionedCounter := 0
-            DoneCounter := 0
-            ReviewCounter := 0
-          }
-          
-          ExportHeader := "<tr" . WarningClass . "><th colspan=""5"">" . ExprtHeading . "</th></tr>"
-            . "<tr" . WarningClass . "><th>Task</th><th>Added</th><th class=""reviewCol"">On Review</th><th class=""doneCol""><nobr>Done/Re-Added</nobr></th><th class=""doneCol"">Time</th></tr>"
+          ExportDone := SubStr(A_LoopField, 2)
+          FormatTime, ExportDone, %ExportDone%, yyyy-MM-dd'&nbsp;'H:mm
         }
-      }
-
-    }
-    If ((System == "AF1" or System == "AF3") and ExportPage < ceil(A_Index/TasksPerPage))
-    {
-      ExportPage += 1
-      If (AllCounter > 0)
-      {
-        HeaderClass := "has"
-        If (UnactionedCounter > 0)
+        If (InStr(A_LoopField, "R"))
         {
-          HeaderClass .= "Unactioned"
+          ExportReview := SubStr(A_LoopField, 2)
+          FormatTime, ExportReview, %ExportReview%, yyyy-MM-dd'&nbsp;'H:mm
         }
-        If (DoneCounter > 0)
+        If (InStr(A_LoopField, "A"))
         {
-          HeaderClass .= "Done"
+          ExportAdded := SubStr(A_LoopField, 2)                               
+          FormatTime, ExportAdded, %ExportAdded%, yyyy-MM-dd'&nbsp;'H:mm
         }
-        If (ReviewCounter > 0)
+        If (InStr(A_LoopField, "T"))
         {
-          HeaderClass .= "Review"
+          ExprtTime := SubStr(A_LoopField, 2)
+          ExprtTime := SecondsToFormattedTime(ExprtTime)
         }
-        StringReplace, ExportHeader, ExportHeader, CONSISTCLASS, %HeaderClass%, All
-        
-        Export .= ExportHeader . ExportSegment
-      }
-      ExportSegment := ""
-      AllCounter := 0
-      UnactionedCounter := 0
-      DoneCounter := 0
-      ReviewCounter := 0
-      ExportHeader := "<tr class=""CONSISTCLASS""><th colspan=""5"">Page " . ExportPage . "</th></tr>"
-        . "<tr class=""CONSISTCLASS""><th>Task</th><th>Added</th><th class=""reviewCol"">On Review</th><th class=""doneCol""><nobr>Done/Re-Added</nobr></th><th class=""doneCol"">Time</th></tr>"
-    }
-    ExportSegment .= "<tr"
-    ExportSegment .= " class="""
-    If (InStr(Tasks%A_Index%_2, "R"))
-    {
-      ReviewCounter += 1
-      ExportSegment .= "review"
-    }
-    Else If (InStr(Tasks%A_Index%_2, "D"))
-    {
-      DoneCounter += 1
-      ExportSegment .= " done"
-    }
-    Else
-    {
-      UnactionedCounter += 1
-      ExportSegment .= " unactioned"            
-        }
-        If (A_Index == CurrentTask)
-        {
-      ExportSegment .= " current"                    
-        }
-        If (WarningClass==" class=""today""")
-        {
-      ExportSegment .= " today"                    
-        }
-        Else If (WarningClass==" class=""tomorrow""")
-        {
-      ExportSegment .= " tomorrow"                    
-        }
-    ExportSegment .= """"
-    ExportSegment .= ">"
-        . "<td>" 
-          . Tasks%A_Index%_1
-        . "</td>"
   
-    ExportSegment .= "<td><nobr>" 
-          . ExportAdded
-        . "<nobr></td>"
-        . "<td class=""reviewCol""><nobr>" 
-          . ExportReview
-        . "<nobr></td>"
-        . "<td class=""doneCol""><nobr>" 
-          . ExportDone
-        . "</nobr></td>"
-        . "<td class=""doneCol""><nobr>" 
-          . ExprtTime
-        . "</nobr></td>"
-        
-    
-    ExportSegment .= "</tr>"
-    If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList and LastTaskInClosedList != TaskCount)
-    {
-      If (AllCounter > 0)
-      {
-        HeaderClass := "has"
-        If (UnactionedCounter > 0)
+        WarningClass := ""
+        If (System == "DWM" and InStr(A_LoopField, "E"))
         {
-          HeaderClass .= "Unactioned"
+          ExprtExpires := SubStr(A_LoopField, 2,8)
+          If (ExprtCurrentExpires < ExprtExpires)
+          {
+            ExprtCurrentExpires := ExprtExpires
+            If (ExprtCurrentExpires == Today)
+            {
+              ExprtHeading := "Expiring Today"
+              WarningClass := " class=""today CONSISTCLASS"""
+            }
+            Else If (ExprtCurrentExpires == Tomorrow)
+            {
+              ExprtHeading := "Expiring Tomorrow"
+              WarningClass := " class=""tomorrow CONSISTCLASS"""
+            }
+            Else
+            {
+              FormatTime, ExprtFormattedExpires, %ExprtCurrentExpires%, yyyy-MM-dd
+              ExprtHeading := "Expiring " . ExprtFormattedExpires
+              WarningClass := " class=""CONSISTCLASS"""
+            }
+          
+            If (ExportHeader != "")
+            {
+              If (AllCounter > 0)
+              {
+                HeaderClass := "has"
+                If (UnactionedCounter > 0)
+                {
+                  HeaderClass .= "Unactioned"
+                }
+                If (DoneCounter > 0)
+                {
+                  HeaderClass .= "Done"
+                }
+                If (ReviewCounter > 0)
+                {
+                  HeaderClass .= "Review"
+                }
+                StringReplace, ExportHeader, ExportHeader, CONSISTCLASS, %HeaderClass%, All
+                
+                Export .= ExportHeader . ExportSegment
+              }
+              ExportSegment := ""
+              AllCounter := 0
+              UnactionedCounter := 0
+              DoneCounter := 0
+              ReviewCounter := 0
+            }
+            
+            ExportHeader := "<tr" . WarningClass . "><th colspan=""5"">" . ExprtHeading . "</th></tr>"
+              . "<tr" . WarningClass . "><th>Task</th><th>Added</th><th class=""reviewCol"">On Review</th><th class=""doneCol""><nobr>Done/Re-Added</nobr></th><th class=""doneCol"">Time</th></tr>"
+          }
         }
-        If (DoneCounter > 0)
-        {
-          HeaderClass .= "Done"
-        }
-        If (ReviewCounter > 0)
-        {
-          HeaderClass .= "Review"
-        }
-        StringReplace, ExportHeader, ExportHeader, CONSISTCLASS, %HeaderClass%, All
-        
-        Export .= ExportHeader . ExportSegment
+  
       }
-      ExportSegment := ""
-      AllCounter := 0
-      UnactionedCounter := 0
-      DoneCounter := 0
-      ReviewCounter := 0
-      ExportHeader := "<tr class=""CONSISTCLASS""><th colspan=""5"">Open List</th></tr>"
-      . "<tr class=""CONSISTCLASS""><th>Task</th><th>Added</th><th class=""reviewCol"">On Review</th><th class=""doneCol""><nobr>Done/Re-Added</nobr></th><th class=""doneCol"">Time</th></tr>"
+      If ((System == "AF1" or System == "AF3") and ExportPage < ceil(A_Index/TasksPerPage))
+      {
+        ExportPage += 1
+        If (AllCounter > 0)
+        {
+          HeaderClass := "has"
+          If (UnactionedCounter > 0)
+          {
+            HeaderClass .= "Unactioned"
+          }
+          If (DoneCounter > 0)
+          {
+            HeaderClass .= "Done"
+          }
+          If (ReviewCounter > 0)
+          {
+            HeaderClass .= "Review"
+          }
+          StringReplace, ExportHeader, ExportHeader, CONSISTCLASS, %HeaderClass%, All
+          
+          Export .= ExportHeader . ExportSegment
+        }
+        ExportSegment := ""
+        AllCounter := 0
+        UnactionedCounter := 0
+        DoneCounter := 0
+        ReviewCounter := 0
+        ExportHeader := "<tr class=""CONSISTCLASS""><th colspan=""5"">Page " . ExportPage . "</th></tr>"
+          . "<tr class=""CONSISTCLASS""><th>Task</th><th>Added</th><th class=""reviewCol"">On Review</th><th class=""doneCol""><nobr>Done/Re-Added</nobr></th><th class=""doneCol"">Time</th></tr>"
+      }
+      ExportSegment .= "<tr"
+      ExportSegment .= " class="""
+      If (InStr(Tasks%A_Index%_2, "R"))
+      {
+        ReviewCounter += 1
+        ExportSegment .= "review"
+      }
+      Else If (InStr(Tasks%A_Index%_2, "D"))
+      {
+        DoneCounter += 1
+        ExportSegment .= " done"
+      }
+      Else
+      {
+        UnactionedCounter += 1
+        ExportSegment .= " unactioned"            
+          }
+          If (A_Index == CurrentTask)
+          {
+        ExportSegment .= " current"                    
+          }
+          If (WarningClass==" class=""today""")
+          {
+        ExportSegment .= " today"                    
+          }
+          Else If (WarningClass==" class=""tomorrow""")
+          {
+        ExportSegment .= " tomorrow"                    
+          }
+      ExportSegment .= """"
+      ExportSegment .= ">"
+          . "<td>" 
+            . Tasks%A_Index%_1
+          . "</td>"
+    
+      ExportSegment .= "<td><nobr>" 
+            . ExportAdded
+          . "<nobr></td>"
+          . "<td class=""reviewCol""><nobr>" 
+            . ExportReview
+          . "<nobr></td>"
+          . "<td class=""doneCol""><nobr>" 
+            . ExportDone
+          . "</nobr></td>"
+          . "<td class=""doneCol""><nobr>" 
+            . ExprtTime
+          . "</nobr></td>"
+          
+      
+      ExportSegment .= "</tr>"
+      If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList and LastTaskInClosedList != TaskCount)
+      {
+        If (AllCounter > 0)
+        {
+          HeaderClass := "has"
+          If (UnactionedCounter > 0)
+          {
+            HeaderClass .= "Unactioned"
+          }
+          If (DoneCounter > 0)
+          {
+            HeaderClass .= "Done"
+          }
+          If (ReviewCounter > 0)
+          {
+            HeaderClass .= "Review"
+          }
+          StringReplace, ExportHeader, ExportHeader, CONSISTCLASS, %HeaderClass%, All
+          
+          Export .= ExportHeader . ExportSegment
+        }
+        ExportSegment := ""
+        AllCounter := 0
+        UnactionedCounter := 0
+        DoneCounter := 0
+        ReviewCounter := 0
+        ExportHeader := "<tr class=""CONSISTCLASS""><th colspan=""5"">Open List</th></tr>"
+        . "<tr class=""CONSISTCLASS""><th>Task</th><th>Added</th><th class=""reviewCol"">On Review</th><th class=""doneCol""><nobr>Done/Re-Added</nobr></th><th class=""doneCol"">Time</th></tr>"
+      }
     }
   }
 
