@@ -97,9 +97,20 @@ ShowNextTasks()
 AddTask()
 {
 	global
-	NewUrl := CheckForBrowserUrl()
+	NewTaskDescription := ""
+	OldClipboard := ClipBoardAll
+  Clipboard =
+  Send ^c
+  ClipWait, 0.2
+  If (!ErrorLevel)
+  {
+    NewTaskDescription := Clipboard
+  }
+  NewUrl := CheckForBrowserUrl()
+  ClipBoard := OldClipboard
+  OldClipboard =
 	Gui, 3:Destroy
-	Gui, 3:Add, Edit, w400 vNewTask  ; The ym option starts a new column of controls.
+	Gui, 3:Add, Edit, w400 vNewTask, %NewTaskDescription%  ; The ym option starts a new column of controls.
 	Gui, 3:Add, Button,ym vAddNotesButton gButtonAddNotes, &More ...
 	Gui, 3:Add, Button,ym default gButtonAdd vAddTaskButton, &Add
 	If (NewUrl)

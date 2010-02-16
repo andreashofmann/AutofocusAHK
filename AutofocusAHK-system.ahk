@@ -281,18 +281,20 @@ CheckForBrowserUrl()
   WinGetActiveTitle, BrowserTitle
   If (InStr(Browsertitle, "Internet Explorer"))
   {
+    Clipboard =
     Send !d
     Sleep 200
     Send ^c
-    Sleep 200
+    ClipWait, 0.5
     Url := Clipboard 
   } 
   Else If (InStr(Browsertitle, "Mozilla Firefox") or InStr(Browsertitle, "Google Chrome") or InStr(Browsertitle, "Opera"))
   {
+    Clipboard =
     Send ^l
     Sleep 200
     Send ^c
-    Sleep 200
+    ClipWait, 0.5
     Url := Clipboard 
   } 
   Return Url  
