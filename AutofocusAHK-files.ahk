@@ -358,8 +358,14 @@ Export()
     . "<div id=""header"">"
     . "<h1>" . ApplicationName . "</h1>"
     . "<h2>Export " . ExportTime . "</h2>"
-    . "<ul id=""displaysettings""><li id=""uaswitch"" onclick=""toggleUnactioned()"">unactioned</li><li id=""dswitch"" onclick=""toggleDone()"">done</li><li id=""rswitch"" onclick=""toggleReview()"">on review</li></ul>"
-    . "</div>"
+    . "<ul id=""displaysettings"">"
+    . "<li id=""uaswitch"" onclick=""toggleUnactioned()"">unactioned</li>"
+    . "<li id=""dswitch"" onclick=""toggleDone()"">done</li>"
+  If (System != "DWM")
+  {
+    Export .= "<li id=""rswitch"" onclick=""toggleReview()"">on review</li></ul>"
+  }
+  Export .= "</div>"
     . "<table cellspacing=""0"">"
 
   AllCounter := 0

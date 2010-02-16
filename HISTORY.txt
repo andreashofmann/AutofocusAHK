@@ -12,10 +12,12 @@ History
         task 
       - Export: Don't show headers if a section hasn't got visible tasks
       - Export: Only show needed columns when done/review tasks are hidden
+      - Export: No option to show tasks on review if current system is DWM
       - DWM: Show expiration date in title of work window (thanks to sabre23t)
       - DWM: Work window changes color when current task expires today/tomorrow
     - Fixed bugs:
       - Clipboard content is no longer lost when auto-adding URLs
+      - Task expiration pop up now lists unactioned expired tasks only
 
   Version 0.9.4.2 (2010-02-12)
     - Fixed bug with saving newlines in notes field

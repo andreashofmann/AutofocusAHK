@@ -39,7 +39,10 @@ DWM_IsValidTask(TaskName, TaskStats)
     
     If (Today > Expires)
     {
-      ListOfExpiredTasks .= TaskName . "`n"
+      If (!InStr(TaskStats, "D"))
+      {
+        ListOfExpiredTasks .= TaskName . "`n"
+      }
    	  If (CurrentTask > TaskIndex) CurrentTask -= CurrentTask
       Return 0
     }
@@ -62,7 +65,8 @@ DWM_PostTaskLoad()
   
   If (ListOfExpiredTasks)
   {
-    MsgBox, 0 , Expiration - %System% - %ApplicationName% %Ver%, The following tasks expired:`n`n%ListOfExpiredTasks% 
+    MsgBox, 0 , Expiration - %System% - %ApplicationName% %Ver%, The following tasks expired:`n`n%ListOfExpiredTasks%
+    ListOfExpiredTasks := ""
   }
 }
 
