@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.4.2
+; @version   0.9.5
 ; @since     0.9.3
 
 DWM_IsReviewOptional()
@@ -200,9 +200,20 @@ DWM_DismissTasks()
 
 DWM_GetWorkWindowTitle()
 {
-	Title := "Work"
-	Title .= GetStandardWindowTitle()
-	Return Title
+  global CurrentExpires
+  GetCurrentMetadata()
+  Expire := CurrentExpires
+  FormatTime, Today,, yyyy-MM-dd
+  Tomorrow := A_Now
+  Tomorrow += 1, days
+  FormatTime, Tomorrow, %Tomorrow%, yyyy-MM-dd
+  If (Expire == Today)
+    Expire := "Today"
+  Else If (Expire == Tomorrow)
+    Expire := "Tomorrow"
+  Title := "Work - Expires " . Expire
+  Title .= GetStandardWindowTitle()
+  Return Title
 }
 
 DWM_GetReviewWindowTitle()

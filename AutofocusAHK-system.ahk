@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.4.2
+; @version   0.9.5
 ; @since     0.9
 
 Initialize()
@@ -15,7 +15,7 @@ Initialize()
 	ApplicationName := "AutofocusAHK"
 	
 	; Version number that is displayed in GUI windows
-	Ver := "0.9.4.2"
+	Ver := "0.9.5"
 
 	; Is the user currently working on a task?
 	Active := 0
@@ -213,6 +213,7 @@ GetCurrentMetadata()
 	CurrentDone := TaskDone
 	CurrentReview := TaskReview
 	CurrentAdded := TaskAdded
+  CurrentExpires := TaskExpires
 }
 
 GetTaskMetadata(Task)
@@ -221,6 +222,7 @@ GetTaskMetadata(Task)
 	TaskDone := ""
 	TaskReview := ""
 	TaskAdded := ""
+  TaskExpires := ""
 	Loop, Parse, Tasks%Task%_2, %A_Space%
 	{
 		If (InStr(A_LoopField, "D"))
@@ -237,6 +239,11 @@ GetTaskMetadata(Task)
 		{
 			TaskAdded := SubStr(A_LoopField, 2)
 			FormatTime, TaskAdded, %TaskAdded%, yyyy-MM-dd H:mm
+		}
+		If (InStr(A_LoopField, "E"))
+		{
+			TaskExpires := SubStr(A_LoopField, 2)
+			FormatTime, TaskExpires, %TaskExpires%, yyyy-MM-dd
 		}
 	}
 }

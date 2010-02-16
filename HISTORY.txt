@@ -1,6 +1,12 @@
 History
 -------
 
+  Version 0.9.5 (2010-02-16)
+    - New features:
+    - Tweaks:
+      - DWM: Show expiration date in title of work window (thanks to sabre23t)
+    - Fixed bugs:
+
   Version 0.9.4.2 (2010-02-12)
     - Fixed bug with saving newlines in notes field
     
