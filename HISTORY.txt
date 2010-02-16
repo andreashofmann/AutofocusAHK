@@ -4,6 +4,7 @@ History
   Version 0.9.5 (2010-02-16)
     - New features:
       - Auto-copy selected text when adding a new task
+      - Added checkbox to confirm auto-copied URLs
     - Tweaks:
       - DWM: Show expiration date in title of work window (thanks to sabre23t)
       - DWM: Work window changes color when current task expires today/tomorrow

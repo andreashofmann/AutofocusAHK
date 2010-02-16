@@ -105,12 +105,14 @@ AddTask()
   If (!ErrorLevel)
   {
     NewTaskDescription := Clipboard
+    StringReplace, NewTaskDescription, NewTaskDescription,%A_Tab%, %A_Space%, All
+    StringReplace, NewTaskDescription, NewTaskDescription,`n, %A_Space%, All
   }
   NewUrl := CheckForBrowserUrl()
   ClipBoard := OldClipboard
   OldClipboard =
 	Gui, 3:Destroy
-	Gui, 3:Add, Edit, w400 vNewTask, %NewTaskDescription%  ; The ym option starts a new column of controls.
+	Gui, 3:Add, Edit, w400 vNewTask r1, %NewTaskDescription%  ; The ym option starts a new column of controls.
 	Gui, 3:Add, Button,ym vAddNotesButton gButtonAddNotes, &More ...
 	Gui, 3:Add, Button,ym default gButtonAdd vAddTaskButton, &Add
 	If (NewUrl)
@@ -118,7 +120,7 @@ AddTask()
     GuiControlGet, AddTaskFieldPos, 3:Pos, NewTask
     GuiControlGet, AddTaskButtonPos, 3:Pos, AddTaskButton
     NewW := AddTaskButtonPosX + AddTaskButtonPosW - AddTaskFieldPosX
-    Gui, 3:Add, Text, xm vAddUrlLabel, URL:
+    Gui, 3:Add, Checkbox, xm vAddUrlCheckbox, &Use this URL:
     Gui, 3:Add, Edit, xm w%NewW% vAddUrlBox, %NewUrl%  
     Gui, 3:Add, Text, xm Hidden NewW vAddNotesLabel, Notes:
   	Gui, 3:Add, Edit,xm Hidden T8 R10 vAddNotesBox
@@ -535,10 +537,21 @@ ButtonAdd:
 	    StringReplace, AddNotesBox, AddNotesBox,%A_Tab%,\t, All
 	    StringReplace, AddNotesBox, AddNotesBox,`n,\n, All
         Tasks%Taskcount%_3 := AddNotesBox
+    If (NewUrl)
+    {
+      If (AddUrlCheckbox)
+      {
         Tasks%Taskcount%_URL := AddUrlBox
+      }
+    }
+    Else
+    {
+        Tasks%Taskcount%_URL := AddUrlBox
+    }
     	Tasks%Taskcount%_4 := 0
     	%System%_PostTaskAdd()
 		SaveTasks()
+		NewUrl =
 
 	}
 	Gui, Hide
