@@ -9,36 +9,35 @@
 
 SetupTrayMenu()
 {
-	;; MENU CONSTRUCTION
+  ;; MENU CONSTRUCTION
 
-	; Remove AutoHotkey standard menu items
-	menu, tray, NoStandard
+  ; Remove AutoHotkey standard menu items
+  menu, tray, NoStandard
 
-	menu, tray, add, Add Task, AddTask
-	menu, tray, add, Show Next Tasks, ShowNextTasks
-	menu, tray, add, Work
+  menu, tray, add, Add Task, AddTask
+  menu, tray, add, Show Next Tasks, ShowNextTasks
+  menu, tray, add, Work
 
-	; Add a separator
-	menu, tray, add 
+  ; Add a separator
+  menu, tray, add 
 
-	menu, tray, add, Preferences
+  menu, tray, add, Preferences
 
-	; Add About/Help menu item
-	menu, tray, add, About/Help, About
+  ; Add About/Help menu item
+  menu, tray, add, About/Help, About
 
-	; Add a separator
-	menu, tray, add 
+  ; Add a separator
+  menu, tray, add 
 
-	; Add Exit menu item
-	menu, tray, add, Exit
+  ; Add Exit menu item
+  menu, tray, add, Exit
 
-	; Make Add Task the default (if tray icon is double-clicked)
-	menu, tray, default, About/Help
+  ; Make Add Task the default (if tray icon is double-clicked)
+  menu, tray, default, About/Help
 }
 
-
 AddTask:
-    ShowAddTaskWindow()
+  ShowAddTaskWindow()
 Return
 
 ShowNextTasks:

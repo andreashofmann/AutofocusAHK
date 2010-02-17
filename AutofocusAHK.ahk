@@ -25,33 +25,12 @@ Return
 ;; INCLUDE FILES
 
 #include AutofocusAHK-system.ahk
-
 #include AutofocusAHK-tray.ahk
-
 #include AutofocusAHK-triggers.ahk
-
 #include AutofocusAHK-files.ahk
-
 #include AutofocusAHK-gui.ahk
-
 #include AutofocusAHK-af1.ahk
 #include AutofocusAHK-af2.ahk
 #include AutofocusAHK-af3.ahk
 #include AutofocusAHK-af4.ahk
 #include AutofocusAHK-dwm.ahk
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
