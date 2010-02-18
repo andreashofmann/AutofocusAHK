@@ -20,7 +20,7 @@ DWM_IsValidTask(TaskName, TaskStats)
   {
     If (CurrentTask > TaskIndex)
     {
-      CurrentTask -= CurrentTask
+      CurrentTask -= 1
     }
 
     Return 0
@@ -30,7 +30,7 @@ DWM_IsValidTask(TaskName, TaskStats)
   {
     If (CurrentTask > TaskIndex)
     {
-      CurrentTask -= CurrentTask
+      CurrentTask -= 1
     }
 
     Return 0
@@ -38,11 +38,6 @@ DWM_IsValidTask(TaskName, TaskStats)
 
   If (TaskName == "---")
   {
-    If (CurrentTask > TaskIndex)
-    {
-      CurrentTask -= CurrentTask
-    }
-
     Return 0
   }
 
@@ -56,9 +51,10 @@ DWM_IsValidTask(TaskName, TaskStats)
       {
         ListOfExpiredTasks .= TaskName . "`n"
       }
+      
       If (CurrentTask > TaskIndex)
       {
-        CurrentTask -= CurrentTask
+        CurrentTask -= 1
       }
 
       Return 0
@@ -68,7 +64,7 @@ DWM_IsValidTask(TaskName, TaskStats)
   {
     If (CurrentTask > TaskIndex)
     {
-      CurrentTask -= CurrentTask
+      CurrentTask -= 1
     }
 
     Return 0
