@@ -1,6 +1,12 @@
 History
 -------
 
+  Version 0.9.5.1 (2010-02-18)
+    Fixed Bugs:
+      - Current task was reset to beginning of list when tasks expired
+      - Leftover Debug messages in 0.9.5 removed
+      - The "Already Done" caused the next task on the list to be skipped
+
   Version 0.9.5 (2010-02-16)
     - New features:
       - Tickler functionality: Add tasks at a given date

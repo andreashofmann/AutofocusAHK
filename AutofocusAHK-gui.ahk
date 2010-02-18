@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.5
+; @version   0.9.5.1
 ; @since     0.9
 
 ; Show Next Tasks
@@ -978,7 +978,6 @@ Return
 
 ButtonMarkDone:
   MarkAsDone()
-  SelectNextTask()
   Gui, Destroy
   Work()
 Return
