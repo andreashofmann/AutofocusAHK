@@ -189,9 +189,7 @@ DWM_Work()
 
 DWM_DoMorningRoutine()
 {
-  SaveTasks()
-  BackupTasks()
-  LoadTasks()
+  Reload
 }
 
 DWM_DismissTasks()

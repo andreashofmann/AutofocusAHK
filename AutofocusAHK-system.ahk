@@ -139,19 +139,18 @@ DoMorningRoutine()
 
   if (((Now - LastRoutine) == 1 and (Hour - StartRoutineAt) >= 0) or (Now - LastRoutine) > 1)
   {
+    CheckTicklers()
+    SaveTasks()
+    BackupTasks()
+    LastRoutine := Now
+    IniWrite, %Now%, %A_ScriptDir%\%ApplicationName%.ini, ReviewMode, LastRoutine
     %System%_DoMorningRoutine()
-  }
+    If (Tasks%CurrentTask%_4 == 1) 
+    {
+      SelectNextTask()
+    }  }
 
-  CheckTicklers()
-  SaveTasks()
-  BackupTasks()
-  LastRoutine := Now
-  IniWrite, %Now%, %A_ScriptDir%\%ApplicationName%.ini, ReviewMode, LastRoutine
 
-  If (Tasks%CurrentTask%_4 == 1) 
-  {
-    SelectNextTask()
-  }
 }
 
 DismissTasks()
