@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.5.1
+; @version   0.9.5.2
 ; @since     0.9
 
 ; Show Next Tasks

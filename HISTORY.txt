@@ -1,5 +1,8 @@
 History
 -------
+  Version 0.9.5.2 (2010-02-21)
+    Fixed Bugs:
+      - Sometimes, duplicated windows would appear
 
   Version 0.9.5.1 (2010-02-18)
     Fixed Bugs:
