@@ -96,7 +96,7 @@ ShowNextTasks()
     LV_ModifyCol(1, ErrorLevel)
     GuiControl, Disable, NoticeListView
   }
-
+  Gui, +AlwaysOnTop -MaximizeBox -MinimizeBox
   Gui, Show, AutoSize, Show Tasks - %System% - %ApplicationName% %Ver%
   GroupAdd, AutofocusAHKadd, Show Tasks - %System% - %ApplicationName% %Ver%
 }
@@ -153,6 +153,7 @@ ShowAddTaskWindow()
   Gui, 3:Add, MonthCal, 16 -Multi Range%startdate% 6 gCalendarTicklerAdd vAddTicklerCalendar
   Gui, 3:Add, Text, w%NewW% vAddTicklerLabel, The task will be added to the list immediately.
   Gui, 3:+LabelGuiAdd
+  Gui, 3:+AlwaysOnTop -MaximizeBox -MinimizeBox
   Gui, 3:Show, AutoSize, Add Task - %System% - %ApplicationName% %Ver%
   GroupAdd, AutofocusAHKadd, Add Task - %System% - %ApplicationName% %Ver%
 }
@@ -237,6 +238,7 @@ ShowWorkWindow()
   Gui, Add, Edit,xm Hidden ReadOnly T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
   Gui, Add, Text, xm Hidden vShowUrlBoxLabel, URL:
   Gui, Add, Edit,xm Hidden ReadOnly T8 default vShowUrlBox, % Tasks%CurrentTask%_URL
+  Gui, +AlwaysOnTop -MaximizeBox -MinimizeBox
   Gui, Show, Center Autosize, %Title%
   GroupAdd, AutofocusAHKwork, %Title%
   GuiControl, Focus, NoButton
@@ -298,6 +300,7 @@ ShowDoneWindow()
   Gui, Add, Edit,xm Hidden T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
   Gui, Add, Text, xm Hidden vShowUrlBoxLabel, URL:
   Gui, Add, Edit,xm Hidden default vShowUrlBox, % Tasks%CurrentTask%_URL
+  Gui, +AlwaysOnTop -MaximizeBox -MinimizeBox
   Gui, Show, Center Autosize, Done - %ApplicationName% %Ver% 
   GroupAdd, AutofocusAHKdone, Done - %ApplicationName% %Ver%
   GuiControl, Focus, YesButton
@@ -365,6 +368,7 @@ ShowReviewWindow()
   StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
   Gui, Add, Edit,xm Hidden T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
   Title := %System%_GetReviewWindowTitle()
+  Gui, +AlwaysOnTop -MaximizeBox -MinimizeBox
   Gui, Show, Center Autosize, %Title%
   GroupAdd, AutofocusAHKreview, %Title%
   GuiControl, Focus, RvNeverButton
@@ -616,6 +620,7 @@ ButtonShowStatusNotes:
   Gui, 4:Add, Edit,xm w500 T8 R10 default vShowStatusNotesBox, %ShowNotesBoxContent%
   Gui, 4:Add, Text, xm, URL:
   Gui, 4:Add, Edit,xm w500 default vShowStatusUrlBox, % Tasks%CurrentTask%_URL
+  Gui, 4:+AlwaysOnTop -MaximizeBox -MinimizeBox
   Gui, 4:Show, Center Autosize, Task Info - %ApplicationName% %Ver%
   GroupAdd, AutofocusAHKinfo, Task Info - %ApplicationName% %Ver%
 Return
@@ -808,6 +813,7 @@ ShowPreferences()
   GuiControlGet, BackupEditPos, Pos, BackupEdit,
   NewY := BackupLabelPosY - (BackupEditPosH - BackupLabelPosH)/2
   GuiControl, Move, BackupEdit, x%NewX% y%NewY% 
+  Gui, +AlwaysOnTop -MaximizeBox -MinimizeBox
   Gui, Show, Center Autosize, Preferences - %ApplicationName% %Ver%
   GroupAdd, AutofocusAHKpreferences, Preferences - %ApplicationName% %Ver%
 
@@ -902,6 +908,7 @@ ShowSearchWindow()
   Gui, 5:+LabelGuiSearch
   Gui, 5:Add, ListView, gListSearch Count%UnactionedCount% ReadOnly AltSubmit -Multi -WantF2 -Hdr xm r6 w500 vSearchResults, Task|Number
   Gui, 5:Add, Text, w500 center, Double-click result to jump to task
+  Gui, 5:+AlwaysOnTop -MaximizeBox -MinimizeBox
   Gui, 5:Show, AutoSize, Find - %System% - %ApplicationName% %Ver%
   GroupAdd, AutofocusAHKsearch, Find - %System% - %ApplicationName% %Ver%
   Gui, 5:Default
