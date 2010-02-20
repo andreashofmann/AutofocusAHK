@@ -29,6 +29,7 @@ ShowNextTasks()
   }
 
   Gui, Destroy
+  WinClose, ahk_group AutofocusAHKshow
   Gui +LastFound
   Gui, Font, Bold
   Gui, Add, Text, xm w600 Center, Next Tasks
@@ -97,6 +98,7 @@ ShowNextTasks()
   }
 
   Gui, Show, AutoSize, Show Tasks - %System% - %ApplicationName% %Ver%
+  GroupAdd, AutofocusAHKadd, Show Tasks - %System% - %ApplicationName% %Ver%
 }
 
 ShowAddTaskWindow()
@@ -120,6 +122,7 @@ ShowAddTaskWindow()
   ClipBoard := OldClipboard
   OldClipboard =
   Gui, 3:Destroy
+  WinClose, ahk_group AutofocusAHKadd
   Gui, 3:Add, Edit, w400 vNewTask r1, %NewTaskDescription%  ; The ym option starts a new column of controls.
   Gui, 3:Add, Button,ym vAddNotesButton gButtonAddNotes, &More ...
   Gui, 3:Add, Button,ym default gButtonAdd vAddTaskButton, &Add
@@ -131,12 +134,12 @@ ShowAddTaskWindow()
 
   If (NewUrl)
   {
-    Gui, 3:Add, Checkbox,  vAddUrlCheckbox, &Use this URL:
+    Gui, 3:Add, Checkbox, vAddUrlCheckbox, &Use this URL:
     Gui, 3:Add, Edit, r1 vAddUrlBox, %NewUrl%  
   }
   Else
   {
-    Gui, 3:Add, Text,   vAddUrlLabel, URL:
+    Gui, 3:Add, Text, vAddUrlLabel, URL:
     Gui, 3:Add, Edit, r1 vAddUrlBox
     GuiControl, 3:Hide, AddTabs
   }
@@ -151,6 +154,7 @@ ShowAddTaskWindow()
   Gui, 3:Add, Text, w%NewW% vAddTicklerLabel, The task will be added to the list immediately.
   Gui, 3:+LabelGuiAdd
   Gui, 3:Show, AutoSize, Add Task - %System% - %ApplicationName% %Ver%
+  GroupAdd, AutofocusAHKadd, Add Task - %System% - %ApplicationName% %Ver%
 }
 
 ToggleStartup()
@@ -187,6 +191,7 @@ ShowWorkWindow()
   global
 
   Gui, Destroy
+  WinClose, ahk_group AutofocusAHKwork
   Gui, Font, Bold
   %System%_PreShowTaskname()
   Gui, Add, Text, Y20 w500 Center vTaskControl, % Tasks%CurrentTask%_1
@@ -233,6 +238,7 @@ ShowWorkWindow()
   Gui, Add, Text, xm Hidden vShowUrlBoxLabel, URL:
   Gui, Add, Edit,xm Hidden ReadOnly T8 default vShowUrlBox, % Tasks%CurrentTask%_URL
   Gui, Show, Center Autosize, %Title%
+  GroupAdd, AutofocusAHKwork, %Title%
   GuiControl, Focus, NoButton
 
   Return
@@ -244,7 +250,14 @@ ShowDoneWindow()
 
   SetTimer,UpdateTime,Off
   Gui, 2:Destroy
+  WinClose, ahk_group AutofocusAHKstatus
   Gui, Destroy
+  WinClose, ahk_group AutofocusAHKdone
+  WinClose, ahk_group AutofocusAHKshow
+  WinClose, ahk_group AutofocusAHKreview
+  WinClose, ahk_group AutofocusAHKwork
+  WinClose, ahk_group AutofocusAHKadd
+  WinClose, ahk_group AutofocusAHKinfo
   Gui, Add, Text, vWorkingOn, You were working on
   GuiControlGet, WorkingPos, Pos, WorkingOn
   NewY := WorkingPosY + WorkingPosH + 20
@@ -286,6 +299,7 @@ ShowDoneWindow()
   Gui, Add, Text, xm Hidden vShowUrlBoxLabel, URL:
   Gui, Add, Edit,xm Hidden default vShowUrlBox, % Tasks%CurrentTask%_URL
   Gui, Show, Center Autosize, Done - %ApplicationName% %Ver% 
+  GroupAdd, AutofocusAHKdone, Done - %ApplicationName% %Ver%
   GuiControl, Focus, YesButton
 
   Return
@@ -297,6 +311,8 @@ ShowReviewWindow()
   global
 
   Gui, Destroy
+  WinClose, ahk_group AutofocusAHKreview
+  WinClose, ahk_group AutofocusAHKwork
   Gui, Add, Text, vReviewing, The following task is on review:
   GuiControlGet, ReviewingPos, Pos, Reviewing
   NewY :=ReviewingPosY + ReviewingPosH + 20
@@ -350,6 +366,7 @@ ShowReviewWindow()
   Gui, Add, Edit,xm Hidden T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
   Title := %System%_GetReviewWindowTitle()
   Gui, Show, Center Autosize, %Title%
+  GroupAdd, AutofocusAHKreview, %Title%
   GuiControl, Focus, RvNeverButton
 
   Return
@@ -360,6 +377,7 @@ ShowStatusWindow()
   global
 
   Gui, 2:Destroy
+  WinClose, ahk_group AutofocusAHKstatus
   Gui, 2:+AlwaysOnTop -SysMenu +Owner -Caption Resize MinSize MaxSize
   Gui, 2:Add, Text, y10, % Tasks%CurrentTask%_1
   Gui, 2:Add, Text, y10 Right vTimeControl, 00:00:00
@@ -368,6 +386,7 @@ ShowStatusWindow()
   Gui, 2:Add, Button,ym gButtonInstantReAdd vIntantReAddButton, &Re-Add
   Gui, 2:Add, Button,ym default gButtonStop vStopButton, &Stop
   Gui, 2:Show, y0 xCenter AutoSize, Status - AutohotkeyAHK
+  GroupAdd, AutofocusAHKstatus, Status - AutohotkeyAHK
   GuiControl, 2:Focus, StopButton
 }
 
@@ -586,6 +605,7 @@ Return
 ButtonShowStatusNotes:
   GuiControl, Disable, StatusNotesButton
   Gui, 4:Destroy
+  WinClose, AutofocusAHKinfo
   Gui, 4:Font, Bold
   Gui, 4:Add, Text,  w500 Center vTaskNotesControl, % Tasks%CurrentTask%_1
   Gui, 4:Font, Norm
@@ -597,6 +617,7 @@ ButtonShowStatusNotes:
   Gui, 4:Add, Text, xm, URL:
   Gui, 4:Add, Edit,xm w500 default vShowStatusUrlBox, % Tasks%CurrentTask%_URL
   Gui, 4:Show, Center Autosize, Task Info - %ApplicationName% %Ver%
+  GroupAdd, AutofocusAHKinfo, Task Info - %ApplicationName% %Ver%
 Return
 
 ButtonStop:
@@ -758,6 +779,7 @@ ShowPreferences()
   global
 
   Gui, Destroy
+  WinClose, ahk_group AutofocusAHKpreferences
   Gui, Font, Bold
   Gui, Add, Text, w250, Used time management system
   Gui, Font, Norm
@@ -787,6 +809,7 @@ ShowPreferences()
   NewY := BackupLabelPosY - (BackupEditPosH - BackupLabelPosH)/2
   GuiControl, Move, BackupEdit, x%NewX% y%NewY% 
   Gui, Show, Center Autosize, Preferences - %ApplicationName% %Ver%
+  GroupAdd, AutofocusAHKpreferences, Preferences - %ApplicationName% %Ver%
 
   Return
 }
@@ -874,12 +897,13 @@ ShowSearchWindow()
 
   NewUrl := CheckForBrowserUrl()
   Gui, 5:Destroy
+  WinClose, ahk_group AutofocusAHKsearch
   Gui, 5:Add, Edit, gEditSearch w500 vSearchString  ; The ym option starts a new column of controls.
   Gui, 5:+LabelGuiSearch
   Gui, 5:Add, ListView, gListSearch Count%UnactionedCount% ReadOnly AltSubmit -Multi -WantF2 -Hdr xm r6 w500 vSearchResults, Task|Number
   Gui, 5:Add, Text, w500 center, Double-click result to jump to task
   Gui, 5:Show, AutoSize, Find - %System% - %ApplicationName% %Ver%
-  GroupAdd, AutofocusAHK, Find - %System% - %ApplicationName% %Ver%
+  GroupAdd, AutofocusAHKsearch, Find - %System% - %ApplicationName% %Ver%
   Gui, 5:Default
 
   Loop, %Taskcount%
@@ -945,7 +969,7 @@ GuiSearchEscape:
 Return
 
 
-#IfWinActive, ahk_group AutofocusAHK
+#IfWinActive, ahk_group AutofocusAHKsearch
   Down::
     Gui, 5:Default
     ResultRow := LV_GetNext(0, "Focused")
