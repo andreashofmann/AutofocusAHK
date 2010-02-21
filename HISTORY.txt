@@ -1,8 +1,14 @@
 History
 -------
   Version 0.9.5.2 (2010-02-21)
+    Tweaks:
+      - Windows are always on top
+      - Windows will close when they lose focus
+      - Windows don't have taskbar buttons anymore
+      - All of the above can be toggled in the ini file
     Fixed Bugs:
       - Sometimes, duplicated windows would appear
+      - Expired tasks weren't immediately removed
 
   Version 0.9.5.1 (2010-02-18)
     Fixed Bugs:
