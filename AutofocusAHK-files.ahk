@@ -633,57 +633,62 @@ Export()
           . "<tr class=""CONSISTCLASS""><th>Task</th><th>Added</th><th class=""reviewCol"">On Review</th><th class=""doneCol""><nobr>Done/Re-Added</nobr></th><th class=""doneCol"">Time</th></tr>"
       }
 
-      ExportSegment .= "<tr"
-      ExportSegment .= " class="""
-
-      If (InStr(Tasks%A_Index%_2, "R"))
+      FormatTime, Today, , yyyyMMdd 
+      Expires := SubStr(Tasks%A_Index%_2, InStr(Tasks%A_Index%_2, "E")+1,8)
+      
+      If ((System == "DWM" and Expires >= Today) or System != "DWM")
       {
-        ReviewCounter += 1
-        ExportSegment .= "review"
+        ExportSegment .= "<tr"
+        ExportSegment .= " class="""
+  
+        If (InStr(Tasks%A_Index%_2, "R"))
+        {
+          ReviewCounter += 1
+          ExportSegment .= "review"
+        }
+        Else If (InStr(Tasks%A_Index%_2, "D"))
+        {
+          DoneCounter += 1
+          ExportSegment .= " done"
+        }
+        Else
+        {
+          UnactionedCounter += 1
+          ExportSegment .= " unactioned"
+        }
+        If (A_Index == CurrentTask)
+        {
+          ExportSegment .= " current"
+        }
+  
+        If (WarningClass==" class=""today""")
+        {
+          ExportSegment .= " today"
+        }
+        Else If (WarningClass==" class=""tomorrow""")
+        {
+          ExportSegment .= " tomorrow"
+        }
+  
+        ExportSegment .= """"
+        ExportSegment .= ">"
+          . "<td>" 
+          . Tasks%A_Index%_1
+          . "</td>"
+        ExportSegment .= "<td><nobr>" 
+          . ExportAdded
+          . "<nobr></td>"
+          . "<td class=""reviewCol""><nobr>" 
+          . ExportReview
+          . "<nobr></td>"
+          . "<td class=""doneCol""><nobr>" 
+          . ExportDone
+          . "</nobr></td>"
+          . "<td class=""doneCol""><nobr>" 
+          . ExprtTime
+          . "</nobr></td>"
+        ExportSegment .= "</tr>"
       }
-      Else If (InStr(Tasks%A_Index%_2, "D"))
-      {
-        DoneCounter += 1
-        ExportSegment .= " done"
-      }
-      Else
-      {
-        UnactionedCounter += 1
-        ExportSegment .= " unactioned"
-      }
-      If (A_Index == CurrentTask)
-      {
-        ExportSegment .= " current"
-      }
-
-      If (WarningClass==" class=""today""")
-      {
-        ExportSegment .= " today"
-      }
-      Else If (WarningClass==" class=""tomorrow""")
-      {
-        ExportSegment .= " tomorrow"
-      }
-
-      ExportSegment .= """"
-      ExportSegment .= ">"
-        . "<td>" 
-        . Tasks%A_Index%_1
-        . "</td>"
-      ExportSegment .= "<td><nobr>" 
-        . ExportAdded
-        . "<nobr></td>"
-        . "<td class=""reviewCol""><nobr>" 
-        . ExportReview
-        . "<nobr></td>"
-        . "<td class=""doneCol""><nobr>" 
-        . ExportDone
-        . "</nobr></td>"
-        . "<td class=""doneCol""><nobr>" 
-        . ExprtTime
-        . "</nobr></td>"
-      ExportSegment .= "</tr>"
-
       If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList and LastTaskInClosedList != TaskCount)
       {
         If (AllCounter > 0)

@@ -160,6 +160,14 @@ DWM_SelectNextTask()
       }
       If (Tasks%CurrentTask%_4 == 0 or UnactionedCount == 0) 
       {
+        FormatTime, Today, , yyyyMMdd 
+        Expires := SubStr(Tasks%CurrentTask%_2, InStr(Tasks%CurrentTask%_2, "E")+1,8)
+
+        If (Expires < Today)
+        {
+          Tasks%CurrentTask%_4 := 1
+        }
+
         Break
       }
     }
@@ -189,7 +197,7 @@ DWM_Work()
 
 DWM_DoMorningRoutine()
 {
-  Reload
+  LoadTasks()
 }
 
 DWM_DismissTasks()
