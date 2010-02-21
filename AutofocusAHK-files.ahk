@@ -217,7 +217,31 @@ LoadConfig()
     ExpirationReAdd := 7
     IniWrite, %ExpirationReAdd%, %A_ScriptDir%\%ApplicationName%.ini, DWM, ExpirationReAdd
   }
-  
+
+  IniRead, HideOnLostFocus, %A_ScriptDir%\%ApplicationName%.ini, GUI, HideOnLostFocus
+
+  If (HideOnLostFocus == "ERROR")
+  {
+    HideOnLostFocus := 1
+    IniWrite, %HideOnLostFocus%, %A_ScriptDir%\%ApplicationName%.ini, GUI, HideOnLostFocus
+  }
+
+  IniRead, GuiAlwaysOnTop, %A_ScriptDir%\%ApplicationName%.ini, GUI, AlwaysOnTop
+
+  If (GuiAlwaysOnTop == "ERROR")
+  {
+    GuiAlwaysOnTop := 1
+    IniWrite, %GuiAlwaysOnTop%, %A_ScriptDir%\%ApplicationName%.ini, GUI, AlwaysOnTop
+  }
+
+  IniRead, GuiHideTaskbarButton, %A_ScriptDir%\%ApplicationName%.ini, GUI, HideTaskbarButton
+
+  If (GuiHideTaskbarButton == "ERROR")
+  {
+    GuiHideTaskbarButton := 1
+    IniWrite, %GuiHideTaskbarButton%, %A_ScriptDir%\%ApplicationName%.ini, GUI, HideTaskbarButton
+  }
+
   SetHotkeys := ""
 
   IniRead, HKAddTask, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKAddTask
