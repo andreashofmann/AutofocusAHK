@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.5.1
+; @version   0.9.5.1.1
 ; @since     0.9
 
 ; Load tasks from file Tasks.txt
@@ -14,6 +14,7 @@ LoadTasks()
 
   TaskCount := 0
   UnactionedCount := 0
+  IsLoadingTasks := 1
 
   Loop, read, %A_ScriptDir%\Tasks.txt
   {
@@ -78,9 +79,11 @@ LoadTasks()
           Tasks%TaskCount%_2 .= " E" . Expires
         }
       }
+      %System%_PostTaskAdd()
     }
   }
 
+  IsLoadingTasks := 0
   %System%_PostTaskLoad()
 }
 
