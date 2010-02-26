@@ -120,246 +120,113 @@ LoadConfig()
   global
 
   FirstStart := 0
-  FormatTime, Now, , yyyyMMdd
-  FormatTime, Hour, , H
-  IniRead, System, %A_ScriptDir%\%ApplicationName%.ini, General, System
-
-  If (System == "ERROR")
+  IfNotExist, %A_ScriptDir%\%ApplicationName%.ini
   {
     FirstStart := 1
-    System := "AF4"
-    IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
   }
+  FormatTime, Now, , yyyyMMdd
+  FormatTime, Hour, , H
+  
+  System := LoadSetting("System", "General", "AF4")
 
   If (System == "AF5")
   {
     System := "DWM"
-    IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
+    SaveSetting("System", System, "General")
   }
-
-  IniRead, StartWithWindows, %A_ScriptDir%\%ApplicationName%.ini, General, StartWithWindows
-
-  If (StartWithWindows == "ERROR")
-  {
-    StartWithWindows := 0
-    IniWrite, %StartWithWindows%, %A_ScriptDir%\%ApplicationName%.ini, General, StartWithWindows
-  }
-
-  IniRead, DoBackups, %A_ScriptDir%\%ApplicationName%.ini, General, DoBackups
-
-  If (DoBackups == "ERROR")
-  {
-    DoBackups := 1
-    IniWrite, %DoBackups%, %A_ScriptDir%\%ApplicationName%.ini, General, DoBackups
-  }
-
-  IniRead, BackupsToKeep, %A_ScriptDir%\%ApplicationName%.ini, General, BackupsToKeep
-
-  If (BackupsToKeep == "ERROR")
-  {
-    BackupsToKeep := 10
-    IniWrite, %BackupsToKeep%, %A_ScriptDir%\%ApplicationName%.ini, General, BackupsToKeep
-  }
-
-  IniRead, LastRoutine, %A_ScriptDir%\%ApplicationName%.ini, ReviewMode, LastRoutine
-
-  If (LastRoutine == "ERROR")
-  {
-    LastRoutine := Now
-    IniWrite, %LastRoutine%, %A_ScriptDir%\%ApplicationName%.ini, ReviewMode, LastRoutine
-  }
-
-  IniRead, StartRoutineAt, %A_ScriptDir%\%ApplicationName%.ini, ReviewMode, StartRoutineAt
-
-  If (StartRoutineAt == "ERROR")
-  {
-    StartRoutineAt := 6
-    IniWrite, %StartRoutineAt%, %A_ScriptDir%\%ApplicationName%.ini, ReviewMode, StartRoutineAt
-  }
-
-  IniRead, TasksPerPage, %A_ScriptDir%\%ApplicationName%.ini, ForwardMode, TasksPerPage
-
-  If (TasksPerPage == "ERROR")
-  {
-    TasksPerPage := 20
-    IniWrite, %TasksPerPage%, %A_ScriptDir%\%ApplicationName%.ini, ForwardMode, TasksPerPage
-  }
-
-  IniRead, CurrentTask, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentTask
-
-  If (CurrentTask == "ERROR")
-  {
-    CurrentTask := 0
-    IniWrite, %CurrentTask%, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentTask
-  }
-
-  IniRead, ActionOnCurrentPass, %A_ScriptDir%\%ApplicationName%.ini, General, ActionOnCurrentPass
-
-  If (ActionOnCurrentPass == "ERROR")
-  {
-    ActionOnCurrentPass := 0
-    IniWrite, %ActionOnCurrentPass%, %A_ScriptDir%\%ApplicationName%.ini, General, ActionOnCurrentPass
-  }
-
-  IniRead, CurrentPass, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentPass
-
-  If (CurrentPass == "ERROR")
-  {
-    CurrentPass := 1
-    IniWrite, %CurrentPass%, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentPass
-  }
-
-  IniRead, ExpirationNew, %A_ScriptDir%\%ApplicationName%.ini, DWM, ExpirationNew
-
-  If (ExpirationNew == "ERROR")
-  {
-    ExpirationNew := 28
-    IniWrite, %ExpirationNew%, %A_ScriptDir%\%ApplicationName%.ini, DWM, ExpirationNew
-  }
-
-  IniRead, ExpirationReAdd, %A_ScriptDir%\%ApplicationName%.ini, DWM, ExpirationReAdd
-
-  If (ExpirationReAdd == "ERROR")
-  {
-    ExpirationReAdd := 7
-    IniWrite, %ExpirationReAdd%, %A_ScriptDir%\%ApplicationName%.ini, DWM, ExpirationReAdd
-  }
-
-  IniRead, HideOnLostFocus, %A_ScriptDir%\%ApplicationName%.ini, GUI, HideOnLostFocus
-
-  If (HideOnLostFocus == "ERROR")
-  {
-    HideOnLostFocus := 1
-    IniWrite, %HideOnLostFocus%, %A_ScriptDir%\%ApplicationName%.ini, GUI, HideOnLostFocus
-  }
-
-  IniRead, GuiAlwaysOnTop, %A_ScriptDir%\%ApplicationName%.ini, GUI, AlwaysOnTop
-
-  If (GuiAlwaysOnTop == "ERROR")
-  {
-    GuiAlwaysOnTop := 1
-    IniWrite, %GuiAlwaysOnTop%, %A_ScriptDir%\%ApplicationName%.ini, GUI, AlwaysOnTop
-  }
-
-  IniRead, GuiHideTaskbarButton, %A_ScriptDir%\%ApplicationName%.ini, GUI, HideTaskbarButton
-
-  If (GuiHideTaskbarButton == "ERROR")
-  {
-    GuiHideTaskbarButton := 1
-    IniWrite, %GuiHideTaskbarButton%, %A_ScriptDir%\%ApplicationName%.ini, GUI, HideTaskbarButton
-  }
-
-  SetHotkeys := ""
-
-  IniRead, HKAddTask, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKAddTask
-
-  If (HKAddTask == "ERROR")
-  {
-    HKAddTask := "CapsLock & a"
-    IniWrite, %HKAddTask%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKAddTask
-  }
-
-  Hotkey, %HKAddTask%, TriggerAddTask
-  SetHotkeys .= HKAddTask  
-  
-  IniRead, HKWork, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKWork
-
-  If (HKWork == "ERROR")
-  {
-    HKWork := "CapsLock & d"
-    IniWrite, %HKWork%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKWork
-  }
-
-  Hotkey, %HKWork%, TriggerWork
-  SetHotkeys .= HKWork  
-
-  IniRead, HKShowNextTasks, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKShowNextTasks
-
-  If (HKShowNextTasks == "ERROR")
-  {
-    HKShowNextTasks := "CapsLock & s"
-    IniWrite, %HKShowNextTasks%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKShowNextTasks
-  }
-
-  Hotkey, %HKShowNextTasks%, TriggerShowNextTasks
-  SetHotkeys .= HKShowNextTasks  
 
   IniRead, HKToggleAutostart, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKToggleAutostart
-
   If (HKToggleAutostart != "ERROR")
   {
     IniDelete, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKToggleAutostart
   }
 
-  IniRead, HKExport, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKExport
+  StartWithWindows := LoadSetting("StartWithWindows", "General", 0)
+  DoBackups := LoadSetting("DoBackups", "General", 1)
+  BackupsToKeep := LoadSetting("BackupsToKeep", "General", 10)
+  LastRoutine := LoadSetting("LastRoutine", "ReviewMode", Now)
+  StartRoutineAt := LoadSetting("StartRoutineAt", "ReviewMode", 6)
+  TasksPerPage := LoadSetting("TasksPerPage", "ForwardMode", 20)
+  CurrentTask := LoadSetting("CurrentTask", "General", 0)
+  ActionOnCurrentPass := LoadSetting("ActionOnCurrentPass", "General", 0)
+  CurrentPass := LoadSetting("CurrentPass", "General", 1)
+  ExpirationNew := LoadSetting("ExpirationNew", "DWM", 28)
+  ExpirationReAdd := LoadSetting("ExpirationReAdd", "DWM", 7)
+  HideOnLostFocus := LoadSetting("HideOnLostFocus", "GUI", 1)
+  GuiAlwaysOnTop := LoadSetting("AlwaysOnTop", "GUI", 1)
+  GuiHideTaskbarButton := LoadSetting("HideTaskbarButton", "GUI", 1)
 
-  If (HKExport == "ERROR")
-  {
-    HKExport := "CapsLock & e"
-    IniWrite, %HKExport%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKExport
-  }
+  SetHotkeys := ""
 
+  HKAddTask := LoadSetting("HKAddTask", "Hotkeys", "CapsLock & a")
+  Hotkey, %HKAddTask%, TriggerAddTask
+  SetHotkeys .= HKAddTask
+  
+  HKWork := LoadSetting("HKWork", "Hotkeys", "CapsLock & d")
+  Hotkey, %HKWork%, TriggerWork
+  SetHotkeys .= HKWork
+
+  HKShowNextTasks := LoadSetting("HKShowNextTasks", "Hotkeys", "CapsLock & s")
+  Hotkey, %HKShowNextTasks%, TriggerShowNextTasks
+  SetHotkeys .= HKShowNextTasks
+
+  HKExport := LoadSetting("HKExport", "Hotkeys", "CapsLock & e")
   Hotkey, %HKExport%, TriggerExport
-  SetHotkeys .= HKExport  
+  SetHotkeys .= HKExport
 
-  IniRead, HKPreferences, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKPreferences
-
-  If (HKPreferences == "ERROR")
-  {
-    HKPreferences := "CapsLock & p"
-    IniWrite, %HKPreferences%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKPreferences
-  }
-
+  HKPreferences := LoadSetting("HKPreferences", "Hotkeys", "CapsLock & p")
   Hotkey, %HKPreferences%, TriggerPreferences
-  SetHotkeys .= HKPreferences  
+  SetHotkeys .= HKPreferences
 
-  IniRead, HKReload, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKReload
-  If (HKReload == "ERROR")
-  {
-    HKReload := "CapsLock & r"
-    IniWrite, %HKReload%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKReload
-  }
-
+  HKReload := LoadSetting("HKReload", "Hotkeys", "CapsLock & r")
   Hotkey, %HKReload%, TriggerReload
-  SetHotkeys .= HKReload  
+  SetHotkeys .= HKReload
 
-  IniRead, HKSearch, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKSearch
-
-  If (HKSearch == "ERROR")
-  {
-    HKSearch := "CapsLock & f"
-    IniWrite, %HKSearch%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKSearch
-  }
-
+  HKSearch := LoadSetting("HKSearch", "Hotkeys", "CapsLock & f")
   Hotkey, %HKSearch%, TriggerSearch
+  SetHotkeys .= HKSearch
 
-  SetHotkeys .= HKSearch  
-
-  IniRead, HKQuit, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKQuit
-
-  If (HKQuit == "ERROR")
-  {
-    HKQuit := "CapsLock & q"
-    IniWrite, %HKQuit%, %A_ScriptDir%\%ApplicationName%.ini, HotKeys, HKQuit
-  }
-
+  HKQuit := LoadSetting("HKQuit", "Hotkeys", "CapsLock & q")
   Hotkey, %HKQuit%, TriggerQuit
   SetHotkeys .= HKQuit
   
   If (InStr(SetHotkeys,"CapsLock"))
   {
       SetTimer, CheckCapslock, 1000
-  }  
+  }
 
   If (FirstStart == 1)
   {
     ShowPreferences()
   }
-  
-  WriteToLog("Application", ApplicationName . " " . Ver . " initialized", 1)
-
 }
 
+LoadSetting(Setting, Section = "System", Default = "")
+{
+  Global ApplicationName
+
+  WriteToLog("Function", "Begin LoadSetting(" . Setting . ", " . Section . ", " . Default . ")", 1)
+  IniRead, Result, %A_ScriptDir%\%ApplicationName%.ini, %Section%, %Setting%
+
+  If (Result == "ERROR")
+  {
+    Result := Default
+    SaveSetting(Setting, Result, Section)
+  }
+
+  WriteToLog("Function", "End LoadSetting(" . Setting . ", " . Section . ", " . Default . "), Return: " . Result, -1)
+
+  Return Result
+}
+
+SaveSetting(Setting, Value, Section = "System")
+{
+  Global ApplicationName
+
+  WriteToLog("Function", "Begin SaveSetting(". Setting . ", " . Value . ", " . Section . ")", 1)
+  IniWrite, %Value%, %A_ScriptDir%\%ApplicationName%.ini, %Section%, %Setting%
+  WriteToLog("Function", "End SaveSetting(". Setting . ", " . Value . ", " . Section . ")", -1)
+}
 BackupTasks()
 {
   global DoBackups, BackupsToKeep
@@ -814,7 +681,7 @@ Export()
 
 WriteToLog(Type, Message, Increment = 0)
 {
-  global LogIndent
+  global LogFile, LogIndent
 
   If (Increment < 0)
   {
@@ -830,10 +697,23 @@ WriteToLog(Type, Message, Increment = 0)
 
   LogLine .= " [" . Type . "] " . Message
 
-  FileAppend, %LogLine%`n, %A_ScriptDir%\Log.txt
+  FileAppend, %LogLine%`n, %LogFile%
 
   If (Increment > 0)
   {
     LogIndent += Increment
   }
+}
+
+InitializeLog()
+{
+  global LogFile, LogIndent
+
+  If (!FileExist(A_ScriptDir . "\Logs"))
+  {
+    FileCreateDir, %A_ScriptDir%\Logs
+  }
+
+  LogFile := A_ScriptDir . "\Logs\" . A_Now . ".txt"
+  LogIndent := 0
 }

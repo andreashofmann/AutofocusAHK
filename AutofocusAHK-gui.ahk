@@ -962,31 +962,31 @@ ShowPreferences()
 
 SystemAF1:
   System := "AF1"
-  IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
+  SaveSetting("System", System, "General")
   LoadTasks()
 Return
 
 SystemAF2:
   System := "AF2"
-  IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
+  SaveSetting("System", System, "General")
   LoadTasks()
 Return
 
 SystemAF3:
   System := "AF3"
-  IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
+  SaveSetting("System", System, "General")
   LoadTasks()
 Return
 
 SystemAF4:
   System := "AF4"
-  IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
+  SaveSetting("System", System, "General")
   LoadTasks()
 Return
 
 SystemDWM:
   System := "DWM"
-  IniWrite, %System%, %A_ScriptDir%\%ApplicationName%.ini, General, System
+  SaveSetting("System", System, "General")
   LoadTasks()
 Return
 
@@ -995,14 +995,14 @@ AutostartCheckbox:
   {
     FileCreateShortcut, "%A_ScriptFullPath%", %A_Startup%\%ApplicationName%.lnk, %A_ScriptDir% 
     StartWithWindows := 1
-    IniWrite, 1, %A_ScriptDir%\%ApplicationName%.ini, General, StartWithWindows
   } 
   Else
   {
     FileDelete, %A_Startup%\%ApplicationName%.lnk
     StartWithWindows := 0
-    IniWrite, 0, %A_ScriptDir%\%ApplicationName%.ini, General, StartWithWindows
   }
+
+  SaveSetting("StartWithWindows", StartWithWindows, "General")
 Return
 
 BackupCheckbox:
@@ -1010,14 +1010,14 @@ BackupCheckbox:
   {
     FileCreateShortcut, "%A_ScriptFullPath%", %A_Startup%\%ApplicationName%.lnk, %A_ScriptDir% 
     DoBackups := 1
-    IniWrite, 1, %A_ScriptDir%\%ApplicationName%.ini, General, DoBackups
   } 
   Else
   {
     FileDelete, %A_Startup%\%ApplicationName%.lnk
     DoBackups := 0
-    IniWrite, 0, %A_ScriptDir%\%ApplicationName%.ini, General, DoBackups
   }
+
+  SaveSetting("DoBackups", DoBackups, "General")
 Return
 
 BackupEditBox:
@@ -1027,7 +1027,7 @@ BackupEditBox:
     Gui, Font
     GuiControl, Font, BackupEdit
     BackupsToKeep := PreBackupsToKeep
-    IniWrite, %BackupsToKeep%, %A_ScriptDir%\%ApplicationName%.ini, General, BackupsToKeep
+    SaveSetting("BackupsToKeep", BackupsToKeep, "General")
   }
   Else
   {

@@ -11,13 +11,14 @@ Initialize()
 {
   global
   
-  LogIndent := 0
-  
   ; Application Name
   ApplicationName := "AutofocusAHK"
   
   ; Version number that is displayed in GUI windows
   Ver := "0.9.5.2"
+
+  InitializeLog()
+  WriteToLog("Application", ApplicationName . " " . Ver . " started", 1)
 
   ; Is the user currently working on a task?
   Active := 0
@@ -68,9 +69,9 @@ SelectNextTask()
 
   WriteToLog("Function", "Begin SelectNextTask()", 1)
   %System%_SelectNextTask()
-  IniWrite, %CurrentTask%, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentTask
-  IniWrite, %CurrentPass%, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentPass
-  IniWrite, %ActionOnCurrentPass%, %A_ScriptDir%\%ApplicationName%.ini, General, ActionOnCurrentPass
+  SaveSetting("CurrentTask", CurrentTask, "General")
+  SaveSetting("CurrentPass", CurrentPass, "General")
+  SaveSetting("ActionOnCurrentPass", ActionOnCurrentPass, "General")
   WriteToLog("Function", "End SelectNextTask()", -1)
 }
 
@@ -154,7 +155,7 @@ DoMorningRoutine()
     SaveTasks()
     BackupTasks()
     LastRoutine := Now
-    IniWrite, %Now%, %A_ScriptDir%\%ApplicationName%.ini, ReviewMode, LastRoutine
+    SaveSetting("LastRoutine", Now, "ReviewMode")
     %System%_DoMorningRoutine()
     If (Tasks%CurrentTask%_4 == 1) 
     {
