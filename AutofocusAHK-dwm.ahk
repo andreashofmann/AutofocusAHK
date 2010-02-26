@@ -23,7 +23,7 @@ DWM_IsValidTask(TaskName, TaskStats)
   
   If (TaskName == "Change to review mode")
   {
-    If (CurrentTask > TaskIndex)
+    If (CurrentTask > 0 and CurrentTask > TaskIndex)
     {
       CurrentTask -= 1
     }
@@ -32,7 +32,7 @@ DWM_IsValidTask(TaskName, TaskStats)
   }
   Else If (TaskName == "Change to forward mode")
   {
-    If (CurrentTask > TaskIndex)
+    If (CurrentTask > 0 and CurrentTask > TaskIndex)
     {
       CurrentTask -= 1
     }
@@ -55,7 +55,7 @@ DWM_IsValidTask(TaskName, TaskStats)
         ListOfExpiredTasks .= TaskName . "`n"
       }
       
-      If (CurrentTask > TaskIndex)
+      If (CurrentTask > 0 and CurrentTask > TaskIndex)
       {
         CurrentTask -= 1
       }
@@ -65,7 +65,7 @@ DWM_IsValidTask(TaskName, TaskStats)
   }
   Else
   {
-    If (CurrentTask > TaskIndex)
+    If (CurrentTask > 0 and CurrentTask > TaskIndex)
     {
       CurrentTask -= 1
     }
@@ -92,7 +92,7 @@ DWM_PostTaskLoad()
     MsgBox, 0 , Expiration - %System% - %ApplicationName% %Ver%, The following tasks expired:`n`n%ListOfExpiredTasks%
     ListOfExpiredTasks := ""
   }
-
+  SaveTasks()
   WriteToLog("Function", "End DWM_PostTaskLoad()", -1)
 }
 
@@ -102,11 +102,11 @@ DWM_PostTaskAdd()
 
   WriteToLog("Function", "Begin DWM_PostTaskAdd()", 1)
   FormatTime, NewExpires, %Expires%, yyyyMMdd
-  NewTask_1 := Tasks%TaskCount%_1
-  NewTask_2 := Tasks%TaskCount%_2
-  NewTask_3 := Tasks%TaskCount%_3
-  NewTask_4 := Tasks%TaskCount%_4
-  NewTask_URL := Tasks%TaskCount%_URL
+  AddedTask_1 := Tasks%TaskCount%_1
+  AddedTask_2 := Tasks%TaskCount%_2
+  AddedTask_3 := Tasks%TaskCount%_3
+  AddedTask_4 := Tasks%TaskCount%_4
+  AddedTask_URL := Tasks%TaskCount%_URL
   Counter := TaskCount
 
   Loop, %TaskCount%
@@ -136,16 +136,19 @@ DWM_PostTaskAdd()
 
   If (OldCounter != TaskCount)
   {
-    Tasks%OldCounter%_1 := NewTask_1
-    Tasks%OldCounter%_2 := NewTask_2
-    Tasks%OldCounter%_3 := NewTask_3
-    Tasks%OldCounter%_4 := NewTask_4    
-    Tasks%OldCounter%_URL := NewTask_URL    
+    Tasks%OldCounter%_1 := AddedTask_1
+    Tasks%OldCounter%_2 := AddedTask_2
+    Tasks%OldCounter%_3 := AddedTask_3
+    Tasks%OldCounter%_4 := AddedTask_4    
+    Tasks%OldCounter%_URL := AddedTask_URL    
 
-    SaveTasks()
+    If (!IsLoadingTasks)
+    {
+      SaveTasks()
+    }
   }
 
-  If (Tasks%CurrentTask%_4 == 1)
+  If (CurrentTask < 0 or Tasks%CurrentTask%_4 == 1)
   {
     SelectNextTask()
   }

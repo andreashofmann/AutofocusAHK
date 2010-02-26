@@ -1,6 +1,7 @@
 History
 -------
-  Version 0.9.5.2 (2010-02-21)
+
+  Version 0.9.5.3 (2010-02-26)
     Tweaks:
       - Windows are always on top
       - Windows will close when they lose focus
@@ -9,6 +10,15 @@ History
     Fixed Bugs:
       - Sometimes, duplicated windows would appear
       - Expired tasks weren't immediately removed
+
+  Version 0.9.5.1.1 (2010-02-26)
+    - All changes of 0.9.5.2 removed until it's clear what caused the bug
+    - Resorts the list on load to fix the broken sort of 0.9.5.2
+    
+  Version 0.9.5.2 (2010-02-21)
+    CONTAINED A SERIOUS BUG
+    The sorting in DWM mode didn't work anymore, the tasks weren't in correct 
+    order, which lead to unexpected behavior.
 
   Version 0.9.5.1 (2010-02-18)
     Fixed Bugs:

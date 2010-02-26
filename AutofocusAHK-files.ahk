@@ -16,6 +16,7 @@ LoadTasks()
 
   TaskCount := 0
   UnactionedCount := 0
+  IsLoadingTasks := 1
 
   Loop, read, %A_ScriptDir%\Tasks.txt
   {
@@ -80,9 +81,11 @@ LoadTasks()
           Tasks%TaskCount%_2 .= " E" . Expires
         }
       }
+      %System%_PostTaskAdd()
     }
   }
 
+  IsLoadingTasks := 0
   %System%_PostTaskLoad()
   
   WriteToLog("Function", "End LoadTasks()", -1)
