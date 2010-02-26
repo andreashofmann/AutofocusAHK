@@ -9,6 +9,8 @@
 
 AF2_IsReviewOptional()
 {
+  WriteToLog("Function", "Begin AF2_IsReviewOptional()", 1)
+  WriteToLog("Function", "End AF2_IsReviewOptional(), Return: 1", -1)
   Return 1
 }
 
@@ -16,40 +18,48 @@ AF2_IsValidTask(TaskName, TaskStats, TaskIndex)
 {
   global
 
+  WriteToLog("Function", "Begin AF2_IsValidTask(" . TaskName . ", " . TaskStats . ", " . TaskIndex . ")", 1)
+  Result := 1
+  
   If (TaskName == "Change to review mode")
   {
     HasReviewModeTask := 1
-    Return 1
+  }
+  Else If (TaskName == "Change to forward mode")
+  {
+    Result := 0
+  }
+  Else If (TaskName == "---")
+  {
+    Result := 0
   }
 
-  If (TaskName == "Change to forward mode")
-  {
-    Return 0
-  }
+  WriteToLog("Function", "End AF2_IsValidTask(" . TaskName . ", " . TaskStats . ", " . TaskIndex . "), Return: " . Result, -1)
 
-  If (TaskName == "---")
-  {
-    Return 0
-  }  
-
-  Return 1
+  Return Result
 }
 
 AF2_PostTaskLoad()
 {
   global
 
+  WriteToLog("Function", "Begin AF2_PostTaskLoad()", 1)
   CurrentTask := TaskCount + 1
   SelectNextTask()
+  WriteToLog("Function", "End AF2_PostTaskLoad()", -1)
 }
 
 AF2_PostTaskAdd()
 {
+  WriteToLog("Function", "Begin AF2_PostTaskAdd()", 1)
+  WriteToLog("Function", "End AF2_PostTaskAdd()", -1)
 }
 
 AF2_SelectNextTask()
 {
   global
+
+  WriteToLog("Function", "Begin AF2_SelectNextTask()", 1)
 
   If (UnactionedCount > 0)
   {
@@ -68,11 +78,15 @@ AF2_SelectNextTask()
       }
     }
   }
+
+  WriteToLog("Function", "End AF2_SelectNextTask()", -1)
 }
 
 AF2_Work()
 {
   global
+
+  WriteToLog("Function", "Begin AF2_Work()", 1)
 
   If (CurrentMode == ReviewMode)
   {
@@ -82,29 +96,31 @@ AF2_Work()
   {
     ShowDoneWindow()
   }
+  Else If (UnactionedCount <= 0)
+  {
+    MsgBox No unactioned tasks!
+  }
   Else
   {
-    If (UnactionedCount <= 0)
-    {
-      MsgBox No unactioned tasks!
-
-      Return
-    }
-
     ShowWorkWindow()
   }
+
+  WriteToLog("Function", "End AF2_Work()", -1)
 }
 
 AF2_DoMorningRoutine()
 {
+  WriteToLog("Function", "Begin AF2_DoMorningRoutine()", 1)
   DismissTasks()
   PutTasksOnNotice()
+  WriteToLog("Function", "End AF2_DoMorningRoutine()", -1)
 }
 
 AF2_DismissTasks()
 {
   global
 
+  WriteToLog("Function", "Begin AF2_DismissTasks()", 1)
   Message := ""
 
   Loop %TaskCount%
@@ -136,24 +152,35 @@ AF2_DismissTasks()
   }
 
   SaveTasks()
+  WriteToLog("Function", "End AF2_DismissTasks()", -1)
 }
 
 AF2_GetWorkWindowTitle()
 {
+  WriteToLog("Function", "Begin AF2_GetWorkWindowTitle()", 1)
   Title .= "Work" . GetStandardWindowTitle()
+  WriteToLog("Function", "End AF2_GetWorkWindowTitle(), Return: " . Title, -1)
+
   Return Title
 }
 
 AF2_GetReviewWindowTitle()
 {
+  WriteToLog("Function", "Begin AF2_GetReviewWindowTitle()", 1)
   Title := "Review" . GetStandardWindowTitle()
+  WriteToLog("Function", "End AF2_GetReviewWindowTitle(), Return: " . Title, -1)
+
   Return Title
 }
 
 AF2_PreShowTaskname()
 {
+  WriteToLog("Function", "Begin AF2_PreShowTaskname()", 1)
+  WriteToLog("Function", "End AF2_PreShowTaskname()", -1)
 }
 
 AF2_PostShowTaskname()
 {
+  WriteToLog("Function", "Begin AF2_PostShowTaskname()", 1)
+  WriteToLog("Function", "End AF2_PostShowTaskname()", -1)
 }

@@ -9,38 +9,40 @@
 
 AF3_IsReviewOptional()
 {
-    Return 1
+  WriteToLog("Function", "Begin AF3_IsReviewOptional()", 1)
+  WriteToLog("Function", "End AF3_IsReviewOptional(), Return: 1", -1)
+  Return 1
 }
 
 AF3_IsValidTask(TaskName, TaskStats, TaskIndex)
 {
   global
 
+  WriteToLog("Function", "Begin AF3_IsValidTask(" . TaskName . ", " . TaskStats . ", " . TaskIndex . ")", 1)
+  Result := 1
+  
   If (TaskName == "Change to review mode")
   {
     HasReviewModeTask := 1
-
-    Return 1
   }
-
-  If (TaskName == "Change to forward mode")
+  Else If (TaskName == "Change to forward mode")
   {
     HasForwardModeTask := 1
-
-    Return 1
   }
-
-  If (TaskName == "---")
+  Else If (TaskName == "---")
   {
-    Return 0
+    Result := 0
   }
 
-  Return 1
+  WriteToLog("Function", "End AF3_IsValidTask(" . TaskName . ", " . TaskStats . ", " . TaskIndex . "), Return: " . Result, -1)
+  Return Result
 }
 
 AF3_PostTaskLoad()
 {
   global
+
+  WriteToLog("Function", "Begin AF3_PostTaskLoad()", 1)
 
   If (TaskCount >= TasksPerPage * 3 and HasForwardModeTask == 0)
   {
@@ -56,15 +58,20 @@ AF3_PostTaskLoad()
 
   CurrentTask := TaskCount + 1
   SelectNextTask()
+  WriteToLog("Function", "End AF3_PostTaskLoad()", -1)
 }
 
 AF3_PostTaskAdd()
 {
+  WriteToLog("Function", "Begin AF3_PostTaskAdd()", 1)
+  WriteToLog("Function", "End AF3_PostTaskAdd()", -1)
 }
 
 AF3_SelectNextTask()
 {
   global
+
+  WriteToLog("Function", "Begin AF3_SelectNextTask()", 1)
 
   If (UnactionedCount > 0)
   {
@@ -138,11 +145,15 @@ AF3_SelectNextTask()
       }
     }
   }
+
+  WriteToLog("Function", "End AF3_SelectNextTask()", -1)
 }
 
 AF3_Work()
 {
   global
+
+  WriteToLog("Function", "Begin AF3_Work()", 1)
 
   If (CurrentMode == ReviewMode)
   {
@@ -152,22 +163,23 @@ AF3_Work()
   {
     ShowDoneWindow()
   }
+  Else If (UnactionedCount <= 0)
+  {
+    MsgBox No unactioned tasks!
+  }
   Else
   {
-    If (UnactionedCount <= 0)
-    {
-      MsgBox No unactioned tasks!
-
-      Return
-    }
-
     ShowWorkWindow()
   }
+
+  WriteToLog("Function", "End AF3_Work()", -1)
 }
 
 SetForwardModeStats()
 {
   global
+
+  WriteToLog("Function", "Begin SetForwardModeStats()", 1)
 
   CurrentPage := Ceil(CurrentTask/TasksPerPage)
 
@@ -186,18 +198,23 @@ SetForwardModeStats()
       LastTaskOnPage := TaskCount
     }
   }
+
+  WriteToLog("Function", "End SetForwardModeStats()", -1)
 }
 
 AF3_DoMorningRoutine()
 {
+  WriteToLog("Function", "Begin AF3_DoMorningRoutine()", 1)
   DismissTasks()
   PutTasksOnNotice()
+  WriteToLog("Function", "End AF3_DoMorningRoutine()", -1)
 }
 
 AF3_DismissTasks()
 {
   global
 
+  WriteToLog("Function", "Begin AF3_DismissTasks()", 1)
   Message := ""
 
   Loop %TaskCount%
@@ -229,11 +246,14 @@ AF3_DismissTasks()
   }
 
   SaveTasks()
+  WriteToLog("Function", "End AF3_DismissTasks()", -1)
 }
 
 AF3_GetWorkWindowTitle()
 {
   Global CurrentMode, ForwardMode
+
+  WriteToLog("Function", "Begin AF3_GetWorkWindowTitle()", 1)
 
   If (CurrentMode == ForwardMode)
   {
@@ -245,22 +265,29 @@ AF3_GetWorkWindowTitle()
   }
 
   Title .= GetStandardWindowTitle()
+  WriteToLog("Function", "End AF3_GetWorkWindowTitle(), Return: " . Title, -1)
 
   Return Title
 }
 
 AF3_GetReviewWindowTitle()
 {
+  WriteToLog("Function", "Begin AF3_GetReviewWindowTitle()", 1)
   Title := "Review Mode"
   Title .= GetStandardWindowTitle()
+  WriteToLog("Function", "End AF3_GetReviewWindowTitle(), Return: " . Title, -1)
 
   Return Title
 }
 
 AF3_PreShowTaskname()
 {
+  WriteToLog("Function", "Begin AF3_PreShowTaskname()", 1)
+  WriteToLog("Function", "End AF3_PreShowTaskname()", -1)
 }
 
 AF3_PostShowTaskname()
 {
+  WriteToLog("Function", "Begin AF3_PostShowTaskname()", 1)
+  WriteToLog("Function", "End AF3_PostShowTaskname()", -1)
 }

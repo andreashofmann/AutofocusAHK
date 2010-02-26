@@ -9,6 +9,8 @@
 
 AF4_IsReviewOptional()
 {
+  WriteToLog("Function", "Begin AF4_IsReviewOptional()", 1)
+  WriteToLog("Function", "End AF4_IsReviewOptional(), Return: 0", -1)
   Return 0
 }
 
@@ -16,31 +18,36 @@ AF4_IsValidTask(TaskName, TaskStats, TaskIndex)
 {
   global
 
+  WriteToLog("Function", "Begin AF4_IsValidTask(" . TaskName . ", " . TaskStats . ", " . TaskIndex . ")", 1)
+  Result := 1
+
   If (TaskName == "Change to review mode")
   {
     If (CurrentTask > TaskIndex) CurrentTask -= CurrentTask
-    Return 0
+    Result :=  0
   }
-
-  If (TaskName == "Change to forward mode")
+  Else If (TaskName == "Change to forward mode")
   {
     If (CurrentTask > TaskIndex) CurrentTask -= CurrentTask
-    Return 0
+    Result :=  0
   }
-
-  If (TaskName == "---")
+  Else If (TaskName == "---")
   {
     HasClosedList := 1
     LastTaskInClosedList := TaskCount
-    Return 0
+    Result := 0
   }
 
-  Return 1
+  WriteToLog("Function", "End AF4_IsValidTask(" . TaskName . ", " . TaskStats . ", " . TaskIndex . "), Return: " . Result, -1)
+
+  Return Result
 }
 
 AF4_PostTaskLoad()
 {
   global
+
+  WriteToLog("Function", "Begin AF4_PostTaskLoad()", 1)
 
   If (TaskCount >= TasksPerPage and HasClosedList == 0)
   {
@@ -53,11 +60,15 @@ AF4_PostTaskLoad()
   {
     SelectNextTask()
   }
+
+  WriteToLog("Function", "End AF4_PostTaskLoad()", -1)
 }
 
 AF4_PostTaskAdd()
 {
   global
+
+  WriteToLog("Function", "Begin AF4_PostTaskAdd()", 1)
 
   If (TaskCount >= TasksPerPage and HasClosedList == 0)
   {
@@ -65,11 +76,15 @@ AF4_PostTaskAdd()
     LastTaskInClosedList := TaskCount
     SaveTasks()
   }
+
+  WriteToLog("Function", "End AF4_PostTaskAdd()", -1)
 }
 
 AF4_SelectNextTask()
 {
   global
+
+  WriteToLog("Function", "Begin AF4_SelectNextTask()", 1)
 
   If (UnactionedCount > 0 or HasTasksOnReview)
   {
@@ -127,12 +142,16 @@ AF4_SelectNextTask()
       }
     }
   }
+
+  WriteToLog("Function", "End AF4_SelectNextTask()", -1)
 }
 
 
 AF4_Work()
 {
   global
+
+  WriteToLog("Function", "Begin AF4_Work()", 1)
 
   If (CurrentMode == ReviewMode)
   {
@@ -142,28 +161,29 @@ AF4_Work()
   {
     ShowDoneWindow()
   }
+  Else If (UnactionedCount <= 0)
+  {
+    MsgBox No unactioned tasks!
+  }
   Else
   {
-    If (UnactionedCount <= 0)
-    {
-      MsgBox No unactioned tasks!
-      Return
-    }
-
     If (HasClosedList == 0)
     {
       HasClosedList := 1
       LastTaskInClosedList := TaskCount
       SaveTasks()
     }
-
     ShowWorkWindow()
   }
+
+  WriteToLog("Function", "End AF4_Work()", -1)
 }
 
 SetBacklogStats()
 {
   global
+
+  WriteToLog("Function", "Begin SetBacklogStats()", 1)
 
   CurrentPage := Ceil(CurrentTask/TasksPerPage)
 
@@ -182,18 +202,23 @@ SetBacklogStats()
       LastTaskOnPage := TaskCount
     }
   }
+
+  WriteToLog("Function", "End SetBacklogStats()", -1)
 }
 
 AF4_DoMorningRoutine()
 {
+  WriteToLog("Function", "Begin AF4_DoMorningRoutine()", 1)
   SaveTasks()
   BackupTasks()
+  WriteToLog("Function", "End AF4_DoMorningRoutine()", -1)
 }
 
 AF4_DismissTasks()
 {
   global
 
+  WriteToLog("Function", "Begin AF4_DismissTasks()", 1)
   Message := ""
 
   Loop
@@ -220,11 +245,14 @@ AF4_DismissTasks()
 
   LastTaskInClosedList := TaskCount
   SaveTasks()
+  WriteToLog("Function", "End AF4_DismissTasks()", -1)
 }
 
 AF4_GetWorkWindowTitle()
 {
   global CurrentTask,LastTaskInClosedList,CurrentPass,ActionOnCurrentPass
+
+  WriteToLog("Function", "Begin AF4_GetWorkWindowTitle()", 1)
 
   If (CurrentTask > LastTaskInClosedList)
   {
@@ -243,22 +271,29 @@ AF4_GetWorkWindowTitle()
   }
 
   Title .= GetStandardWindowTitle()
+  WriteToLog("Function", "End AF4_GetWorkWindowTitle(), Return: " . Title, -1)
 
   Return Title
 }
 
 AF4_GetReviewWindowTitle()
 {
+  WriteToLog("Function", "Begin AF4_GetReviewWindowTitle()", 1)
   Title := "Review"
   Title .= GetStandardWindowTitle()
+  WriteToLog("Function", "End AF4_GetReviewWindowTitle(), Return: " . Title, -1)
 
   Return Title
 }
 
 AF4_PreShowTaskname()
 {
+  WriteToLog("Function", "Begin AF4_PreShowTaskname()", 1)
+  WriteToLog("Function", "End AF4_PreShowTaskname()", -1)
 }
 
 AF4_PostShowTaskname()
 {
+  WriteToLog("Function", "Begin AF4_PostShowTaskname()", 1)
+  WriteToLog("Function", "End AF4_PostShowTaskname()", -1)
 }

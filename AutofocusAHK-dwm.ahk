@@ -9,6 +9,8 @@
 
 DWM_IsReviewOptional()
 {
+  WriteToLog("Function", "Begin DWM_IsReviewOptional()", 1)
+  WriteToLog("Function", "End DWM_IsReviewOptional()", 1)
   Return 0
 }
 
@@ -16,6 +18,9 @@ DWM_IsValidTask(TaskName, TaskStats)
 {
   global
 
+  WriteToLog("Function", "Begin DWM_IsValidTask(" . TaskName . ", " . TaskStats . ")", 1)
+  Result := 1
+  
   If (TaskName == "Change to review mode")
   {
     If (CurrentTask > TaskIndex)
@@ -23,28 +28,26 @@ DWM_IsValidTask(TaskName, TaskStats)
       CurrentTask -= 1
     }
 
-    Return 0
+    Result := 0
   }
-
-  If (TaskName == "Change to forward mode")
+  Else If (TaskName == "Change to forward mode")
   {
     If (CurrentTask > TaskIndex)
     {
       CurrentTask -= 1
     }
 
-    Return 0
+    Result := 0
   }
-
-  If (TaskName == "---")
+  Else If (TaskName == "---")
   {
-    Return 0
+    Result := 0
   }
-
-  If (ePos := InStr(TaskStats, "E"))
+  Else If (ePos := InStr(TaskStats, "E"))
   {
     Expires := SubStr(TaskStats, ePos + 1, 8)
     FormatTime, Today, , yyyyMMdd
+
     If (Today > Expires)
     {
       If (!InStr(TaskStats, "D"))
@@ -57,7 +60,7 @@ DWM_IsValidTask(TaskName, TaskStats)
         CurrentTask -= 1
       }
 
-      Return 0
+      Result := 0
     }
   }
   Else
@@ -67,16 +70,18 @@ DWM_IsValidTask(TaskName, TaskStats)
       CurrentTask -= 1
     }
 
-    Return 0
+    Result := 0
   }
 
-  Return 1
+  WriteToLog("Function", "End DWM_IsValidTask(" . TaskName . ", " . TaskStats . "), Result: " . Result, -1)
+  Return %Result%
 }
 
 DWM_PostTaskLoad()
 {
   global
 
+  WriteToLog("Function", "Begin DWM_PostTaskLoad()", 1)
   If (CurrentTask <= 0 or CurrentTask > TaskCount or Tasks%CurrentTask%_4 == 1)
   {
     SelectNextTask()
@@ -87,12 +92,15 @@ DWM_PostTaskLoad()
     MsgBox, 0 , Expiration - %System% - %ApplicationName% %Ver%, The following tasks expired:`n`n%ListOfExpiredTasks%
     ListOfExpiredTasks := ""
   }
+
+  WriteToLog("Function", "End DWM_PostTaskLoad()", -1)
 }
 
 DWM_PostTaskAdd()
 {
   global
 
+  WriteToLog("Function", "Begin DWM_PostTaskAdd()", 1)
   FormatTime, NewExpires, %Expires%, yyyyMMdd
   NewTask_1 := Tasks%TaskCount%_1
   NewTask_2 := Tasks%TaskCount%_2
@@ -141,11 +149,14 @@ DWM_PostTaskAdd()
   {
     SelectNextTask()
   }
+  WriteToLog("Function", "End DWM_PostTaskAdd()", -1)
 }
 
 DWM_SelectNextTask()
 {
   global
+
+  WriteToLog("Function", "Begin DWM_SelectNextTask()", 1)
 
   If (UnactionedCount > 0)
   {
@@ -172,38 +183,45 @@ DWM_SelectNextTask()
       }
     }
   }
+
+  WriteToLog("Function", "End DWM_SelectNextTask()", -1)
 }
 
 DWM_Work()
 {
   global
 
+  WriteToLog("Function", "Begin DWM_Work()", 1)
+
   If (Active == 1)
   {
     ShowDoneWindow()
   }
+  Else If (UnactionedCount <= 0)
+  {
+    MsgBox No unactioned tasks!
+  }
   Else
   {
-    If (UnactionedCount <= 0)
-    {
-      MsgBox No unactioned tasks!
-
-      Return
-    }
-
     ShowWorkWindow()
   }
+
+  WriteToLog("Function", "End DWM_Work()", -1)
 }
+
 
 DWM_DoMorningRoutine()
 {
+  WriteToLog("Function", "Begin DWM_DoMorningRoutine()", 1)
   LoadTasks()
+  WriteToLog("Function", "Begin DWM_DoMorningRoutine()", -1)
 }
 
 DWM_DismissTasks()
 {
   global
 
+  WriteToLog("Function", "Begin DWM_DismissTasks()", 1)
   Message := ""
 
   Loop
@@ -230,23 +248,28 @@ DWM_DismissTasks()
 
   LastTaskInClosedList := TaskCount
   SaveTasks()
+  WriteToLog("Function", "End DWM_DismissTasks()", -1)
 }
 
 DWM_GetWorkWindowTitle()
 {
   global CurrentExpires
 
+  WriteToLog("Function", "Begin DWM_GetWorkWindowTitle()", 1)
   GetCurrentMetadata()
   Title := "Work - Expires " . CurrentExpires
   Title .= GetStandardWindowTitle()
+  WriteToLog("Function", "End DWM_GetWorkWindowTitle(), Return: " . Title, -1)
 
   Return Title
 }
 
 DWM_GetReviewWindowTitle()
 {
+  WriteToLog("Function", "Begin DWM_GetReviewWindowTitle()", 1)
   Title := "Review"
   Title .= GetStandardWindowTitle()
+  WriteToLog("Function", "End DWM_GetReviewWindowTitle(), Return: " . Title, 1)
 
   Return Title
 }
@@ -255,6 +278,7 @@ DWM_PreShowTaskname()
 {
   global CurrentExpires
 
+  WriteToLog("Function", "Begin DWM_PreShowTaskname()", 1)
   GetCurrentMetadata()
 
   If (CurrentExpires = "Today")
@@ -265,13 +289,16 @@ DWM_PreShowTaskname()
   {
     Gui, Color, FFFFBB
   }
+  WriteToLog("Function", "End DWM_PreShowTaskname()", -1)
 }
 
 DWM_PostShowTaskname()
 {
   global
 
+  WriteToLog("Function", "Begin DWM_PostShowTaskname()", 1)
   GuiControl, Hide, TaskControl  
   GuiControl, +Background00FF00, TaskControl
   GuiControl, Show, TaskControl
+  WriteToLog("Function", "End DWM_PostShowTaskname()", -1)
 }

@@ -9,6 +9,8 @@
 
 SetupTrayMenu()
 {
+  WriteToLog("Function", "Begin SetupTrayMenu()", 1)
+
   ;; MENU CONSTRUCTION
 
   ; Remove AutoHotkey standard menu items
@@ -34,6 +36,8 @@ SetupTrayMenu()
 
   ; Make Add Task the default (if tray icon is double-clicked)
   menu, tray, default, About/Help
+
+  WriteToLog("Function", "End SetupTrayMenu()", -1)
 }
 
 AddTask:

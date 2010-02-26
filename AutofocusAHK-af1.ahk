@@ -9,6 +9,8 @@
 
 AF1_IsReviewOptional()
 {
+  WriteToLog("Function", "Begin AF1_IsReviewOptional()", 1)
+  WriteToLog("Function", "End AF1_IsReviewOptional(), Return: 1", -1)
   Return 1
 }
 
@@ -16,46 +18,53 @@ AF1_IsValidTask(TaskName, TaskStats, TaskIndex)
 {
   global
 
+  WriteToLog("Function", "AF1_IsValidTask(" . TaskName . ", " . TaskStats . ", " . TaskIndex . ")", 1)
+  Result := 1
+  
   If (TaskName == "Change to review mode")
   {
     HasReviewModeTask := 1
-
-    Return 1
   }
-
-  If (TaskName == "Change to forward mode")
+  Else If (TaskName == "Change to forward mode")
   {
     If (CurrentTask > TaskIndex) CurrentTask -= CurrentTask
 
-    Return 0
+    Result := 0
   }
-
-  If (TaskName == "---")
+  Else If (TaskName == "---")
   {
-    Return 0
+    Result := 0
   }
 
-  Return 1
+  WriteToLog("Function", "AF1_IsValidTask(" . TaskName . ", " . TaskStats . ", " . TaskIndex . "), Return: " . Result, -1)
+  Return %Result%
 }
 
 AF1_PostTaskLoad()
 {
   global
 
+  WriteToLog("Function", "Begin AF1_PostTaskLoad()", 1)
+
   If (CurrentTask == 0 or CurrentTask > TaskCount or Tasks%CurrentTask%_3 == 4)
   {
     SelectNextTask()
   }
+
+  WriteToLog("Function", "End AF1_PostTaskLoad()", -1)
 }
 
 AF1_PostTaskAdd()
 {
+  WriteToLog("Function", "Begin AF1_PostTaskAdd()", 1)
+  WriteToLog("Function", "End AF1_PostTaskAdd()", -1)
 }
 
 AF1_SelectNextTask()
 {
   global
 
+  WriteToLog("Function", "Begin AF1_SelectNextTask()", 1)
   If (UnactionedCount > 0)
   {
     Start := CurrentTask
@@ -100,11 +109,14 @@ AF1_SelectNextTask()
       }
     }
   }
+  WriteToLog("Function", "End AF1_SelectNextTask()", -1)
 }
 
 AF1_Work()
 {
   global
+
+  WriteToLog("Function", "Begin AF1_Work()", 1)
 
   If (CurrentMode == ReviewMode)
   {
@@ -114,27 +126,29 @@ AF1_Work()
   {
     ShowDoneWindow()
   }
+  Else If (UnactionedCount <= 0)
+  {
+    MsgBox No unactioned tasks!
+  }
   Else
   {
-    If (UnactionedCount <= 0)
-    {
-      MsgBox No unactioned tasks!
-
-      Return
-    }
-
     ShowWorkWindow()
   }
+
+  WriteToLog("Function", "End AF1_Work()", -1)
 }
 
 AF1_DoMorningRoutine()
 {
+  WriteToLog("Function", "Begin AF1_DoMorningRoutine()", 1)
+  WriteToLog("Function", "End AF1_DoMorningRoutine()", -1)
 }
 
 AF1_DismissTasks()
 {
   global
 
+  WriteToLog("Function", "Begin AF1_DismissTasks()", 1)
   Message := ""
   ToBeDismissed := FirstTaskOnPage
 
@@ -174,27 +188,36 @@ AF1_DismissTasks()
   }
 
   SaveTasks()
+  WriteToLog("Function", "End AF1_DismissTasks()", -1)
 }
 
 AF1_GetWorkWindowTitle()
 {
+  WriteToLog("Function", "Begin AF1_GetWorkWindowTitle()", 1)
   Title .= "Work" . GetStandardWindowTitle()
+  WriteToLog("Function", "End AF1_GetWorkWindowTitle(), Return: " . Title, -1)
 
   Return Title
 }
 
 AF1_GetReviewWindowTitle()
 {
+  WriteToLog("Function", "Begin AF1_GetReviewWindowTitle()", 1)
   Title := "Review"
   Title .= GetStandardWindowTitle()
+  WriteToLog("Function", "End AF1_GetReviewWindowTitle(), Return: " . Title, -1)
 
   Return Title
 }
 
 AF1_PreShowTaskname()
 {
+  WriteToLog("Function", "Begin AF1_PreShowTaskname()", 1)
+  WriteToLog("Function", "End AF1_PreShowTaskname()", -1)
 }
 
 AF1_PostShowTaskname()
 {
+  WriteToLog("Function", "Begin AF1_PostShowTaskname()", 1)
+  WriteToLog("Function", "End AF1_PostShowTaskname()", -1)
 }

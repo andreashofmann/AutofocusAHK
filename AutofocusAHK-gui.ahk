@@ -12,6 +12,7 @@ ShowNextTasks()
 {
   global
 
+  WriteToLog("Function", "Begin ShowNextTasks()", 1)
   SetTimer, ShowTasksFocus, Off
 
   If (UnactionedCount <= 0)
@@ -119,12 +120,15 @@ ShowNextTasks()
   {
     SetTimer, ShowTasksFocus, 500
   }
+
+  WriteToLog("Function", "End ShowNextTasks()", -1)
 }
 
 ShowAddTaskWindow()
 {
   global
 
+  WriteToLog("Function", "Begin ShowAddTaskWindow()", 1)
   SetTimer, AddTaskFocus, Off
   NewTaskDescription := ""
   OldClipboard := ClipBoardAll
@@ -195,10 +199,14 @@ ShowAddTaskWindow()
   {
     SetTimer, AddTaskFocus, 500
   }
+
+  WriteToLog("Function", "End ShowAddTaskWindow()", -1)
 }
 
 ToggleStartup()
 {
+  WriteToLog("Function", "Begin ToggleStartup()", 1)
+
   If (StartWithWindows)
   {
     Message := "Autostart is currently enabled."
@@ -224,12 +232,15 @@ ToggleStartup()
     StartWithWindows := 0
     IniWrite, 0, %A_ScriptDir%\%ApplicationName%.ini, General, StartWithWindows
   }
+
+  WriteToLog("Function", "End ToggleStartup()", -1)
 }
 
 ShowWorkWindow()
 {
   global
 
+  WriteToLog("Function", "Begin ShowWorkWindow()", 1)
   Gui, Destroy
   WinClose, ahk_group AutofocusAHKwork
 
@@ -300,6 +311,7 @@ ShowWorkWindow()
     SetTimer,WorkFocus, 500
   }
 
+  WriteToLog("Function", "End ShowWorkWindow()", -1)
 
   Return
 }
@@ -308,6 +320,7 @@ ShowDoneWindow()
 {
   global
 
+  WriteToLog("Function", "Begin ShowDoneWindow()", 1)
   SetTimer,UpdateTime,Off
   Gui, 2:Destroy
   WinClose, ahk_group AutofocusAHKstatus
@@ -376,6 +389,8 @@ ShowDoneWindow()
   GroupAdd, AutofocusAHKdone, Done - %ApplicationName% %Ver%
   GuiControl, Focus, YesButton
 
+  WriteToLog("Function", "End ShowDoneWindow()", -1)
+
   Return
 }
 
@@ -384,6 +399,7 @@ ShowReviewWindow()
 {
   global
 
+  WriteToLog("Function", "Begin ShowReviewWindow()", 1)
   Gui, Destroy
   WinClose, ahk_group AutofocusAHKreview
   WinClose, ahk_group AutofocusAHKwork
@@ -462,6 +478,8 @@ ShowReviewWindow()
     SetTimer, ReviewFocus, 500
   }
 
+  WriteToLog("Function", "End ShowReviewWindow()", -1)
+
   Return
 }
 
@@ -469,6 +487,7 @@ ShowStatusWindow()
 {
   global
 
+  WriteToLog("Function", "Begin ShowStatusWindow()", 1)
   Gui, 2:Destroy
   WinClose, ahk_group AutofocusAHKstatus
 
@@ -493,6 +512,7 @@ ShowStatusWindow()
   Gui, 2:Show, y0 xCenter AutoSize, Status - AutohotkeyAHK
   GroupAdd, AutofocusAHKstatus, Status - AutohotkeyAHK
   GuiControl, 2:Focus, StopButton
+  WriteToLog("Function", "End ShowStatusWindow()", -1)
 }
 
 ~Shift::
@@ -512,6 +532,8 @@ Return
 SelectNextReviewTask()
 {
   global
+
+  WriteToLog("Function", "Begin SelectNextReviewTask()", 1)
 
   Loop
   {
@@ -549,6 +571,8 @@ SelectNextReviewTask()
   }
 
   Work()
+
+  WriteToLog("Function", "End SelectNextReviewTask()", -1)
 }
 
 GuiClose:
@@ -890,6 +914,7 @@ ShowPreferences()
 {
   global
 
+  WriteToLog("Function", "Begin ShowPreferences()", 1)
   Gui, Destroy
   WinClose, ahk_group AutofocusAHKpreferences
   Gui, Font, Bold
@@ -929,6 +954,8 @@ ShowPreferences()
   Gui, -MaximizeBox -MinimizeBox
   Gui, Show, Center Autosize, Preferences - %ApplicationName% %Ver%
   GroupAdd, AutofocusAHKpreferences, Preferences - %ApplicationName% %Ver%
+
+  WriteToLog("Function", "End ShowPreferences()", -1)
 
   Return
 }
@@ -1014,6 +1041,7 @@ ShowSearchWindow()
 {
   global
 
+  WriteToLog("Function", "Begin ShowSearchWindow()", 1)
   NewUrl := CheckForBrowserUrl()
   Gui, 5:Destroy
   WinClose, ahk_group AutofocusAHKsearch
@@ -1050,6 +1078,7 @@ ShowSearchWindow()
   }
 
   LV_Modify(1, "Focus Select Vis")
+  WriteToLog("Function", "End ShowSearchWindow()", -1)
 }
 
 EditSearch:

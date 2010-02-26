@@ -9,7 +9,9 @@
 
 Initialize()
 {
-  global 
+  global
+  
+  LogIndent := 0
   
   ; Application Name
   ApplicationName := "AutofocusAHK"
@@ -38,11 +40,11 @@ Initialize()
   ; Does a closed list exist?
   HasClosedList := 0
 
-  ; Setup tray menu
-  SetupTrayMenu()
-
   ; Load configuration form AutofocusAHK.ini
   LoadConfig()
+  
+  ; Setup tray menu
+  SetupTrayMenu()
 
   ; Load tasks from Tasks.txt
   LoadTasks()
@@ -55,23 +57,28 @@ Work()
 {
   global System
 
+  WriteToLog("Function", "Begin Work()", 1)
   %System%_Work()
+  WriteToLog("Function", "End Work()", -1)
 }
 
 SelectNextTask()
 {
   global System, CurrentTask,CurrentPass,ActionOnCurrentPass,ApplicationName
 
+  WriteToLog("Function", "Begin SelectNextTask()", 1)
   %System%_SelectNextTask()
   IniWrite, %CurrentTask%, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentTask
   IniWrite, %CurrentPass%, %A_ScriptDir%\%ApplicationName%.ini, General, CurrentPass
   IniWrite, %ActionOnCurrentPass%, %A_ScriptDir%\%ApplicationName%.ini, General, ActionOnCurrentPass
+  WriteToLog("Function", "End SelectNextTask()", -1)
 }
 
 ReAddTask()
 {
   global
 
+  WriteToLog("Function", "Begin ReAddTask()", 1)
   TaskCount := TaskCount + 1
   UnactionedCount := UnactionedCount + 1
   GuiControlGet,RephraseBoxContent,,RephraseBox
@@ -114,12 +121,14 @@ ReAddTask()
   Tasks%Taskcount%_4 := 0
   MarkAsDone()
   %System%_PostTaskAdd()
+  WriteToLog("Function", "End ReAddTask()", -1)
 }
 
 MarkAsDone()
 {
   global
 
+  WriteToLog("Function", "Begin MarkAsDone()", 1)
   Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . " D" . A_Now . " T" . TimePassed
   Tasks%CurrentTask%_4 := 1
   UnactionedCount := UnactionedCount - 1
@@ -131,12 +140,14 @@ MarkAsDone()
   }
 
   SelectNextTask()
+  WriteToLog("Function", "End MarkAsDone()", -1)
 }
 
 DoMorningRoutine()
 {
   global
 
+  WriteToLog("Function", "Begin DoMorningRoutine()", 1)
   if (((Now - LastRoutine) == 1 and (Hour - StartRoutineAt) >= 0) or (Now - LastRoutine) > 1)
   {
     CheckTicklers()
@@ -148,20 +159,24 @@ DoMorningRoutine()
     If (Tasks%CurrentTask%_4 == 1) 
     {
       SelectNextTask()
-    }  }
+    }
+  }
 
-
+  WriteToLog("Function", "End DoMorningRoutine()", -1)
 }
 
 DismissTasks()
 {
+  WriteToLog("Function", "Begin DismissTasks()", 1)
   %System%_DismissTasks()
+  WriteToLog("Function", "End DismissTasks()", -1)
 }
 
 PutTasksOnNotice()
 {
   global
 
+  WriteToLog("Function", "Begin PutTasksOnNotice()", 1)
   BlockStarted := 0
   Message := ""
 
@@ -195,20 +210,26 @@ PutTasksOnNotice()
   {
     MsgBox The following tasks are now on notice for review:`n`n%Message%
   }
+
+  WriteToLog("Function", "End PutTasksOnNotice()", -1)
 }
 
 DoReview()
 {
   global
 
+  WriteToLog("Function", "Begin DoReview()", 1)
   ReviewComplete := 1
   ReviewTask := 0
   SelectNextReviewTask()
+  WriteToLog("Function", "End DoReview()", -1)
 }
 
 SelectNextActivePage()
 {
   global
+
+  WriteToLog("Function", "Begin SelectNextActivePage()", 1)
 
   If (UnactionedCount > 0)
   {
@@ -225,23 +246,28 @@ SelectNextActivePage()
     SetForwardModeStats()
     CurrentTask := FirstTaskOnPage - 1
   }
+
+  WriteToLog("Function", "End SelectNextActivePage()", -1)
 }
 
 GetCurrentMetadata()
 {
   global
 
+  WriteToLog("Function", "Begin GetCurrentMetadata()", 1)
   GetTaskMetadata(CurrentTask)
   CurrentDone := TaskDone
   CurrentReview := TaskReview
   CurrentAdded := TaskAdded
   CurrentExpires := TaskExpires
+  WriteToLog("Function", "End GetCurrentMetadata()", -1)
 }
 
 GetTaskMetadata(Task)
 {
   global
 
+  WriteToLog("Function", "Begin GetTaskMetadata(" . Task . ")", 1)
   TaskDone := ""
   TaskReview := ""
   TaskAdded := ""
@@ -286,6 +312,7 @@ GetTaskMetadata(Task)
       }
     }
   }
+  WriteToLog("Function", "End GetTaskMetadata(" . Task . ")", -1)
 }
 
 MorningRoutine:
@@ -309,6 +336,7 @@ Return
 
 CheckForBrowserUrl()
 {
+  WriteToLog("Function", "Begin CheckForBrowserUrl()", 1)
   Url := ""
   WinGetActiveTitle, BrowserTitle
 
@@ -331,6 +359,7 @@ CheckForBrowserUrl()
     Url := Clipboard 
   } 
 
+  WriteToLog("Function", "End CheckForBrowserUrl(), Return: " . Url, -1)
   Return Url  
 }
 
@@ -338,6 +367,7 @@ AddTask(Description, Notes, Url, TickleDate)
 {
   global
 
+  WriteToLog("Function", "Begin AddTask(" . Description . ", " . Notes . ", " . Url . ", " . TickleDate . ")", 1)
   FormatTime, today, ,yyyyMMdd
   TaskCount := TaskCount + 1
 
@@ -371,12 +401,14 @@ AddTask(Description, Notes, Url, TickleDate)
   Tasks%Taskcount%_4 := 0
   %System%_PostTaskAdd()
   SaveTasks()
+  WriteToLog("Function", "End AddTask(" . Description . ", " . Notes . ", " . Url . ", " . TickleDate . ")", -1)
 }
 
 CheckTicklers()
 {
   global
 
+  WriteToLog("Function", "Begin CheckTicklers()", 1)
   Loop, %TaskCount%
   {
     If (TicklePos := InStr(Tasks%A_Index%_2, "S"))
@@ -390,4 +422,5 @@ CheckTicklers()
       }
     }
   }
+  WriteToLog("Function", "End CheckTicklers()", -1)
 }

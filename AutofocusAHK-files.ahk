@@ -12,6 +12,8 @@ LoadTasks()
 {
   global
 
+  WriteToLog("Function", "Begin LoadTasks()", 1)
+
   TaskCount := 0
   UnactionedCount := 0
 
@@ -82,12 +84,16 @@ LoadTasks()
   }
 
   %System%_PostTaskLoad()
+  
+  WriteToLog("Function", "End LoadTasks()", -1)
 }
 
 ; Save tasks to file Tasks.txt
 SaveTasks()
 {
   global
+
+  WriteToLog("Function", "Begin SaveTasks()", 1)
 
   Content := ""
 
@@ -105,6 +111,7 @@ SaveTasks()
 
   FileDelete, %A_ScriptDir%\Tasks.txt
   FileAppend, %Content%, %A_ScriptDir%\Tasks.txt
+  WriteToLog("Function", "End SaveTasks()", -1)
 }
 
 ; Load configuration from AutofocusAHK.ini
@@ -348,11 +355,16 @@ LoadConfig()
   {
     ShowPreferences()
   }
+  
+  WriteToLog("Application", ApplicationName . " " . Ver . " initialized", 1)
+
 }
 
 BackupTasks()
 {
   global DoBackups, BackupsToKeep
+
+  WriteToLog("Function", "Begin BackupTasks()", 1)
 
   If (DoBackups)
   {
@@ -395,11 +407,15 @@ BackupTasks()
       }
     }
   }
+
+  WriteToLog("Function", "End BackupTasks()", -1)
 }
 
 Export()
 {
   global
+
+  WriteToLog("Function", "Begin Export()", 1)
 
   If (!FileExist(A_ScriptDir . "\Export"))
   {
@@ -792,5 +808,32 @@ Export()
   Export .= "</body></html>"
   FileDelete, %A_ScriptDir%\Export\Tasks-%ExportTime%.html
   FileAppend, %Export%, %A_ScriptDir%\Export\Tasks-%ExportTime%.html 
-  Run, %A_ScriptDir%\Export\Tasks-%ExportTime%.html 
+  Run, %A_ScriptDir%\Export\Tasks-%ExportTime%.html
+  WriteToLog("Function", "End Export()", -1)
+}
+
+WriteToLog(Type, Message, Increment = 0)
+{
+  global LogIndent
+
+  If (Increment < 0)
+  {
+    LogIndent += Increment
+  }
+
+  FormatTime, LogLine, , yyyy-MM-dd HH:mm:ss
+  
+  Loop, %LogIndent%
+  {
+    LogLine .= "  "
+  }
+
+  LogLine .= " [" . Type . "] " . Message
+
+  FileAppend, %LogLine%`n, %A_ScriptDir%\Log.txt
+
+  If (Increment > 0)
+  {
+    LogIndent += Increment
+  }
 }
