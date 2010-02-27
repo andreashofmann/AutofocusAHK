@@ -1,7 +1,8 @@
 
+*.ini
+*.zip
 /Tasks.txt
 /AutofocusAHK.exe
-/AutofocusAHK.ini
 /Backups/*
 /Export/*
-*.zip
+/Logs/*
