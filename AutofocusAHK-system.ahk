@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.5.2
+; @version   0.9.5.3
 ; @since     0.9
 
 Initialize()
@@ -15,7 +15,7 @@ Initialize()
   ApplicationName := "AutofocusAHK"
   
   ; Version number that is displayed in GUI windows
-  Ver := "0.9.5.2"
+  Ver := "0.9.5.3"
 
   InitializeLog()
   WriteToLog("Application", ApplicationName . " " . Ver . " started", 1)
@@ -82,6 +82,7 @@ ReAddTask()
   global
 
   WriteToLog("Function", "Begin ReAddTask()", 1)
+  RessourceTasksWriteAccess += 1
   TaskCount := TaskCount + 1
   UnactionedCount := UnactionedCount + 1
   GuiControlGet,RephraseBoxContent,,RephraseBox
@@ -100,28 +101,12 @@ ReAddTask()
   Expires += %ExpirationReAdd%, days
   Tasks%Taskcount%_2 := "A" . Added . " E" . Expires
   GuiControlGet,ShowNotesBoxContent,,ShowNotesBox
-
-  If (ShowNotesBoxContent)
-  {
-    Tasks%Taskcount%_3 := ShowNotesBoxContent
-  }
-  Else
-  {
-    Tasks%Taskcount%_3 := Tasks%CurrentTask%_3
-  }
-
+  Tasks%Taskcount%_3 := ShowNotesBoxContent
   GuiControlGet,ShowUrlBoxContent,,ShowUrlBox
-
-  If (ShowUrlBoxContent)
-  {
-    Tasks%Taskcount%_URL := ShowUrlBoxContent ;Tasks%CurrentTask%_3
-  }
-  Else
-  {
-    Tasks%Taskcount%_URL := Tasks%CurrentTask%_URL
-  }
-
+  Tasks%Taskcount%_URL := ShowUrlBoxContent ;Tasks%CurrentTask%_3
+  Tasks%Taskcount%_URL := Tasks%CurrentTask%_URL
   Tasks%Taskcount%_4 := 0
+  RessourceTasksWriteAccess -= 1
   MarkAsDone()
   %System%_PostTaskAdd()
   WriteToLog("Function", "End ReAddTask()", -1)
