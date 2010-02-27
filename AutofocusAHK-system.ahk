@@ -20,6 +20,8 @@ Initialize()
   InitializeLog()
   WriteToLog("Application", ApplicationName . " " . Ver . " started", 1)
 
+  RessourceTasksWriteAccess := 0
+  
   ; Is the user currently working on a task?
   Active := 0
 
@@ -130,9 +132,11 @@ MarkAsDone()
   global
 
   WriteToLog("Function", "Begin MarkAsDone()", 1)
+  RessourceTasksWriteAccess += 1
   Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . " D" . A_Now . " T" . TimePassed
   Tasks%CurrentTask%_4 := 1
   UnactionedCount := UnactionedCount - 1
+  RessourceTasksWriteAccess -= 1
   SaveTasks()
 
   If (System == "AF2" or (System == "AF3" and CurrentMode == ReverseMode))
@@ -369,6 +373,7 @@ AddTask(Description, Notes, Url, TickleDate)
   global
 
   WriteToLog("Function", "Begin AddTask(" . Description . ", " . Notes . ", " . Url . ", " . TickleDate . ")", 1)
+  RessourceTasksWriteAccess += 1
   FormatTime, today, ,yyyyMMdd
   TaskCount := TaskCount + 1
 
@@ -401,6 +406,7 @@ AddTask(Description, Notes, Url, TickleDate)
   Tasks%Taskcount%_URL := Url
   Tasks%Taskcount%_4 := 0
   %System%_PostTaskAdd()
+  RessourceTasksWriteAccess -= 1
   SaveTasks()
   WriteToLog("Function", "End AddTask(" . Description . ", " . Notes . ", " . Url . ", " . TickleDate . ")", -1)
 }

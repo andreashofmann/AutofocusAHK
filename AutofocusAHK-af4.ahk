@@ -219,6 +219,7 @@ AF4_DismissTasks()
   global
 
   WriteToLog("Function", "Begin AF4_DismissTasks()", 1)
+  RessourceTasksWriteAccess += 1
   Message := ""
 
   Loop
@@ -244,6 +245,7 @@ AF4_DismissTasks()
   }
 
   LastTaskInClosedList := TaskCount
+  RessourceTasksWriteAccess -= 1
   SaveTasks()
   WriteToLog("Function", "End AF4_DismissTasks()", -1)
 }

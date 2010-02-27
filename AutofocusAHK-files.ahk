@@ -16,7 +16,7 @@ LoadTasks()
 
   TaskCount := 0
   UnactionedCount := 0
-  IsLoadingTasks := 1
+  RessourceTasksWriteAccess += 1
 
   Loop, read, %A_ScriptDir%\Tasks.txt
   {
@@ -85,7 +85,7 @@ LoadTasks()
     }
   }
 
-  IsLoadingTasks := 0
+  RessourceTasksWriteAccess -= 1
   %System%_PostTaskLoad()
   
   WriteToLog("Function", "End LoadTasks()", -1)
@@ -98,22 +98,31 @@ SaveTasks()
 
   WriteToLog("Function", "Begin SaveTasks()", 1)
 
-  Content := ""
-
-  Loop %TaskCount%
+  If (RessourceTasksWriteAccess == 0)
   {
-    StringReplace, NotesToBeSaved, Tasks%A_Index%_3,%A_Tab%,\t, All
-    StringReplace, NotesToBeSaved, NotesToBeSaved,`n,\n, All
-    Content := Content . Tasks%A_Index%_1 . A_Tab . Tasks%A_Index%_2 . A_Tab . NotesToBeSaved . A_Tab . Tasks%A_Index%_URL . "`n"
-
-    If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList)
+    WriteToLog("Ressource", "Tasks can be saved")
+    Content := ""
+  
+    Loop %TaskCount%
     {
-      Content := Content . "---`n"    
+      StringReplace, NotesToBeSaved, Tasks%A_Index%_3,%A_Tab%,\t, All
+      StringReplace, NotesToBeSaved, NotesToBeSaved,`n,\n, All
+      Content := Content . Tasks%A_Index%_1 . A_Tab . Tasks%A_Index%_2 . A_Tab . NotesToBeSaved . A_Tab . Tasks%A_Index%_URL . "`n"
+  
+      If (System == "AF4" and HasClosedList and A_Index == LastTaskInClosedList)
+      {
+        Content := Content . "---`n"    
+      }
     }
+  
+    FileDelete, %A_ScriptDir%\Tasks.txt
+    FileAppend, %Content%, %A_ScriptDir%\Tasks.txt
+  }
+  Else
+  {
+    WriteToLog("Ressource", "Tasks can not be saved")
   }
 
-  FileDelete, %A_ScriptDir%\Tasks.txt
-  FileAppend, %Content%, %A_ScriptDir%\Tasks.txt
   WriteToLog("Function", "End SaveTasks()", -1)
 }
 

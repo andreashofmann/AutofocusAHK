@@ -46,6 +46,7 @@ AF3_PostTaskLoad()
 
   If (TaskCount >= TasksPerPage * 3 and HasForwardModeTask == 0)
   {
+      RessourceTasksWriteAccess += 1
       TaskCount := TaskCount + 1
       UnactionedCount := UnactionedCount + 1
       Tasks%Taskcount%_1 := "Change to forward mode"
@@ -53,6 +54,7 @@ AF3_PostTaskLoad()
       Tasks%Taskcount%_3 := ""
       Tasks%Taskcount%_4 := 0
       HasForwardModeTask := 1
+      RessourceTasksWriteAccess -= 1
       SaveTasks()
   }
 
@@ -116,6 +118,7 @@ AF3_SelectNextTask()
           {
             If (CurrentPass == 1)
             {
+              RessourceTasksWriteAccess += 1
               CurrentMode := ReverseMode
               TaskCount := TaskCount + 1
               UnactionedCount := UnactionedCount + 1
@@ -124,6 +127,7 @@ AF3_SelectNextTask()
               Tasks%Taskcount%_3 := ""
               Tasks%Taskcount%_4 := 0
               HasForwardModeTask := 1
+              RessourceTasksWriteAccess -= 1
               SaveTasks()
               CurrentTask := TaskCount + 1
               SelectNextTask()
@@ -215,6 +219,7 @@ AF3_DismissTasks()
   global
 
   WriteToLog("Function", "Begin AF3_DismissTasks()", 1)
+  RessourceTasksWriteAccess += 1
   Message := ""
 
   Loop %TaskCount%
@@ -245,6 +250,7 @@ AF3_DismissTasks()
     }
   }
 
+  RessourceTasksWriteAccess -= 1
   SaveTasks()
   WriteToLog("Function", "End AF3_DismissTasks()", -1)
 }

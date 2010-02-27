@@ -121,6 +121,7 @@ AF2_DismissTasks()
   global
 
   WriteToLog("Function", "Begin AF2_DismissTasks()", 1)
+  RessourceTasksWriteAccess += 1
   Message := ""
 
   Loop %TaskCount%
@@ -151,6 +152,7 @@ AF2_DismissTasks()
     }
   }
 
+  RessourceTasksWriteAccess -= 1
   SaveTasks()
   WriteToLog("Function", "End AF2_DismissTasks()", -1)
 }

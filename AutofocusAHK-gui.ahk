@@ -630,6 +630,7 @@ ButtonReady:
   }
   Else If (Tasks%CurrentTask%_1 == "Change to forward mode")
   {
+    RessourceTasksWriteAccess += 1
     Active := 0
     CurrentMode := ForwardMode
     CurrentPass := 1
@@ -637,6 +638,7 @@ ButtonReady:
     Tasks%CurrentTask%_2 := Tasks%CurrentTask%_2 . " D" . A_Now
     Tasks%CurrentTask%_4 := 1
     UnactionedCount := UnactionedCount - 1
+    RessourceTasksWriteAccess -= 1
     SaveTasks()
     CurrentTask := 1
     SelectNextActivePage()
@@ -762,6 +764,7 @@ ButtonStop:
 Return
 
 ButtonReviewYes:
+  RessourceTasksWriteAccess += 1
   Tasks%ReviewTask%_2 := Tasks%ReviewTask%_2 . " D" . A_Now
   Tasks%ReviewTask%_4 := 1
   TaskCount := TaskCount + 1
@@ -799,6 +802,7 @@ ButtonReviewYes:
   }
 
   Tasks%Taskcount%_4 := 0
+  RessourceTasksWriteAccess -= 1
   SaveTasks()
   SelectNextReviewTask()
 Return

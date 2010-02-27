@@ -14,7 +14,7 @@ DWM_IsReviewOptional()
   Return 0
 }
 
-DWM_IsValidTask(TaskName, TaskStats)
+DWM_IsValidTask(TaskName, TaskStats, TaskIndeX)
 {
   global
 
@@ -101,7 +101,7 @@ DWM_PostTaskAdd()
   global
 
   WriteToLog("Function", "Begin DWM_PostTaskAdd()", 1)
-  FormatTime, NewExpires, %Expires%, yyyyMMdd
+  NewExpires := SubStr(Tasks%TaskCount%_2, ePos + 1, 8)
   AddedTask_1 := Tasks%TaskCount%_1
   AddedTask_2 := Tasks%TaskCount%_2
   AddedTask_3 := Tasks%TaskCount%_3
@@ -109,6 +109,7 @@ DWM_PostTaskAdd()
   AddedTask_URL := Tasks%TaskCount%_URL
   Counter := TaskCount
 
+  RessourceTasksWriteAccess += 1
   Loop, %TaskCount%
   {
     OldCounter := Counter
@@ -122,30 +123,35 @@ DWM_PostTaskAdd()
     ePos := InStr(Tasks%Counter%_2, "E")
     Expires := SubStr(Tasks%Counter%_2, ePos + 1, 8)
 
+    LogMessage := NewExpires . " >= " .  Expires . " ? "
     If (NewExpires >= Expires)
     {
+      LogMessage .= "Yes, drop task at position " . OldCounter
+      WriteToLog("Variable", LogMessage)
       Break
     }
 
+    LogMessage .= "No"
+    WriteToLog("Variable", LogMessage)
     Tasks%OldCounter%_1 := Tasks%Counter%_1
     Tasks%OldCounter%_2 := Tasks%Counter%_2
     Tasks%OldCounter%_3 := Tasks%Counter%_3
     Tasks%OldCounter%_4 := Tasks%Counter%_4 
     Tasks%OldCounter%_URL := Tasks%Counter%_URL 
   }
+  RessourceTasksWriteAccess -= 1
 
   If (OldCounter != TaskCount)
   {
+    RessourceTasksWriteAccess += 1
     Tasks%OldCounter%_1 := AddedTask_1
     Tasks%OldCounter%_2 := AddedTask_2
     Tasks%OldCounter%_3 := AddedTask_3
     Tasks%OldCounter%_4 := AddedTask_4    
     Tasks%OldCounter%_URL := AddedTask_URL    
+    RessourceTasksWriteAccess -= 1
 
-    If (!IsLoadingTasks)
-    {
-      SaveTasks()
-    }
+    SaveTasks()
   }
 
   If (CurrentTask < 0 or Tasks%CurrentTask%_4 == 1)
@@ -164,6 +170,8 @@ DWM_SelectNextTask()
   If (UnactionedCount > 0)
   {
     Start := CurrentTask
+
+    RessourceTasksWriteAccess += 1
 
     Loop
     {
@@ -185,6 +193,8 @@ DWM_SelectNextTask()
         Break
       }
     }
+
+    RessourceTasksWriteAccess -= 1
   }
 
   WriteToLog("Function", "End DWM_SelectNextTask()", -1)
@@ -227,6 +237,8 @@ DWM_DismissTasks()
   WriteToLog("Function", "Begin DWM_DismissTasks()", 1)
   Message := ""
 
+  RessourceTasksWriteAccess += 1
+
   Loop
   {
     If (A_Index > LastTaskInClosedList)
@@ -242,6 +254,8 @@ DWM_DismissTasks()
       Message := Message . "- " . Tasks%A_Index%_1 . "`n"
     }
   }
+
+  RessourceTasksWriteAccess -= 1
 
   If (Message != "")
   {

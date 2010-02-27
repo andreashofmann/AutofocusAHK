@@ -149,6 +149,7 @@ AF1_DismissTasks()
   global
 
   WriteToLog("Function", "Begin AF1_DismissTasks()", 1)
+  RessourceTasksWriteAccess += 1
   Message := ""
   ToBeDismissed := FirstTaskOnPage
 
@@ -187,6 +188,7 @@ AF1_DismissTasks()
     }
   }
 
+  RessourceTasksWriteAccess -= 1
   SaveTasks()
   WriteToLog("Function", "End AF1_DismissTasks()", -1)
 }
