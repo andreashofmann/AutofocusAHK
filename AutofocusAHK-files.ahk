@@ -693,35 +693,40 @@ Export()
 
 WriteToLog(Type, Message, Increment = 0)
 {
-  global LogFile, LogIndent
+  global LogFile, LogIndent, SettingDebugLoggingEnabled
 
-  If (Increment < 0)
+  If (SettingDebugLoggingEnabled)
   {
-    LogIndent += Increment
-  }
+    If (Increment < 0)
+    {
+      LogIndent += Increment
+    }
 
-  FormatTime, LogLine, , yyyy-MM-dd HH:mm:ss
-  
-  Loop, %LogIndent%
-  {
-    LogLine .= "  "
-  }
+    FormatTime, LogLine, , yyyy-MM-dd HH:mm:ss
+    
+    Loop, %LogIndent%
+    {
+      LogLine .= "  "
+    }
 
-  LogLine .= " [" . Type . "] " . Message
+    LogLine .= " [" . Type . "] " . Message
 
-  FileAppend, %LogLine%`n, %LogFile%
+    FileAppend, %LogLine%`n, %LogFile%
 
-  If (Increment > 0)
-  {
-    LogIndent += Increment
+    If (Increment > 0)
+    {
+      LogIndent += Increment
+    }
   }
 }
 
 InitializeLog()
 {
-  global LogFile, LogIndent
+  global LogFile, LogIndent, SettingDebugLoggingEnabled
 
-  If (!FileExist(A_ScriptDir . "\Logs"))
+  SettingDebugLoggingEnabled := LoadSetting("LoggingEnabled", "Debug", 0)
+
+  If (SettingDebugLoggingEnabled and !FileExist(A_ScriptDir . "\Logs"))
   {
     FileCreateDir, %A_ScriptDir%\Logs
   }
