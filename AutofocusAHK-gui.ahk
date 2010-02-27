@@ -294,7 +294,7 @@ ShowWorkWindow()
   StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
   Gui, Add, Edit,xm Hidden ReadOnly T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
   Gui, Add, Text, xm Hidden vShowUrlBoxLabel, URL:
-  Gui, Add, Edit,xm Hidden ReadOnly T8 default vShowUrlBox, % Tasks%CurrentTask%_URL
+  Gui, Add, Edit,xm Hidden ReadOnly T8 r1 vShowUrlBox, % Tasks%CurrentTask%_URL
 
   If (GuiAlwaysOnTop)
   {
@@ -591,19 +591,9 @@ GuiNotesClose:
 GuiNotesEscape:
   GuiControl, 2:Enable, StatusNotesButton
   GuiControlGet,ShowNotesBoxContent,,ShowStatusNotesBox
-
-  If (ShowNotesBoxContent)
-  {
-        Tasks%CurrentTask%_3 := ShowNotesBoxContent
-  }
-
+  Tasks%CurrentTask%_3 := ShowNotesBoxContent
   GuiControlGet,ShowUrlBoxContent,,ShowStatusUrlBox
-
-  If (ShowUrlBoxContent)
-  {
-        Tasks%CurrentTask%_URL := ShowUrlBoxContent
-  }
-
+  Tasks%CurrentTask%_URL := ShowUrlBoxContent
   Gui, 4:Destroy  
 Return
 
@@ -770,37 +760,12 @@ ButtonReviewYes:
   TaskCount := TaskCount + 1
   UnactionedCount := UnactionedCount + 1
   GuiControlGet,RephraseBoxContent,,RephraseBox
-
-  If (RephraseBoxContent)
-  {
-    Tasks%Taskcount%_1 := RephraseBoxContent
-  }
-  Else
-  {
-    Tasks%Taskcount%_1 := Tasks%ReviewTask%_1
-  }
-
+  Tasks%Taskcount%_1 := RephraseBoxContent
   Tasks%Taskcount%_2 := "A" . A_Now
   GuiControlGet,ShowNotesBoxContent,,ShowNotesBox
-
-  If (ShowNotesBoxContent)
-  {
-    Tasks%Taskcount%_3 := ShowNotesBoxContent
-  }
-  Else
-  {
-    Tasks%Taskcount%_3 := Tasks%ReviewTask%_3
-  }
-
-  If (ShowUrlBoxContent)
-  {
-    Tasks%Taskcount%_URL := ShowUrlBoxContent ;Tasks%CurrentTask%_3
-  }
-  Else
-  {
-    Tasks%Taskcount%_URL := Tasks%CurrentTask%_URL
-  }
-
+  Tasks%Taskcount%_3 := ShowNotesBoxContent
+  GuiControlGet,ShowUrlBoxContent,,ShowUrlBox
+  Tasks%Taskcount%_URL := ShowUrlBoxContent
   Tasks%Taskcount%_4 := 0
   RessourceTasksWriteAccess -= 1
   SaveTasks()
