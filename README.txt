@@ -45,6 +45,7 @@ Configuration
                    StartWithWindows=0
                    DoBackups=1
                    BackupsToKeep=10
+                   TicklerPrefix=*
                    [ReviewMode]
                    LastRoutine=20091120
                    StartRoutineAt=6
@@ -78,6 +79,9 @@ Configuration
                    systems that use pages as units (AF1 and AF3), but also has
                    other effects (for example, in AF4 the list will be closed 
                    the first time when there are more tasks than this number).
+  
+  TicklerPrefix    Letter or Word that tickled tasks should be prefixed with
+                   (Must be added manually)
   
   HotKeys          Change the hotkeys. Follows AutoHotkey rules, 
                    see http://www.autohotkey.com/docs/Hotkeys.htm

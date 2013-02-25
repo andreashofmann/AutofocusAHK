@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.5.3
+; @version   0.9.5.4
 ; @since     0.9
 
 AF4_IsReviewOptional()

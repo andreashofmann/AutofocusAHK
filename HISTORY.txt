@@ -1,6 +1,13 @@
 History
 -------
 
+  Version 0.9.5.4 (2013-02-25)
+    - Three Years later ...
+    Tweaks:
+      - Added more or less hidden TicklerPrefix option (Add in ini under General)
+    Fixed Bugs:
+      - Doing a task in the open list counted for the next pass of the closed list (AF4)
+      - Ticklers did not work correctly
   Version 0.9.5.3 (2010-02-26)
     Tweaks:
       - Windows are always on top

@@ -4,7 +4,7 @@
 ;
 ; @author    Andreas Hofmann
 ; @license   See LICENSE.txt
-; @version   0.9.5.3
+; @version   0.9.5.4
 ; @since     0.9
 
 Initialize()
@@ -15,7 +15,7 @@ Initialize()
   ApplicationName := "AutofocusAHK"
   
   ; Version number that is displayed in GUI windows
-  Ver := "0.9.5.3"
+  Ver := "0.9.5.4"
 
   InitializeLog()
   WriteToLog("Application", ApplicationName . " " . Ver . " started", 1)
