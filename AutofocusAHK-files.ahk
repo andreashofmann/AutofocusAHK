@@ -235,9 +235,9 @@ SaveSetting(Setting, Value, Section = "System")
 {
   Global ApplicationName
 
-  WriteToLog("Function", "Begin SaveSetting(". Setting . ", " . Value . ", " . Section . ")", 1)
+  WriteToLog("Function", "Begin SaveSetting(" . Setting . ", " . Value . ", " . Section . ")", 1)
   IniWrite, %Value%, %A_ScriptDir%\%ApplicationName%.ini, %Section%, %Setting%
-  WriteToLog("Function", "End SaveSetting(". Setting . ", " . Value . ", " . Section . ")", -1)
+  WriteToLog("Function", "End SaveSetting(" . Setting . ", " . Value . ", " . Section . ")", -1)
 }
 BackupTasks()
 {

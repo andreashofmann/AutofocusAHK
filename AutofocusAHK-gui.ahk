@@ -292,7 +292,7 @@ ShowWorkWindow()
   Gui, Add, Text, xm Hidden vShowNotesBoxLabel, Notes:
   StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\t,%A_Tab%, All
   StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
-  Gui, Add, Edit,xm Hidden ReadOnly T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
+  Gui, Add, Edit,xm Hidden ReadOnly T8 R10 vShowNotesBox, %ShowNotesBoxContent%
   Gui, Add, Text, xm Hidden vShowUrlBoxLabel, URL:
   Gui, Add, Edit,xm Hidden ReadOnly T8 r1 vShowUrlBox, % Tasks%CurrentTask%_URL
 
@@ -375,9 +375,9 @@ ShowDoneWindow()
   Gui, +LabelGuiDone
   StringReplace, ShowNotesBoxContent, Tasks%CurrentTask%_3,\t,%A_Tab% , All
   StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
-  Gui, Add, Edit,xm Hidden T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
+  Gui, Add, Edit,xm Hidden T8 R10 vShowNotesBox, %ShowNotesBoxContent%
   Gui, Add, Text, xm Hidden vShowUrlBoxLabel, URL:
-  Gui, Add, Edit,xm Hidden default vShowUrlBox, % Tasks%CurrentTask%_URL
+  Gui, Add, Edit,xm Hidden vShowUrlBox, % Tasks%CurrentTask%_URL
 
   If (GuiAlwaysOnTop)
   {
@@ -460,7 +460,7 @@ ShowReviewWindow()
   GuiControl, Move, QuestionLabel, x%QuestionPosX% y%QuestionPosY% w%QuestionPosW% h%QuestionPosH%
   StringReplace, ShowNotesBoxContent, Tasks%ReviewTask%_3,\t,%A_Tab%, All
   StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
-  Gui, Add, Edit,xm Hidden T8 R10 default vShowNotesBox, %ShowNotesBoxContent%
+  Gui, Add, Edit,xm Hidden T8 R10 vShowNotesBox, %ShowNotesBoxContent%
   Title := %System%_GetReviewWindowTitle()
 
   If (GuiAlwaysOnTop)
@@ -734,9 +734,9 @@ ButtonShowStatusNotes:
   StringReplace, ShowNotesBoxContent, ShowNotesBoxContent,\n,`n, All
   Gui, 4:+LabelGuiNotes
   Gui, 4:Add, Text, xm w500, Notes:
-  Gui, 4:Add, Edit,xm w500 T8 R10 default vShowStatusNotesBox, %ShowNotesBoxContent%
+  Gui, 4:Add, Edit,xm w500 T8 R10 vShowStatusNotesBox, %ShowNotesBoxContent%
   Gui, 4:Add, Text, xm, URL:
-  Gui, 4:Add, Edit,xm w500 default vShowStatusUrlBox, % Tasks%CurrentTask%_URL
+  Gui, 4:Add, Edit,xm w500 vShowStatusUrlBox, % Tasks%CurrentTask%_URL
 
   If (GuiAlwaysOnTop)
   {
