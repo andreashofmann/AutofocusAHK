@@ -134,6 +134,7 @@ AF4_SelectNextTask()
       If (CurrentTask > TaskCount)
       {
         CurrentTask := 0
+        ActionOnCurrentPass := 0
       }
 
       If (Tasks%CurrentTask%_4 == 0 or (UnactionedCount == 0 and HasTasksOnReview == 0) (UnactionedCount == 0 and CurrentMode == ReviewMode and HasTasksOnReview == 1)) 
