@@ -376,7 +376,7 @@ AddTask(Description, Notes, Url, TickleDate)
     Expires := Added
     Expires += %ExpirationNew%, days
     Tasks%Taskcount%_2 := "A" . Added . " E" . Expires
-	Tasks%Taskcount%_4 := 0
+    Tasks%Taskcount%_4 := 0
   }
   Else
   {
@@ -384,7 +384,7 @@ AddTask(Description, Notes, Url, TickleDate)
     Expires := TickleDate
     Expires += %ExpirationNew%, days
     Tasks%Taskcount%_2 := "S" . Tickled . " E" . Expires
-	Tasks%Taskcount%_4 := 1
+    Tasks%Taskcount%_4 := 1
   }
 
   StringReplace, Notes, Notes,%A_Tab%,\t, All
@@ -410,7 +410,12 @@ CheckTicklers()
       If (SubStr(Tasks%A_Index%_2, TicklePos+1, 8) <= Today)
       {
         StringReplace, Tasks%A_Index%_2, Tasks%A_Index%_2, S, U 
-        AddTask(Tasks%A_Index%_1, Tasks%A_Index%_3, Tasks%A_Index%_URL, Today)
+        NewTitle := Tasks%A_Index%_1
+        If (TicklerPrefix)
+        {
+            NewTitle := TicklerPrefix . " " . NewTitle
+        }
+        AddTask(NewTitle, Tasks%A_Index%_3, Tasks%A_Index%_URL, Today)
       }
     }
   }
