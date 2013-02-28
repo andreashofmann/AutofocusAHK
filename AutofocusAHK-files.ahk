@@ -393,7 +393,7 @@ Export()
 
   Loop, %TaskCount%
   {
-    If (!InStr(Tasks%A_Index%_2, "S"))
+    If (!InStr(Tasks%A_Index%_2, "S") && !InStr(Tasks%A_Index%_2, "U"))
     {
       ExportAdded := ""
       ExportReview := ""
